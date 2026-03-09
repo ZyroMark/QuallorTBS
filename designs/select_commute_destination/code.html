@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quallor - Daily Commute</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Top Header -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 justify-between sticky top-0 z-10 border-b border-primary/10">
+<button class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-12 font-display">Daily Commute</h2>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto">
+<!-- Search Section -->
+<div class="px-4 py-4">
+<label class="flex flex-col min-w-40 h-14 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full shadow-lg overflow-hidden border border-primary/20">
+<div class="text-primary flex bg-white dark:bg-primary/5 items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-white dark:bg-primary/5 h-full placeholder:text-slate-400 dark:placeholder:text-slate-500 px-4 pl-2 text-base font-normal leading-normal font-display" placeholder="Search destination in Eastern Cape" value=""/>
+</div>
+</label>
+</div>
+<!-- Map Quick Access / Current Location -->
+<div class="px-4 pb-6">
+<div class="relative h-32 w-full rounded-xl overflow-hidden border border-primary/20 bg-primary/10 flex items-center justify-center">
+<div class="absolute inset-0 opacity-40 bg-[url('https://placeholder.pics/svg/600x200')]" data-alt="Stylized map view of East London streets" data-location="East London, South Africa" style=""></div>
+<div class="relative flex items-center gap-2 bg-white/90 dark:bg-background-dark/90 px-4 py-2 rounded-full shadow-md">
+<span class="material-symbols-outlined text-primary">my_location</span>
+<span class="text-sm font-semibold font-display">Current Location</span>
+</div>
+</div>
+</div>
+<!-- Popular Destinations Grid -->
+<div class="px-4 pb-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight pb-4 font-display">Popular Destinations</h3>
+<div class="grid grid-cols-2 gap-4">
+<!-- Beacon Bay -->
+<div class="relative group cursor-pointer aspect-[4/3] rounded-xl overflow-hidden border border-primary/10 shadow-sm transition-transform active:scale-95">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Coastal suburban landscape of Beacon Bay" style='background-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCdvYbPtvpLXDNs5mQ_OSEVc-9bVFPoegGqk6-0w-GoSvrK8YyMqOU4gGJYxBUB2n6o1FOmGrDfzvwPhFknhqVP8ASMtoGFjHvgwgOX-5-UFncbCc2obTEA3I6nJY3yPwITDhDwJhqSK5l-w8JbFW0bH9WqRFaeGT7JkMnilHDVJHOOKN0hgemorg3BeYDpb3o_BVj9O2GFOvMkWq4LWXhQKHTLm5uKai1mUQCiJxGx840xF0ZbCcGm6DtEo4T5MMLQuQ9WaRozqAwL");'></div>
+<div class="absolute bottom-0 left-0 p-3 w-full">
+<p class="text-white text-sm font-bold font-display">Beacon Bay</p>
+<p class="text-primary text-[10px] font-medium uppercase tracking-wider">East London</p>
+</div>
+</div>
+<!-- Amalinda -->
+<div class="relative group cursor-pointer aspect-[4/3] rounded-xl overflow-hidden border border-primary/10 shadow-sm transition-transform active:scale-95">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Residential streets and greenery in Amalinda" style='background-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuB2rUt8au8lVGWMIoZk86S8_P167CKpefzd6wBU1BiSW2CLwXZiY0XEa2CazNz1rd7EwPxOHBA8O75d3wPaS2JRnNCSRnkOKtFiG4_NyEjQzgBC_u9YhBmX5mVblHLdigHD6YIwPnVh3_deYxHR4Ha2fDN9w1I6c8X77fkq7_0u7c_b4Tv7na7XjRlycQrAfKa82l64G7BqEbIctyt38PxjTj54EY_cZYJf8lFLNBHAomTcWamnUUQPdNRrWHxdA7z1aKKR7su1gbJW");'></div>
+<div class="absolute bottom-0 left-0 p-3 w-full">
+<p class="text-white text-sm font-bold font-display">Amalinda</p>
+<p class="text-primary text-[10px] font-medium uppercase tracking-wider">Residential District</p>
+</div>
+</div>
+<!-- Vincent -->
+<div class="relative group cursor-pointer aspect-[4/3] rounded-xl overflow-hidden border border-primary/10 shadow-sm transition-transform active:scale-95">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Modern commercial buildings in Vincent area" style='background-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuA4Ox-iY7xAuY3dJjM3KPMOY1zkhOyHBVvTIAzB8kPzL-DreQO4TEdTXjyCvqBHpHIJTwOtweIAQO-QWlc3-JcnvZlFRWEWLi7mmsACcMrelPkYHioAt4Rc0acOcGGHQ6NNUdaEfto257QLL8d1kqhlR5k3PxzYHpDZ6HhyXOCRWpdIDH7ruKoqH5qj3Uq0rrNECSe6l8a9R1052936gq1kgYT_EMUBUuiuuQ4dF22S63N8CR4Q81IcSsahAhsefq79-iYiNiYXIv4J");'></div>
+<div class="absolute bottom-0 left-0 p-3 w-full">
+<p class="text-white text-sm font-bold font-display">Vincent</p>
+<p class="text-primary text-[10px] font-medium uppercase tracking-wider">Business Hub</p>
+</div>
+</div>
+<!-- Mdantsane -->
+<div class="relative group cursor-pointer aspect-[4/3] rounded-xl overflow-hidden border border-primary/10 shadow-sm transition-transform active:scale-95">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Vibrant community area of Mdantsane" style='background-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZcBfh8znYRrrAexewZkuGSlIFNdo7aLMTpa4C6QE7gTao6JMQS_fSonXz4NulH2b4gu7OzGS_Zef88H6nQTCy_e0vStq6y9Z8kBTqXW6UQ-KaurKk4mzcmeBleqoF5FzLMxliRYdkZeCZIWSR15CEKBx3oqJDGpUL6mMQpPbJg3D0plhMLZplzNQSInSi2BUsh-H68s561pFeavT1tTU-s0SuHK4tLmaUEXBZz7srhRN21C8MmpgMT176uXwlF6KvLwdRak4jxc5f");'></div>
+<div class="absolute bottom-0 left-0 p-3 w-full">
+<p class="text-white text-sm font-bold font-display">Mdantsane</p>
+<p class="text-primary text-[10px] font-medium uppercase tracking-wider">Main Township</p>
+</div>
+</div>
+<!-- Nahoon -->
+<div class="relative group cursor-pointer aspect-[4/3] rounded-xl overflow-hidden border border-primary/10 shadow-sm transition-transform active:scale-95 col-span-2">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Beach view and coastline of Nahoon" style='background-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBuCHecUW8YYkpqOI4sAbJ3O4UKe4-zGDTHj4yVaCrenuIywRzcmEIteCgl_Myzf3vay2ii_1ezS0_CxHHQMUZwGP-zfvBWXJa2rLnszqkGk_X8xFPH0YyvZ0w0q1udMrt-lYWYxgS6lUW23Pd7J1l322MVahw648wc5VbuiybN7F9UqOKlJ16n6eKS-CeP3S0D5mGr8BthdpoO0ur62ZtQhInoq1j3oIJEHBd-tFRwu4TPaDPZErlrdDZK3Nm3PFZKQKOPFdIJjMxG");'></div>
+<div class="absolute bottom-0 left-0 p-4 w-full">
+<p class="text-white text-base font-bold font-display">Nahoon</p>
+<p class="text-primary text-xs font-medium uppercase tracking-wider">Beach &amp; Surf</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Rides -->
+<div class="px-4 py-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight pb-3 font-display">Recent Rides</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-4 p-3 rounded-xl bg-white dark:bg-primary/5 border border-primary/5">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">history</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold font-display">Hemingways Mall</p>
+<p class="text-xs text-slate-500">2.4 km away</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-xl bg-white dark:bg-primary/5 border border-primary/5">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">history</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold font-display">East London Airport</p>
+<p class="text-xs text-slate-500">12.1 km away</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+</div>
+<div class="h-24"></div> <!-- Spacer for fixed bottom nav -->
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 border-t border-primary/10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-4 pb-6 pt-3 z-50">
+<div class="flex items-center justify-between max-w-md mx-auto">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-medium leading-none font-display">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill">commute</span>
+<p class="text-[10px] font-bold leading-none font-display">Commute</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">shield_with_heart</span>
+<p class="text-[10px] font-medium leading-none font-display">Safety</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<p class="text-[10px] font-medium leading-none font-display">Profile</p>
+</a>
+</div>
+</nav>
+</body></html>

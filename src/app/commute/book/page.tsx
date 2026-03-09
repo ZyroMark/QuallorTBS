@@ -1,0 +1,153 @@
+"use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
+import { useBooking } from "@/app/context/BookingContext";
+
+const TAKEN_SEATS = ["A1", "A3", "B2", "B4", "C1", "D3"];
+const ROWS = ["A", "B", "C", "D"];
+const COLS = [1, 2, 3, 4];
+
+export default function SeatSelectionPage() {
+    const router = useRouter();
+    const { user } = useAuth();
+    const { selectedRoute, selectedTaxi, confirmBooking } = useBooking();
+    const [selectedSeat, setSelectedSeat] = useState<string | null>(null);
+
+    const from = selectedRoute?.from || "Beacon Bay";
+    const to = selectedRoute?.to || "Amalinda";
+    const taxi = selectedTaxi || { id: "TX-402", name: "Khululeka Express", departureTime: "08:30 AM", fare: 20 };
+
+    function handleConfirm() {
+        if (!selectedSeat) return;
+        const booking = confirmBooking({
+            tripType: "commute",
+            from,
+            to,
+            taxiId: taxi.id,
+            taxiName: taxi.name,
+            departureTime: taxi.departureTime,
+            seatNumber: selectedSeat,
+            fare: taxi.fare,
+            passengerName: user?.name || "Passenger",
+            passengerId: user?.id || "GUEST",
+            date: new Date().toISOString(),
+            status: "confirmed",
+        });
+        if (booking) router.push("/commute/confirmation");
+    }
+
+    return (
+        <main className="min-h-screen bg-q-bg-page flex flex-col">
+            {/* Header */}
+            <header className="flex items-center bg-white px-4 py-3 sticky top-0 z-10 border-b border-q-stone-200 shadow-q-xs">
+                <button onClick={() => router.back()} className="flex w-10 h-10 items-center justify-center rounded-[10px] hover:bg-q-stone-100 transition-colors">
+                    <span className="material-symbols-outlined text-q-stone-700">arrow_back</span>
+                </button>
+                <h1 className="font-display text-lg font-semibold text-q-stone-900 flex-1 text-center pr-10">Select Your Seat</h1>
+            </header>
+
+            <div className="flex-1 overflow-y-auto pb-32">
+                {/* Route Info */}
+                <div className="px-4 py-4 bg-q-bg-section border-b border-q-stone-200">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="font-sans text-[10px] font-bold text-q-stone-500 uppercase tracking-wider">Route</p>
+                            <p className="font-sans font-semibold text-q-stone-900">{from} → {to}</p>
+                        </div>
+                        <div className="text-right">
+                            <p className="font-sans text-[10px] font-bold text-q-stone-500 uppercase tracking-wider">Taxi</p>
+                            <p className="font-sans text-sm font-semibold text-q-brown">{taxi.name}</p>
+                        </div>
+                        <div className="text-right">
+                            <p className="font-sans text-[10px] font-bold text-q-stone-500 uppercase tracking-wider">Departs</p>
+                            <p className="font-sans text-sm font-semibold text-q-stone-900">{taxi.departureTime}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Legend */}
+                <div className="flex items-center justify-center gap-6 py-4 font-sans text-xs font-semibold text-q-stone-600">
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-md bg-q-brown-100 border-2 border-q-brown" />
+                        <span>Available</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-md bg-q-brown border-2 border-q-brown" />
+                        <span className="text-q-brown">Selected</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-md bg-q-stone-200 border-2 border-q-stone-300" />
+                        <span className="text-q-stone-400">Taken</span>
+                    </div>
+                </div>
+
+                {/* Front indicator */}
+                <div className="mx-4 mb-4 py-2 rounded-[10px] bg-q-stone-100 text-center font-sans text-xs font-bold uppercase tracking-widest text-q-stone-500">
+                    Front of Taxi — Driver
+                </div>
+
+                {/* Seat Grid */}
+                <div className="px-8 space-y-3">
+                    {ROWS.map((row) => (
+                        <div key={row} className="flex items-center gap-3">
+                            <span className="font-sans text-xs font-bold text-q-stone-400 w-4">{row}</span>
+                            <div className="flex gap-3 flex-1">
+                                {COLS.map((col, colIdx) => {
+                                    const seatId = `${row}${col}`;
+                                    const isTaken = TAKEN_SEATS.includes(seatId);
+                                    const isSelected = selectedSeat === seatId;
+                                    return (
+                                        <React.Fragment key={col}>
+                                            {colIdx === 2 && <div className="w-5" />}
+                                            <button
+                                                disabled={isTaken}
+                                                onClick={() => setSelectedSeat(isSelected ? null : seatId)}
+                                                className={`flex-1 h-12 rounded-[10px] font-sans text-sm font-bold border-2 transition-all active:scale-95 ${
+                                                    isTaken
+                                                        ? "bg-q-stone-200 border-q-stone-300 text-q-stone-400 cursor-not-allowed"
+                                                        : isSelected
+                                                        ? "bg-q-brown border-q-brown text-white shadow-q-sm"
+                                                        : "bg-q-brown-100 border-q-brown text-q-brown hover:bg-q-brown-200"
+                                                }`}
+                                            >
+                                                {seatId}
+                                            </button>
+                                        </React.Fragment>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {selectedSeat && (
+                    <div className="mx-4 mt-6 p-4 rounded-[14px] bg-q-brown-50 border border-q-brown-200">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <p className="font-sans text-[10px] font-bold text-q-stone-500 uppercase tracking-wider">Selected Seat</p>
+                                <p className="font-display text-3xl font-bold text-q-brown">{selectedSeat}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="font-sans text-[10px] font-bold text-q-stone-500 uppercase tracking-wider">Fare</p>
+                                <p className="font-display text-3xl font-bold text-q-brown">R {taxi.fare}.00</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Sticky Confirm */}
+            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-q-stone-200 p-4 pb-8 shadow-q-lg">
+                <button
+                    onClick={handleConfirm}
+                    disabled={!selectedSeat}
+                    className="q-btn-primary-lg w-full justify-center disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                    {selectedSeat ? `Confirm Seat ${selectedSeat} — Pay R ${taxi.fare}.00` : "Select a Seat"}
+                </button>
+            </div>
+        </main>
+    );
+}

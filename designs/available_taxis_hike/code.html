@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quallor - Available Taxis (Hike)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-x-hidden">
+<!-- Header Section -->
+<header class="sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-slate-200 dark:border-primary/20">
+<div class="flex items-center p-4 justify-between">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</button>
+<div class="flex-1 px-4">
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Available Taxis (Hike)</h2>
+<p class="text-xs text-primary font-medium">Long-Distance Travel</p>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">search</span>
+</button>
+</div>
+<div class="px-4 pb-4">
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-sm text-primary">distance</span>
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-semibold">East London to Port Elizabeth</h3>
+</div>
+</div>
+</header>
+<!-- Main Content (Taxi List) -->
+<main class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Taxi Card 1 -->
+<div class="group flex flex-col gap-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 p-4 shadow-sm transition-all hover:shadow-md dark:hover:bg-primary/10">
+<div class="flex justify-between items-start gap-3">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-sm material-symbols-fill">schedule</span>
+<p class="text-primary text-xs font-bold uppercase tracking-wider">Leaves when full</p>
+</div>
+<h4 class="text-slate-900 dark:text-slate-100 text-base font-bold">Sibusiso M.</h4>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Plate: CA 123-456</p>
+</div>
+<div class="text-right">
+<p class="text-primary text-lg font-black leading-none">R250.00</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] mt-1 uppercase font-bold">Fixed Fare</p>
+</div>
+</div>
+<div class="flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 text-lg">event_seat</span>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">3 Seats Available</span>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<div class="h-1.5 w-24 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 70%;"></div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">70% Full</span>
+</div>
+</div>
+<div class="relative w-24 h-16 shrink-0 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Vehicle Image" class="w-full h-full object-cover" data-alt="White long distance transport minibus taxi" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ3yV-SmN_PMzX3C-tw9NuicETlSEz6_v1bjJyHLozgAj7sNMQSHIUgPf9rhr7PzCWuFc2ZexIS87OhqR_Rm_jei6hGvAFfvZ82oFWXT0-1DJ4t8UGQztv8EwCiFyyH3aavof_cqP5Asn1FOPxTRmrh3IStLBH56IN_XRWul1NjEszjbW_zpwFcZp8pfhkTieoATta-OqLKxMvwpMuXy04E31YqN5X3WETHTOhCazqIQbSWc57Ggw6kU8rExIsqtnLjaXRIIlC1js9"/>
+</div>
+</div>
+<button class="flex w-full cursor-pointer items-center justify-center rounded-lg h-11 bg-primary text-background-dark gap-2 text-sm font-bold transition-transform active:scale-95">
+<span class="material-symbols-outlined text-xl">confirmation_number</span>
+<span>Book Seat</span>
+</button>
+</div>
+<!-- Taxi Card 2 -->
+<div class="group flex flex-col gap-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 p-4 shadow-sm transition-all hover:shadow-md dark:hover:bg-primary/10">
+<div class="flex justify-between items-start gap-3">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-sm material-symbols-fill">alarm</span>
+<p class="text-primary text-xs font-bold uppercase tracking-wider">09:00 AM Departure</p>
+</div>
+<h4 class="text-slate-900 dark:text-slate-100 text-base font-bold">Phumzile K.</h4>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Plate: CB 987-654</p>
+</div>
+<div class="text-right">
+<p class="text-primary text-lg font-black leading-none">R250.00</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] mt-1 uppercase font-bold">Fixed Fare</p>
+</div>
+</div>
+<div class="flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-red-500 text-lg material-symbols-fill">warning</span>
+<span class="text-red-500 text-sm font-bold">Filling Up (1 Seat Left)</span>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<div class="h-1.5 w-24 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-red-500 rounded-full" style="width: 90%;"></div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">92% Full</span>
+</div>
+</div>
+<div class="relative w-24 h-16 shrink-0 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Vehicle Image" class="w-full h-full object-cover" data-alt="Toyota Quantum minibus on road" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjJSRTl_QDXJ7eKOUAU3ReJ6MPqcYzzDA6CMB2QoRaq_SVjMImoXqS_NZ3LTV3y_7z3E9KsLz2i7OnAivQCEZi1_r14AG5SOEBTdz5LCA-1dRAttdTHt4hzPxcV6-KmuyDvONu0gaxMK24PhMVWDlMipQoWwbutLkPglx8SWC4hTx9t1iEGqMGP_qaEDbmoR1oeuKMkzPTaJytpEMqT2CSyJ3Uxgr5npIZXUgnw1jlw2O8HYeFnC3TXmzlUa9esnV-2wadsyK9OnLt"/>
+</div>
+</div>
+<button class="flex w-full cursor-pointer items-center justify-center rounded-lg h-11 bg-primary text-background-dark gap-2 text-sm font-bold transition-transform active:scale-95">
+<span class="material-symbols-outlined text-xl">confirmation_number</span>
+<span>Book Seat</span>
+</button>
+</div>
+<!-- Taxi Card 3 -->
+<div class="group flex flex-col gap-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 p-4 shadow-sm transition-all hover:shadow-md dark:hover:bg-primary/10">
+<div class="flex justify-between items-start gap-3">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-sm material-symbols-fill">schedule</span>
+<p class="text-primary text-xs font-bold uppercase tracking-wider">Leaves when full</p>
+</div>
+<h4 class="text-slate-900 dark:text-slate-100 text-base font-bold">Lwazi N.</h4>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Plate: EC 554-121</p>
+</div>
+<div class="text-right">
+<p class="text-primary text-lg font-black leading-none">R250.00</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] mt-1 uppercase font-bold">Fixed Fare</p>
+</div>
+</div>
+<div class="flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 text-lg">event_seat</span>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">8 Seats Available</span>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<div class="h-1.5 w-24 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 40%;"></div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">40% Full</span>
+</div>
+</div>
+<div class="relative w-24 h-16 shrink-0 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Vehicle Image" class="w-full h-full object-cover" data-alt="Modern passenger van profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6jRYjiAy7MMG4xLAsvZ-ImIe_NS65ldTiu1UyTkbQKlhehPSutODVW6_auOvGsYFlXI_f5nsmqT0AvcXaL-YR2CG4oSvtfLYHVHEyuVGMLYoQqGMCMqtvW6aXYOi-kxAy6yMjJO42bzR2jcM0LH1fcMM_Oav2YHLeb8UyDKfMG4FjuIzqK7B7PSg0tmAOGVMZnyBzPYUVqTV25wuARkhZjcoy7F46JvszI5wOn-H8sdToddxza2N3EQj66qL8De7nC3XodluHAH0M"/>
+</div>
+</div>
+<button class="flex w-full cursor-pointer items-center justify-center rounded-lg h-11 bg-primary text-background-dark gap-2 text-sm font-bold transition-transform active:scale-95">
+<span class="material-symbols-outlined text-xl">confirmation_number</span>
+<span>Book Seat</span>
+</button>
+</div>
+<div class="h-10"></div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="sticky bottom-0 z-10 border-t border-slate-200 dark:border-primary/20 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2">
+<div class="flex gap-2 justify-around items-end">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">home</span>
+<p class="text-[10px] font-bold uppercase tracking-tight">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl material-symbols-fill">conversion_path</span>
+<p class="text-[10px] font-bold uppercase tracking-tight">HIKE</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">history</span>
+<p class="text-[10px] font-bold uppercase tracking-tight">History</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">account_circle</span>
+<p class="text-[10px] font-bold uppercase tracking-tight">Profile</p>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

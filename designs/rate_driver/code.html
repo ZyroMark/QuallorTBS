@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rate Your Quallor Ride</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "accent-blue": "#0ea5e9",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-10">
+<button class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h2 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-12">Rate your ride</h2>
+</div>
+<main class="flex-1 max-w-xl mx-auto w-full px-4 py-6 space-y-8">
+<!-- Driver Profile Section -->
+<div class="flex flex-col items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 border-4 border-primary/20" data-alt="Professional portrait of a friendly male driver" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAIDZFFajymrIBTYN6gJgKHHSEhsb4ZLqkolHrt45pXIopGZW5C8IsUf9VRP491Q96pdDVEmKJbMQZScNEX6UVLvf37pz6BXRhEMIY5TP6pka7Do4ePUXLVxmpp6ZNvp8PJne4IV9yOMYMyUMACfjT--efg6EBw38Ft0RJ8J5N9ACltxT4T6Nrp5ktVpn69RErb5zbsvbV92Hquf-w0M8kfeb83K9Y5jVwaU3UUaG4lAxNnl3MKpFpLo__2DI2NbhI8wtKAgiaegAag");'>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-background-dark text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        Partner
+                    </div>
+</div>
+<div class="flex flex-col items-center justify-center text-center">
+<p class="text-2xl font-black leading-tight tracking-tight">Thabo Mokoena</p>
+<p class="text-slate-600 dark:text-primary/70 text-sm font-medium">VW Polo • Quallor Pro</p>
+<div class="flex items-center gap-1 mt-1 text-accent-blue">
+<span class="material-symbols-outlined text-sm">verified</span>
+<p class="text-xs font-semibold">Verified Quallor Partner South Africa</p>
+</div>
+</div>
+</div>
+<!-- Rating Stars -->
+<div class="space-y-4">
+<h4 class="text-slate-900 dark:text-slate-100 text-base font-bold text-center">How was your trip?</h4>
+<div class="flex justify-center gap-2">
+<button class="text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined !text-5xl fill-current">star</span>
+</button>
+<button class="text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined !text-5xl fill-current">star</span>
+</button>
+<button class="text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined !text-5xl fill-current">star</span>
+</button>
+<button class="text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined !text-5xl fill-current">star</span>
+</button>
+<button class="text-slate-300 dark:text-slate-700 hover:scale-110 transition-transform">
+<span class="material-symbols-outlined !text-5xl">star</span>
+</button>
+</div>
+</div>
+<!-- Feedback Tags -->
+<div class="space-y-3">
+<p class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest text-center">What went well?</p>
+<div class="flex flex-wrap justify-center gap-2">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/10 border border-primary/30 px-4 text-primary font-medium hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-lg">verified_user</span>
+<span class="text-sm">Safe Driving</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-transparent px-4 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-lg">clean_hands</span>
+<span class="text-sm">Clean Car</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/10 border border-primary/30 px-4 text-primary font-medium hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-lg">sentiment_satisfied</span>
+<span class="text-sm">Friendly</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-transparent px-4 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-lg">music_note</span>
+<span class="text-sm">Great Music</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-transparent px-4 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-lg">navigation</span>
+<span class="text-sm">Good Route</span>
+</button>
+</div>
+</div>
+<!-- Comment Area -->
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-500 dark:text-slate-400" for="comments">Additional comments</label>
+<textarea class="w-full bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg p-4 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder-slate-400 dark:placeholder-slate-500" id="comments" placeholder="Tell us more about your experience..." rows="3"></textarea>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-3 pt-4">
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+<span>Submit Feedback</span>
+<span class="material-symbols-outlined">send</span>
+</button>
+<button class="w-full bg-transparent text-slate-500 dark:text-slate-400 font-semibold py-3 rounded-lg hover:text-slate-700 dark:hover:text-slate-200 transition-colors">
+                    Not Now
+                </button>
+</div>
+</main>
+<!-- Footer Info -->
+<footer class="p-6 text-center">
+<p class="text-xs text-slate-400 dark:text-slate-600">Your feedback helps improve Quallor services in South Africa.</p>
+</footer>
+</div>
+</body></html>

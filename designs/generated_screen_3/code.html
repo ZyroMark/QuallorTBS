@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quallor Driver App Flow</title>
+<!-- BEGIN: External Resources -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            quallorDark: '#0f172a',
+            quallorAmber: '#f59e0b',
+            quallorSky: '#0ea5e9',
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: External Resources -->
+<!-- BEGIN: Custom Typography Styles -->
+<style data-purpose="typography">
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #020617;
+      color: #f8fafc;
+    }
+    .step-title {
+      font-weight: 700;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+  </style>
+<!-- END: Custom Typography Styles -->
+<!-- BEGIN: Layout Styles -->
+<style data-purpose="layout">
+    .flow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      padding: 2rem;
+      align-items: center;
+    }
+    .phone-mockup {
+      width: 320px;
+      height: 640px;
+      border: 8px solid #334155;
+      border-radius: 40px;
+      background-color: #0f172a;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    /* Hide scrollbar for mockup */
+    .phone-mockup::-webkit-scrollbar {
+      display: none;
+    }
+    .connector {
+      width: 2px;
+      height: 40px;
+      background: linear-gradient(to bottom, #f59e0b, #0ea5e9);
+    }
+  </style>
+<!-- END: Layout Styles -->
+</head>
+<body class="bg-slate-950 text-slate-200">
+<main class="flow-container">
+<h1 class="text-3xl font-bold text-quallorAmber text-center mb-4">Quallor Driver App Flow</h1>
+<!-- BEGIN: Step 1 - Registration -->
+<section class="flex flex-col items-center" data-purpose="step-registration">
+<div class="step-title mb-4">Step 1: Registration &amp; Docs</div>
+<div class="phone-mockup border-quallorAmber/30">
+<div class="p-6 h-full flex flex-col">
+<div class="text-quallorAmber text-2xl font-black mb-6">Quallor</div>
+<h2 class="text-xl font-semibold mb-2">Driver Application</h2>
+<p class="text-slate-400 text-sm mb-6">Upload required documents to start earning.</p>
+<div class="space-y-4">
+<div class="p-3 border border-slate-700 rounded-lg flex items-center justify-between">
+<span class="text-sm">Driver's License</span>
+<span class="text-quallorSky text-xs">UPLOADED</span>
+</div>
+<div class="p-3 border border-slate-700 rounded-lg flex items-center justify-between">
+<span class="text-sm">Vehicle Insurance</span>
+<span class="text-quallorAmber text-xs font-bold">REQUIRED</span>
+</div>
+<div class="p-3 border border-slate-700 rounded-lg flex items-center justify-between">
+<span class="text-sm">Vehicle Registration</span>
+<span class="text-slate-500 text-xs italic">Pending...</span>
+</div>
+</div>
+<button class="mt-auto w-full bg-quallorAmber text-black font-bold py-3 rounded-xl">Submit for Review</button>
+</div>
+</div>
+</section>
+<!-- END: Step 1 -->
+<div class="connector"></div>
+<!-- BEGIN: Step 2 - Verification Pending -->
+<section class="flex flex-col items-center" data-purpose="step-verification">
+<div class="step-title mb-4">Step 2: Verification Pending</div>
+<div class="phone-mockup border-slate-700">
+<div class="p-6 h-full flex flex-col items-center justify-center text-center">
+<div class="w-20 h-20 rounded-full bg-slate-800 flex items-center justify-center mb-6 border-4 border-quallorAmber animate-pulse">
+<svg class="w-10 h-10 text-quallorAmber" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h2 class="text-xl font-semibold mb-2">Review in Progress</h2>
+<p class="text-slate-400 text-sm">We are verifying your documents. This usually takes 24-48 hours. You'll receive a notification once approved.</p>
+</div>
+</div>
+</section>
+<!-- END: Step 2 -->
+<div class="connector"></div>
+<!-- BEGIN: Step 3 - Driver Interface / Accepting Rides -->
+<section class="flex flex-col items-center" data-purpose="step-active-interface">
+<div class="step-title mb-4">Step 3: Main Interface (Online)</div>
+<div class="phone-mockup border-quallorSky/30">
+<!-- Mock Map Background -->
+<div class="absolute inset-0 bg-slate-900 opacity-50 z-0">
+<div class="w-full h-full" style="background-image: radial-gradient(#1e293b 2px, transparent 2px); background-size: 20px 20px;"></div>
+</div>
+<div class="relative z-10 h-full flex flex-col">
+<!-- Status Bar -->
+<div class="p-4 bg-slate-900/90 backdrop-blur-md flex justify-between items-center border-b border-slate-700">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+<span class="font-bold text-sm">ONLINE</span>
+</div>
+<div class="text-quallorAmber font-bold">$142.50</div>
+</div>
+<!-- Ride Request Popup -->
+<div class="mt-auto p-4 m-4 bg-slate-800 rounded-2xl border-t-4 border-quallorAmber shadow-2xl">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="text-[10px] bg-quallorAmber text-black px-2 py-0.5 rounded-full font-bold">NEW REQUEST</span>
+<h3 class="text-lg font-bold mt-1">4.5km • 12 min</h3>
+</div>
+<div class="text-right">
+<span class="text-quallorSky font-bold text-xl">$18.50</span>
+</div>
+</div>
+<div class="space-y-2 mb-4">
+<div class="flex items-center gap-3 text-sm">
+<div class="w-2 h-2 rounded-full bg-quallorSky"></div>
+<div class="truncate text-slate-300">Central Station, Downtown</div>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<div class="w-2 h-2 rounded-full bg-quallorAmber"></div>
+<div class="truncate text-slate-300">Harbor View Tech Park</div>
+</div>
+</div>
+<button class="w-full bg-quallorSky text-white font-bold py-3 rounded-xl shadow-lg active:scale-95 transition-transform">Accept Ride</button>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Step 3 -->
+<div class="connector"></div>
+<!-- BEGIN: Step 4 - Scan to Board -->
+<section class="flex flex-col items-center" data-purpose="step-boarding">
+<div class="step-title mb-4">Step 4: Scan to Board</div>
+<div class="phone-mockup">
+<div class="p-6 h-full flex flex-col">
+<div class="flex justify-between items-center mb-8">
+<button class="text-slate-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<h2 class="font-bold">Boarding</h2>
+<div class="w-6"></div>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center">
+<div class="relative w-48 h-48 mb-8">
+<!-- Animated QR Scanner Frame -->
+<div class="absolute inset-0 border-2 border-quallorAmber rounded-2xl opacity-50"></div>
+<div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-quallorAmber"></div>
+<div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-quallorAmber"></div>
+<div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-quallorAmber"></div>
+<div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-quallorAmber"></div>
+<div class="w-full h-1 bg-quallorAmber absolute top-1/2 left-0 shadow-[0_0_15px_rgba(245,158,11,1)]"></div>
+<div class="w-full h-full flex items-center justify-center opacity-20">
+<svg class="w-32 h-32" fill="currentColor" viewbox="0 0 24 24"><path d="M3 3h6v6H3V3zm12 0h6v6h-6V3zM3 15h6v6H3v-6zm12 0h6v6h-6v-6zM5 5v2h2V5H5zm12 0v2h2V5h-2zM5 17v2h2v-2H5zm12 0v2h2v-2h-2zM9 9H7V7h2v2zm0 8H7v-2h2v2zm8 0h-2v-2h2v2zm0-8h-2V7h2v2z"></path></svg>
+</div>
+</div>
+<p class="text-center text-slate-400 px-4">Scan passenger's Quallor ID to verify booking and start the trip.</p>
+</div>
+<div class="p-4 bg-slate-800 rounded-xl flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center font-bold text-quallorSky">JD</div>
+<div>
+<div class="font-bold text-sm">John Doe</div>
+<div class="text-xs text-slate-500">Booking ID: #QR-9821</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Step 4 -->
+<div class="connector"></div>
+<!-- BEGIN: Step 5 - In-Transit Navigation -->
+<section class="flex flex-col items-center" data-purpose="step-navigation">
+<div class="step-title mb-4">Step 5: In-Transit</div>
+<div class="phone-mockup border-slate-700">
+<!-- Main Navigation Interface -->
+<div class="h-full flex flex-col relative">
+<!-- Navigation Header -->
+<div class="p-4 bg-quallorSky text-white">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"></path></svg>
+</div>
+<div>
+<div class="text-xs opacity-80">Next Turn: 200m</div>
+<div class="text-lg font-bold leading-tight">Turn right onto Harbor Blvd</div>
+</div>
+</div>
+</div>
+<!-- Map Content (Placeholder) -->
+<div class="flex-1 bg-slate-800 relative">
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#64748b 1px, transparent 1px); background-size: 15px 15px;"></div>
+<!-- Route Path -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M50,90 Q50,50 80,40 T90,10" fill="none" stroke="#0ea5e9" stroke-dasharray="4" stroke-width="2"></path>
+</svg>
+<div class="absolute top-10 right-10 w-4 h-4 bg-quallorAmber rounded-full ring-4 ring-quallorAmber/20"></div>
+</div>
+<!-- Trip Controls -->
+<div class="p-4 bg-slate-900 border-t border-slate-700 flex flex-col gap-4">
+<div class="flex justify-between items-center px-2">
+<div>
+<div class="text-[10px] text-slate-500 uppercase tracking-widest">ETA</div>
+<div class="text-xl font-bold">14:28 <span class="text-sm font-normal text-slate-500">(8 min)</span></div>
+</div>
+<button class="p-3 rounded-full bg-red-500/10 text-red-500">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></svg>
+</button>
+</div>
+<button class="w-full bg-slate-200 text-black font-bold py-3 rounded-xl">Complete Trip</button>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Step 5 -->
+<div class="connector"></div>
+<!-- BEGIN: Step 6 - Summary & Earnings -->
+<section class="flex flex-col items-center" data-purpose="step-summary">
+<div class="step-title mb-4">Step 6: Post-Trip Summary</div>
+<div class="phone-mockup border-quallorAmber/30">
+<div class="p-6 h-full flex flex-col items-center">
+<div class="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mb-4">
+<svg class="w-10 h-10" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+<h2 class="text-2xl font-bold mb-1">Trip Completed!</h2>
+<p class="text-slate-500 text-sm mb-8">Excellent service, Captain.</p>
+<div class="w-full space-y-4 mb-8">
+<div class="flex justify-between items-center py-3 border-b border-slate-800">
+<span class="text-slate-400">Ride Fare</span>
+<span class="font-semibold">$15.50</span>
+</div>
+<div class="flex justify-between items-center py-3 border-b border-slate-800">
+<span class="text-slate-400">Peak Surge (1.2x)</span>
+<span class="font-semibold text-quallorAmber">+$3.10</span>
+</div>
+<div class="flex justify-between items-center py-3 border-b border-slate-800">
+<span class="text-slate-400">Booking Fee</span>
+<span class="font-semibold text-red-400">-$0.10</span>
+</div>
+<div class="flex justify-between items-center pt-4">
+<span class="text-lg font-bold">Total Earning</span>
+<span class="text-2xl font-black text-quallorSky">$18.50</span>
+</div>
+</div>
+<div class="w-full p-4 bg-slate-800 rounded-xl mb-auto">
+<div class="flex items-center gap-1 mb-2">
+<svg class="w-4 h-4 text-quallorAmber fill-current" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<span class="text-sm font-bold">5.0 <span class="text-slate-500 font-normal">Passenger Rating</span></span>
+</div>
+<p class="text-xs italic text-slate-400">"Very professional driver and clean vehicle."</p>
+</div>
+<button class="w-full bg-slate-700 text-white font-bold py-3 rounded-xl mt-6">Go Offline</button>
+<button class="w-full text-quallorSky font-bold py-3">Back to Online</button>
+</div>
+</div>
+</section>
+<!-- END: Step 6 -->
+</main>
+<footer class="py-12 text-center text-slate-500 text-sm">
+    © 2023 Quallor Technologies - Driver Flow Visualization
+  </footer>
+</body></html>

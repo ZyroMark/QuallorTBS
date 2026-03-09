@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<title>Driver Verification | Quallor</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 sticky top-0 z-10 border-b border-slate-200 dark:border-primary/20">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center cursor-pointer hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Driver Verification</h2>
+<div class="flex w-10 items-center justify-end">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-xl">lock</span>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-2xl mx-auto pb-24">
+<!-- Profile Section -->
+<div class="flex p-6 @container">
+<div class="flex w-full flex-col gap-4 items-center">
+<div class="flex gap-4 flex-col items-center">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 border-4 border-primary/20" data-alt="Professional portrait of a male driver smiling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDxjuGLM9QwUrD2PHXl5UGw4qrqjlrXowUc6djYh9lUCbZeuhQdWby1oRtoTAoKFhDhQ3E3KBaujTPW__2ms8dDPiFPsKNggPKchcX1KF9-DSfO8gUOfzBd3uHVHvrVoDM8cJRhbZWhYZHyCxxSnqS0cCVfjgKXDc0KFO5u5seeIfNQkz3eW18dsqW1fbpaRZXuigL0YZ3LlM-dI5yhOUTx-L_tlvFA5R8BZLuZhPQeDPgmk53FWOgZ4-vQAI4P8FteCqVCX53uig6s");'>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-background-dark p-1 rounded-full flex items-center justify-center border-2 border-background-dark">
+<span class="material-symbols-outlined text-sm font-bold">verified</span>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight text-center">Marcus Thorne</p>
+<div class="flex items-center gap-2 mt-1">
+<p class="text-primary text-sm font-medium leading-normal text-center">Operator ID: #8829</p>
+<span class="w-1 h-1 rounded-full bg-slate-400"></span>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal text-center italic">Pending Approval</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Personal Information -->
+<div class="px-6 py-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-4 border-l-4 border-primary pl-3">Personal Information</h3>
+<div class="bg-slate-100 dark:bg-primary/5 rounded-xl p-4 space-y-4">
+<div class="flex justify-between items-center border-b border-slate-200 dark:border-primary/10 pb-3">
+<p class="text-slate-500 dark:text-slate-400 text-sm">Full Name</p>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold">Marcus J. Thorne</p>
+</div>
+<div class="flex justify-between items-center border-b border-slate-200 dark:border-primary/10 pb-3">
+<p class="text-slate-500 dark:text-slate-400 text-sm">Contact Number</p>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold">+1 (555) 924-0123</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-slate-500 dark:text-slate-400 text-sm">License Number</p>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold tracking-wider uppercase">ABC-12345678</p>
+</div>
+</div>
+</div>
+<!-- Vehicle Details -->
+<div class="px-6 py-6">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-4 border-l-4 border-primary pl-3">Vehicle Details</h3>
+<div class="bg-slate-100 dark:bg-primary/5 rounded-xl p-4 space-y-4">
+<div class="flex justify-between items-center border-b border-slate-200 dark:border-primary/10 pb-3">
+<p class="text-slate-500 dark:text-slate-400 text-sm">License Plate</p>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold">QX-772-BD</p>
+</div>
+<div class="flex justify-between items-center border-b border-slate-200 dark:border-primary/10 pb-3">
+<p class="text-slate-500 dark:text-slate-400 text-sm">Model</p>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold">Toyota Prius Prime 2023</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-slate-500 dark:text-slate-400 text-sm">Color</p>
+<div class="flex items-center gap-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold">Midnight Silver</p>
+<div class="w-4 h-4 rounded-full bg-slate-600 border border-white/20"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Document Verification Tiles -->
+<div class="px-6 py-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-4 border-l-4 border-primary pl-3">Document Verification</h3>
+<div class="grid grid-cols-1 gap-3">
+<!-- Tile 1 -->
+<div class="flex items-center justify-between p-4 bg-slate-100 dark:bg-primary/10 rounded-xl border border-transparent hover:border-primary/30 transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="bg-primary/20 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">badge</span>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-100 font-bold text-sm">Driver's License</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs">High-res scan attached</p>
+</div>
+</div>
+<div class="flex items-center gap-2 text-emerald-500">
+<span class="text-xs font-bold uppercase tracking-wider">Uploaded</span>
+<span class="material-symbols-outlined text-lg">check_circle</span>
+</div>
+</div>
+<!-- Tile 2 -->
+<div class="flex items-center justify-between p-4 bg-slate-100 dark:bg-primary/10 rounded-xl border border-transparent hover:border-primary/30 transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="bg-primary/20 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">id_card</span>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-100 font-bold text-sm">National ID Card</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Verification in progress</p>
+</div>
+</div>
+<div class="flex items-center gap-2 text-emerald-500">
+<span class="text-xs font-bold uppercase tracking-wider">Uploaded</span>
+<span class="material-symbols-outlined text-lg">check_circle</span>
+</div>
+</div>
+<!-- Tile 3 -->
+<div class="flex items-center justify-between p-4 bg-slate-100 dark:bg-primary/10 rounded-xl border border-primary/40 transition-all cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="bg-primary/20 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-100 font-bold text-sm">Vehicle Permit</p>
+<p class="text-primary text-xs">Awaiting file upload...</p>
+</div>
+</div>
+<div class="flex items-center gap-2 text-primary">
+<span class="text-xs font-bold uppercase tracking-wider">Pending</span>
+<span class="material-symbols-outlined text-lg">upload_file</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Button -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-primary/20">
+<div class="max-w-2xl mx-auto flex gap-3 flex-row flex-wrap">
+<div class="flex items-center justify-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1 w-full">
+<span class="material-symbols-outlined text-sm">encrypted</span>
+<span>End-to-end encrypted verification session</span>
+</div>
+<button class="flex-1 border-2 border-red-500/50 hover:bg-red-500/10 text-red-500 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 uppercase tracking-wide" onclick="document.getElementById('rejection-modal').classList.remove('hidden')">
+<span>Reject Driver</span>
+<span class="material-symbols-outlined">person_remove</span>
+</button><button class="bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 uppercase tracking-wide flex-1">
+<span>Verify &amp; Add Driver</span>
+<span class="material-symbols-outlined">person_add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Modal Overlay (Hidden by default, shown on 'Reject Driver' click) -->
+<div class="fixed inset-0 z-50 hidden flex flex-col justify-end bg-black/60 backdrop-blur-sm" id="rejection-modal">
+<!-- Bottom Sheet Content -->
+<div class="flex flex-col items-stretch bg-white dark:bg-stone-900 rounded-t-[2rem] shadow-2xl max-h-[90vh] overflow-hidden">
+<!-- BottomSheetHandle -->
+<button class="flex h-6 w-full items-center justify-center pt-2" onclick="document.getElementById('rejection-modal').classList.add('hidden')">
+<div class="h-1.5 w-12 rounded-full bg-stone-300 dark:bg-stone-700"></div>
+</button>
+<div class="flex-1 overflow-y-auto">
+<h1 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight px-6 text-center pb-2 pt-4">
+        Select Rejection Reason
+      </h1>
+<p class="text-center text-sm text-slate-500 dark:text-stone-400 px-8 pb-4">
+        Please specify why this driver's registration is being rejected.
+      </p>
+<div class="flex flex-col gap-3 px-6 py-2">
+<!-- Option 1 -->
+<label class="flex items-center gap-4 rounded-xl border border-solid border-stone-200 dark:border-stone-800 p-4 transition-colors hover:bg-stone-50 dark:hover:bg-stone-800/50 cursor-pointer">
+<input checked="" class="radio-custom h-5 w-5 border-2 border-stone-300 dark:border-stone-600 bg-transparent text-primary checked:border-primary focus:ring-primary focus:ring-offset-0" name="rejection_reason" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium">Invalid Driver's License</p>
+</div>
+<span class="material-symbols-outlined text-stone-400">id_card</span>
+</label>
+<!-- Option 2 -->
+<label class="flex items-center gap-4 rounded-xl border border-solid border-stone-200 dark:border-stone-800 p-4 transition-colors hover:bg-stone-50 dark:hover:bg-stone-800/50 cursor-pointer">
+<input class="radio-custom h-5 w-5 border-2 border-stone-300 dark:border-stone-600 bg-transparent text-primary checked:border-primary focus:ring-primary focus:ring-offset-0" name="rejection_reason" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium">Expired Vehicle Permit</p>
+</div>
+<span class="material-symbols-outlined text-stone-400">event_busy</span>
+</label>
+<!-- Option 3 -->
+<label class="flex items-center gap-4 rounded-xl border border-solid border-stone-200 dark:border-stone-800 p-4 transition-colors hover:bg-stone-50 dark:hover:bg-stone-800/50 cursor-pointer">
+<input class="radio-custom h-5 w-5 border-2 border-stone-300 dark:border-stone-600 bg-transparent text-primary checked:border-primary focus:ring-primary focus:ring-offset-0" name="rejection_reason" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium">Blurry Document Photo</p>
+</div>
+<span class="material-symbols-outlined text-stone-400">no_photography</span>
+</label>
+</div>
+<!-- Text Area Section -->
+<div class="flex flex-col gap-2 px-6 py-4">
+<label class="flex flex-col w-full">
+<p class="text-slate-700 dark:text-stone-300 text-sm font-medium pb-2">Other or additional comments</p>
+<textarea class="form-input flex w-full min-w-0 flex-1 resize-none rounded-xl text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/20 border border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-800/50 focus:border-primary min-h-[100px] placeholder:text-stone-400 p-4 text-sm font-normal" placeholder="Type specific reason here..."></textarea>
+</label>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row gap-3 px-6 py-6 bg-stone-50/50 dark:bg-stone-800/20">
+<button class="flex-1 cursor-pointer items-center justify-center rounded-xl h-14 px-5 bg-stone-200 dark:bg-stone-800 text-slate-700 dark:text-stone-300 text-base font-bold transition-opacity hover:opacity-90" onclick="document.getElementById('rejection-modal').classList.add('hidden')">
+<span>Cancel</span>
+</button>
+<button class="flex-[2] cursor-pointer items-center justify-center rounded-xl h-14 px-5 bg-primary text-white text-base font-bold shadow-lg shadow-primary/20 transition-opacity hover:opacity-90" onclick="document.getElementById('rejection-modal').classList.add('hidden')">
+<span>Confirm Rejection</span>
+</button>
+</div>
+</div>
+<!-- Spacer for mobile home indicator -->
+<div class="h-6 bg-stone-50/50 dark:bg-stone-800/20"></div>
+</div>
+</div></body></html>

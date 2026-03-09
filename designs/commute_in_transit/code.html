@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                        "neutral-muted": "#342b18",
+                        "neutral-text": "#cbb790",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .map-gradient-overlay {
+            background: linear-gradient(to bottom, rgba(34, 28, 16, 0.4) 0%, rgba(34, 28, 16, 0) 20%, rgba(34, 28, 16, 0) 70%, rgba(34, 28, 16, 1) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Header -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 justify-between z-10 border-b border-neutral-muted">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center rounded-full hover:bg-neutral-muted/20 cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex flex-col items-center">
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">In-Transit</h2>
+<p class="text-primary text-xs font-medium uppercase tracking-widest">Daily Commute</p>
+</div>
+<div class="flex size-10 items-center justify-center">
+<button class="text-red-500 hover:bg-red-500/10 p-2 rounded-full">
+<span class="material-symbols-outlined font-bold">sos</span>
+</button>
+</div>
+</div>
+<!-- Map Section -->
+<div class="relative flex-1 @container">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Dark mode street map with amber route line" data-location="East London, South Africa" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBt5UpiN9ZezwdnhuVS4GYBkG7fvnmt37Hf-zwuQVxNSRMVdszith6pQoq-rRlZvq7_NzG-YBH-ooPteIq4nTZVH3f-3Qr5Sq3VXhNlKypforPlDeNVDEPClyyzZj7GON_YoEWVLUDwqrSOXcf1H5O-oua7WLouIb9W72U6Oel592kd6bRPW7Vqge3qeXroYRha2gB50q9-DIN-_3xuiXzq6SyClFFwdt4HaGyQwEf5AF4KXSREe5NfeCj8mR65THjQ_mXYgWMqRPNH");'>
+<div class="absolute inset-0 bg-background-dark/40 map-gradient-overlay"></div>
+</div>
+<!-- Floating Controls -->
+<div class="absolute top-4 right-4 flex flex-col gap-2">
+<div class="flex flex-col rounded-lg bg-background-dark/90 border border-neutral-muted overflow-hidden shadow-xl">
+<button class="p-3 text-slate-100 hover:bg-neutral-muted transition-colors border-b border-neutral-muted">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="p-3 text-slate-100 hover:bg-neutral-muted transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+</div>
+<button class="p-3 rounded-lg bg-background-dark/90 border border-neutral-muted text-primary shadow-xl hover:bg-neutral-muted transition-colors">
+<span class="material-symbols-outlined">navigation</span>
+</button>
+</div>
+<!-- Search/Status Bar Overlay -->
+<div class="absolute top-4 left-4 right-16">
+<div class="flex items-center gap-3 bg-background-dark/90 border border-neutral-muted p-3 rounded-xl shadow-2xl">
+<div class="flex size-8 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-sm">near_me</span>
+</div>
+<div class="flex-1">
+<p class="text-[10px] text-neutral-text uppercase font-bold tracking-tighter">Current Trip</p>
+<p class="text-sm font-semibold text-slate-100">Beacon Bay to Amalinda</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Sheet -->
+<div class="bg-background-light dark:bg-background-dark border-t border-neutral-muted rounded-t-xl px-4 pb-6 pt-2 shadow-[0_-8px_30px_rgb(0,0,0,0.12)]">
+<div class="flex justify-center mb-4">
+<div class="h-1.5 w-12 rounded-full bg-neutral-muted"></div>
+</div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Amalinda</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-primary font-bold">12 mins</span>
+<span class="text-neutral-text text-sm">• 4.8 km remaining</span>
+</div>
+</div>
+<div class="bg-neutral-muted/30 px-3 py-1.5 rounded-lg border border-neutral-muted text-center">
+<p class="text-[10px] text-neutral-text uppercase font-bold tracking-widest">Vehicle ID</p>
+<p class="text-sm font-mono font-bold text-slate-100 tracking-wider">EC-928-842</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 bg-primary text-background-dark font-bold py-3.5 rounded-xl hover:bg-primary/90 transition-all active:scale-95">
+<span class="material-symbols-outlined text-xl">share</span>
+                    Share Trip
+                </button>
+<button class="flex items-center justify-center gap-2 bg-neutral-muted/50 text-slate-100 font-bold py-3.5 rounded-xl hover:bg-neutral-muted transition-all active:scale-95 border border-neutral-muted">
+<span class="material-symbols-outlined text-xl">support_agent</span>
+                    Contact
+                </button>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<div class="flex gap-2 border-t border-neutral-muted bg-background-light dark:bg-neutral-muted/20 px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-neutral-text" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-xs font-medium">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">directions_car</span>
+<p class="text-xs font-bold">Commute</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-neutral-text" href="#">
+<span class="material-symbols-outlined">shield</span>
+<p class="text-xs font-medium">Safety</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-neutral-text" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-xs font-medium">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .radio-custom:checked {
+            background-image: url("data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27%23ec5b13%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3ccircle cx=%278%27 cy=%278%27 r=%273%27/%3e%3c/svg%3e");
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<!-- Background Screen: Driver Verification (Simulated as background) -->
+<div class="fixed inset-0 overflow-y-auto z-0 opacity-40 grayscale-[20%] pointer-events-none">
+<header class="flex items-center justify-between p-4 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800">
+<span class="material-symbols-outlined">arrow_back</span>
+<h2 class="text-lg font-semibold">Driver Verification</h2>
+<span class="material-symbols-outlined">more_vert</span>
+</header>
+<div class="p-4 space-y-6">
+<div class="aspect-video w-full rounded-xl bg-stone-300 dark:bg-stone-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl opacity-50">badge</span>
+</div>
+<div class="space-y-4">
+<div class="h-4 w-3/4 bg-stone-200 dark:bg-stone-800 rounded"></div>
+<div class="h-4 w-1/2 bg-stone-200 dark:bg-stone-800 rounded"></div>
+<div class="grid grid-cols-2 gap-4">
+<div class="h-20 bg-stone-200 dark:bg-stone-800 rounded-lg"></div>
+<div class="h-20 bg-stone-200 dark:bg-stone-800 rounded-lg"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-50 flex flex-col justify-end bg-black/60 backdrop-blur-sm">
+<!-- Bottom Sheet Content -->
+<div class="flex flex-col items-stretch bg-white dark:bg-stone-900 rounded-t-[2rem] shadow-2xl max-h-[90vh] overflow-hidden">
+<!-- BottomSheetHandle -->
+<button class="flex h-6 w-full items-center justify-center pt-2">
+<div class="h-1.5 w-12 rounded-full bg-stone-300 dark:bg-stone-700"></div>
+</button>
+<div class="flex-1 overflow-y-auto">
+<h1 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight px-6 text-center pb-2 pt-4">
+                    Select Rejection Reason
+                </h1>
+<p class="text-center text-sm text-slate-500 dark:text-stone-400 px-8 pb-4">
+                    Please specify why this driver's registration is being rejected.
+                </p>
+<div class="flex flex-col gap-3 px-6 py-2">
+<!-- Option 1 -->
+<label class="flex items-center gap-4 rounded-xl border border-solid border-stone-200 dark:border-stone-800 p-4 transition-colors hover:bg-stone-50 dark:hover:bg-stone-800/50 cursor-pointer">
+<input checked="" class="radio-custom h-5 w-5 border-2 border-stone-300 dark:border-stone-600 bg-transparent text-primary checked:border-primary focus:ring-primary focus:ring-offset-0" name="rejection_reason" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium">Invalid Driver's License</p>
+</div>
+<span class="material-symbols-outlined text-stone-400">id_card</span>
+</label>
+<!-- Option 2 -->
+<label class="flex items-center gap-4 rounded-xl border border-solid border-stone-200 dark:border-stone-800 p-4 transition-colors hover:bg-stone-50 dark:hover:bg-stone-800/50 cursor-pointer">
+<input class="radio-custom h-5 w-5 border-2 border-stone-300 dark:border-stone-600 bg-transparent text-primary checked:border-primary focus:ring-primary focus:ring-offset-0" name="rejection_reason" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium">Expired Vehicle Permit</p>
+</div>
+<span class="material-symbols-outlined text-stone-400">event_busy</span>
+</label>
+<!-- Option 3 -->
+<label class="flex items-center gap-4 rounded-xl border border-solid border-stone-200 dark:border-stone-800 p-4 transition-colors hover:bg-stone-50 dark:hover:bg-stone-800/50 cursor-pointer">
+<input class="radio-custom h-5 w-5 border-2 border-stone-300 dark:border-stone-600 bg-transparent text-primary checked:border-primary focus:ring-primary focus:ring-offset-0" name="rejection_reason" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium">Blurry Document Photo</p>
+</div>
+<span class="material-symbols-outlined text-stone-400">no_photography</span>
+</label>
+</div>
+<!-- Text Area Section -->
+<div class="flex flex-col gap-2 px-6 py-4">
+<label class="flex flex-col w-full">
+<p class="text-slate-700 dark:text-stone-300 text-sm font-medium pb-2">Other or additional comments</p>
+<textarea class="form-input flex w-full min-w-0 flex-1 resize-none rounded-xl text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/20 border border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-800/50 focus:border-primary min-h-[100px] placeholder:text-stone-400 p-4 text-sm font-normal" placeholder="Type specific reason here..."></textarea>
+</label>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row gap-3 px-6 py-6 bg-stone-50/50 dark:bg-stone-800/20">
+<button class="flex-1 cursor-pointer items-center justify-center rounded-xl h-14 px-5 bg-stone-200 dark:bg-stone-800 text-slate-700 dark:text-stone-300 text-base font-bold transition-opacity hover:opacity-90">
+<span>Cancel</span>
+</button>
+<button class="flex-[2] cursor-pointer items-center justify-center rounded-xl h-14 px-5 bg-primary text-white text-base font-bold shadow-lg shadow-primary/20 transition-opacity hover:opacity-90">
+<span>Confirm Rejection</span>
+</button>
+</div>
+</div>
+<!-- Spacer for mobile home indicator -->
+<div class="h-6 bg-stone-50/50 dark:bg-stone-800/20"></div>
+</div>
+</div>
+</body></html>

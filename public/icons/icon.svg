@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="#221c10"/>
+  <!-- Q lettermark -->
+  <text x="256" y="340" font-family="Georgia, serif" font-size="320" font-weight="800" fill="#f2a60d" text-anchor="middle">Q</text>
+  <!-- Sky-blue dot (status indicator) -->
+  <circle cx="370" cy="370" r="52" fill="#38bdf8"/>
+  <circle cx="370" cy="370" r="38" fill="#38bdf8"/>
+</svg>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "accent-blue": "#38bdf8",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4">
+<button class="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-xl font-bold flex-1 text-center pr-10">Ride History</h1>
+</div>
+<div class="flex px-4 gap-8">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 pt-2" href="#">
+<span class="text-sm font-bold">Recent</span>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2" href="#">
+<span class="text-sm font-bold">Scheduled</span>
+</a>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
+<!-- Expanded Ride Card -->
+<div class="rounded-xl bg-slate-100 dark:bg-slate-900/50 border border-primary/30 overflow-hidden shadow-lg">
+<div class="relative h-40 w-full bg-slate-300 dark:bg-slate-800 overflow-hidden" data-location="Johannesburg, South Africa" style="">
+<div class="absolute inset-0 bg-[url('https://placeholder.pics/svg/600x400')] bg-cover bg-center" data-alt="Map showing a taxi route in Johannesburg"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<span class="bg-primary text-background-dark text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Expanded Detail</span>
+</div>
+</div>
+<div class="p-4 space-y-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="size-12 rounded-full overflow-hidden border-2 border-primary" data-alt="Portrait of taxi driver Sipho M.">
+<img alt="Driver" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ-FYGwoRep8N8S9PEIpf0S4XYyhUBpPh4z4DZ3RdsdhIW6Lt51IA1EJlara7_BLhp_gY3pgRxpLO7RpLNYVyN_UqHJf_9M8CZuUK6t5LPB4K9H2RhnE6W2byWi0XMUOTPQlaAH3q5EyKL2rmtRCRsnGSy4MxmZliOqhQR5qrjHmhsNMEHCygxeEeWOADfC_qxPLvwSxt-OPar9Het56Y7Y4Z_HbRWtcvLh--GrCPdE-2yMPAFqh5jS1WFKZ7qH6W1HmvpZxwbe1hD"/>
+</div>
+<div>
+<p class="font-bold text-lg">Sipho M.</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary fill-icon">star</span>
+                                4.9 • Quallor Standard
+                            </p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-2xl font-black text-primary leading-tight">R 145.00</p>
+<p class="text-[10px] text-accent-blue font-bold uppercase">Completed</p>
+</div>
+</div>
+<!-- Route Detail -->
+<div class="space-y-3 py-2 border-y border-slate-200 dark:border-slate-800">
+<div class="flex gap-3">
+<div class="flex flex-col items-center pt-1">
+<span class="material-symbols-outlined text-accent-blue text-sm">radio_button_checked</span>
+<div class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700 my-1"></div>
+<span class="material-symbols-outlined text-primary text-sm">location_on</span>
+</div>
+<div class="flex-1 space-y-3">
+<div>
+<p class="text-[10px] text-slate-500 uppercase font-bold">Pickup</p>
+<p class="text-sm">124 Rivonia Rd, Sandton</p>
+</div>
+<div>
+<p class="text-[10px] text-slate-500 uppercase font-bold">Dropoff</p>
+<p class="text-sm">OR Tambo International Airport</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Fare Breakdown -->
+<div class="space-y-2 bg-slate-200/50 dark:bg-slate-800/50 p-3 rounded-lg">
+<div class="flex justify-between text-xs">
+<span class="text-slate-500 dark:text-slate-400">Base fare</span>
+<span>R 20.00</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500 dark:text-slate-400">Distance (18.4 km)</span>
+<span>R 110.00</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500 dark:text-slate-400">Time (24 min)</span>
+<span>R 25.00</span>
+</div>
+<div class="flex justify-between text-xs font-bold text-accent-blue">
+<span>Promo Code (AIRPORT20)</span>
+<span>-R 10.00</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-primary text-background-dark font-bold py-2 rounded-lg text-sm transition-transform active:scale-95">Rebook Ride</button>
+<button class="px-4 border border-slate-300 dark:border-slate-700 py-2 rounded-lg text-sm font-medium">Support</button>
+</div>
+</div>
+</div>
+<!-- Regular Ride Card 1 -->
+<div class="rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 shadow-sm">
+<div class="flex justify-between items-center mb-3">
+<div class="flex items-center gap-2">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">directions_car</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Oct 22, 08:15 AM</p>
+<p class="font-bold">Quallor XL • Thabo K.</p>
+</div>
+</div>
+<p class="font-bold text-lg">R 210.50</p>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-xs">location_on</span>
+<p class="truncate">Rosebank Mall → Melrose Arch</p>
+</div>
+<div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+<span class="text-[10px] bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded text-slate-500 font-bold uppercase">Completed</span>
+<button class="text-primary text-xs font-bold flex items-center gap-1">
+                    Details <span class="material-symbols-outlined text-xs">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Regular Ride Card 2 -->
+<div class="rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 shadow-sm">
+<div class="flex justify-between items-center mb-3">
+<div class="flex items-center gap-2">
+<div class="p-2 bg-accent-blue/10 rounded-lg">
+<span class="material-symbols-outlined text-accent-blue">electric_car</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Oct 20, 06:45 PM</p>
+<p class="font-bold">Quallor Lite • Sarah L.</p>
+</div>
+</div>
+<p class="font-bold text-lg">R 85.00</p>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-xs">location_on</span>
+<p class="truncate">Constitution Hill → Maboneng</p>
+</div>
+<div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+<span class="text-[10px] bg-red-500/10 text-red-500 px-2 py-0.5 rounded font-bold uppercase">Cancelled</span>
+<button class="text-primary text-xs font-bold flex items-center gap-1">
+                    Details <span class="material-symbols-outlined text-xs">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Regular Ride Card 3 -->
+<div class="rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 shadow-sm opacity-80">
+<div class="flex justify-between items-center mb-3">
+<div class="flex items-center gap-2">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">directions_car</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Oct 18, 02:30 PM</p>
+<p class="font-bold">Quallor Standard • Mike D.</p>
+</div>
+</div>
+<p class="font-bold text-lg">R 112.00</p>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-xs">location_on</span>
+<p class="truncate">Bryanston → Fourways Mall</p>
+</div>
+<div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+<span class="text-[10px] bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded text-slate-500 font-bold uppercase">Completed</span>
+<button class="text-primary text-xs font-bold flex items-center gap-1">
+                    Details <span class="material-symbols-outlined text-xs">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2 z-20">
+<div class="flex justify-around items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill-icon">local_taxi</span>
+<span class="text-[10px] font-medium">Ride</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary relative" href="#">
+<span class="material-symbols-outlined fill-icon">history</span>
+<span class="text-[10px] font-bold">Activity</span>
+<div class="absolute -top-1 right-0 size-2 bg-accent-blue rounded-full border-2 border-background-dark"></div>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill-icon">account_circle</span>
+<span class="text-[10px] font-medium">Account</span>
+</a>
+</div>
+</nav>
+</body></html>

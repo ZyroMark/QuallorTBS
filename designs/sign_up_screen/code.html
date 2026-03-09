@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign Up - Quallor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header / Top Bar -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="text-slate-100 flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</div>
+<h2 class="text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Sign Up</h2>
+</div>
+<div class="max-w-[480px] w-full mx-auto px-4">
+<!-- Branding/Icon Placeholder -->
+<div class="flex justify-center pt-8 pb-4">
+<div class="bg-primary/20 p-4 rounded-2xl">
+<span class="material-symbols-outlined text-primary text-[48px]">local_taxi</span>
+</div>
+</div>
+<h1 class="text-slate-100 tracking-tight text-[32px] font-bold leading-tight pb-3 pt-6 text-center">Create Account</h1>
+<p class="text-slate-400 text-center mb-8">Join the Quallor community today</p>
+<form action="#" class="space-y-4">
+<!-- Full Name Field -->
+<div class="flex flex-col w-full">
+<p class="text-slate-300 text-sm font-medium leading-normal pb-2">Full Name</p>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-[20px]">person</span>
+<input class="form-input flex w-full rounded-lg text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-primary/20 bg-primary/10 h-14 placeholder:text-slate-500 pl-12 pr-4 text-base font-normal leading-normal" placeholder="John Doe" type="text"/>
+</div>
+</div>
+<!-- Email/Phone Field -->
+<div class="flex flex-col w-full">
+<p class="text-slate-300 text-sm font-medium leading-normal pb-2">Email or Phone Number</p>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-[20px]">mail</span>
+<input class="form-input flex w-full rounded-lg text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-primary/20 bg-primary/10 h-14 placeholder:text-slate-500 pl-12 pr-4 text-base font-normal leading-normal" placeholder="example@mail.com" type="text"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col w-full">
+<p class="text-slate-300 text-sm font-medium leading-normal pb-2">Password</p>
+<div class="flex w-full items-stretch rounded-lg group">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-[20px]">lock</span>
+<input class="form-input flex w-full rounded-l-lg text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-primary/20 bg-primary/10 h-14 placeholder:text-slate-500 pl-12 pr-2 text-base font-normal leading-normal border-r-0" placeholder="Min. 8 characters" type="password"/>
+</div>
+<div class="text-slate-500 flex border border-primary/20 bg-primary/10 items-center justify-center px-4 rounded-r-lg border-l-0 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">visibility</span>
+</div>
+</div>
+</div>
+<!-- Confirm Password Field -->
+<div class="flex flex-col w-full">
+<p class="text-slate-300 text-sm font-medium leading-normal pb-2">Confirm Password</p>
+<div class="flex w-full items-stretch rounded-lg group">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-[20px]">lock_reset</span>
+<input class="form-input flex w-full rounded-l-lg text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-primary/20 bg-primary/10 h-14 placeholder:text-slate-500 pl-12 pr-2 text-base font-normal leading-normal border-r-0" placeholder="Repeat password" type="password"/>
+</div>
+<div class="text-slate-500 flex border border-primary/20 bg-primary/10 items-center justify-center px-4 rounded-r-lg border-l-0 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">visibility</span>
+</div>
+</div>
+</div>
+<!-- Terms & Conditions Checkbox -->
+<div class="flex items-start gap-3 py-2">
+<input class="mt-1 size-5 rounded border-primary/40 bg-primary/10 text-primary focus:ring-primary focus:ring-offset-background-dark" id="terms" type="checkbox"/>
+<label class="text-sm text-slate-400 leading-snug" for="terms">
+                        I agree to the <a class="text-primary hover:underline" href="#">Terms of Service</a> and <a class="text-primary hover:underline" href="#">Privacy Policy</a>.
+                    </label>
+</div>
+<!-- Sign Up Button -->
+<div class="pt-4">
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold text-lg h-14 rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-[0.98]" type="submit">
+                        Sign Up
+                    </button>
+</div>
+</form>
+<!-- Social Login Divider -->
+<div class="flex items-center gap-4 py-8">
+<div class="h-px bg-primary/20 flex-1"></div>
+<p class="text-slate-500 text-sm font-medium">Or continue with</p>
+<div class="h-px bg-primary/20 flex-1"></div>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 flex items-center justify-center h-12 rounded-lg border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-300">account_circle</span>
+</button>
+<button class="flex-1 flex items-center justify-center h-12 rounded-lg border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-300">mail</span>
+</button>
+</div>
+<!-- Login Link -->
+<div class="py-10 text-center">
+<p class="text-slate-400">
+                    Already have an account? 
+                    <a class="text-primary font-semibold hover:underline ml-1" href="#">Log In</a>
+</p>
+</div>
+</div>
+<!-- Decorative element -->
+<div class="absolute -bottom-24 -left-24 size-64 bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
+<div class="absolute -top-24 -right-24 size-64 bg-primary/5 rounded-full blur-[80px] pointer-events-none"></div>
+</div>
+</body></html>

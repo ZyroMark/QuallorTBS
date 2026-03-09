@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-10 bg-background-light dark:bg-background-dark/95 backdrop-blur-md border-b border-slate-200 dark:border-primary/20">
+<div class="flex items-center p-4 justify-between max-w-2xl mx-auto w-full">
+<button class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Select Destination</h2>
+</div>
+</header>
+<main class="flex-1 max-w-2xl mx-auto w-full pb-24">
+<!-- Search Bar -->
+<div class="px-4 py-4">
+<label class="relative flex flex-col w-full group">
+<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="block w-full rounded-xl border-none bg-slate-100 dark:bg-primary/10 py-4 pl-12 pr-4 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:ring-2 focus:ring-primary text-base font-medium shadow-sm transition-all" placeholder="Where are you heading?" type="text" value=""/>
+</label>
+</div>
+<!-- Section Title -->
+<div class="px-4 pt-4 pb-2 flex items-center justify-between">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Popular Routes</h3>
+<button class="text-primary text-sm font-semibold">See all</button>
+</div>
+<!-- Destination Grid -->
+<div class="grid grid-cols-2 gap-4 p-4">
+<!-- Destination Tile -->
+<div class="relative overflow-hidden group rounded-xl aspect-[4/5] shadow-lg border border-slate-200 dark:border-primary/10">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Scenic coastline view of Port Elizabeth South Africa" style='background-image: linear-gradient(to top, rgba(34, 28, 16, 0.9) 0%, rgba(34, 28, 16, 0.3) 50%, rgba(34, 28, 16, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuC86Cu_PL8r2d4MPFmeF-iuGD0mPB-gkmR1R6vXCmviP7x0CoiKgA3H5YQjuJJH99vrBXJrhZQQesl6PJzfj4_LTIrAApsOJCVg3HlrM4s9IhinSS0vn1f2SfDzKQ_WjaZTXBo54SeA8SvblsmDR8OvzrbAcWjJhwjAxfOeLwLMPynW78e-W9xpaU67vq6UZ_h8Ujf740_sb3lw3mThCsoCd2_LiQmnb4xYLcroXqjbiklxDR3BKNJJuq37oG6ESg0XzgjrujVHy9F9");'>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-4">
+<p class="text-white text-base font-bold leading-tight mb-1">Port Elizabeth</p>
+<p class="text-primary text-xs font-medium">From R450</p>
+</div>
+</div>
+<div class="relative overflow-hidden group rounded-xl aspect-[4/5] shadow-lg border border-slate-200 dark:border-primary/10">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Rolling hills landscape of Mthatha Eastern Cape" style='background-image: linear-gradient(to top, rgba(34, 28, 16, 0.9) 0%, rgba(34, 28, 16, 0.3) 50%, rgba(34, 28, 16, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDvW4O8loUJCCiaNAOcYd_eWqEylUcOfMWKIxUEtd3WzBIGun2Dzo-9yvSWeqUCuDbxzfGOGWYQW3o-DCBerScQnDbTKYqGcwTuUkMAQSBveiDqCI0NQenX3bOwwMpqYwFa2MPNCeM_SeM7JYH1CPepDq1rRTZQJMUz4zqk0BWXcdkyTFIgXVrU_YFS7cMPUtLYQyZVcG5rkxEozESnzPZC2p5F7p4p_WBfyjqn_ZvGum6D2XnE-JMbDwo9NX6qKedoHdXyQ9swOHkZ");'>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-4">
+<p class="text-white text-base font-bold leading-tight mb-1">Mthatha</p>
+<p class="text-primary text-xs font-medium">From R320</p>
+</div>
+</div>
+<div class="relative overflow-hidden group rounded-xl aspect-[4/5] shadow-lg border border-slate-200 dark:border-primary/10">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Rural town landscape of Butterworth South Africa" style='background-image: linear-gradient(to top, rgba(34, 28, 16, 0.9) 0%, rgba(34, 28, 16, 0.3) 50%, rgba(34, 28, 16, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCdFSZ4QpYsOvuQLCPWkkoZtwsYhaG_xvm36s7GGXJI6VBNmFDf_ayqaEI25MmThSZUnD-qwxGxB2EAa8EI9z7FNLQcoyLtlQsZTORQ27j8vmrWH_zaXWq6rPIf_N5vuRCtLWNXeOas-Euj16dCcvmisgqBRB8KN1eWumbNeuPrH4nExbaGxgNI8BcyvJijs-4kHCTdtypxT0Ld9DJ5MGJ7PEok1Z6vS5vO0mGpdszpMj2O2hpRSEP7IHqycua1uuNACd9SY-T77es2");'>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-4">
+<p class="text-white text-base font-bold leading-tight mb-1">Butterworth</p>
+<p class="text-primary text-xs font-medium">From R280</p>
+</div>
+</div>
+<div class="relative overflow-hidden group rounded-xl aspect-[4/5] shadow-lg border border-slate-200 dark:border-primary/10">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Mountain backdrop of Queenstown South Africa" style='background-image: linear-gradient(to top, rgba(34, 28, 16, 0.9) 0%, rgba(34, 28, 16, 0.3) 50%, rgba(34, 28, 16, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDD3omQF5h_YN7b8KYcF0DjVommYFvdPKTyEA8GStW2Iv0yDylMTdR4CTnuTKAiI5mNzWPOgmindsFavwlrUk8ZcKu_blYlfWIuJetYoGOGZLD5DipnAg6VCbUYsvmQzfiDvZbdXDgmNdUAFEv1B79ZAiYaI0glfUcA16M24WQdXYLuUwNVaF0bY-f_-VWsnEXojwnC6jPJ8ARprR8hEQgdxmm0MTISkYAU5A1T6pirPumBr5L5IO4VfhtL_TmtaTBqD73JZ24VM-2L");'>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-4">
+<p class="text-white text-base font-bold leading-tight mb-1">Queenstown</p>
+<p class="text-primary text-xs font-medium">From R380</p>
+</div>
+</div>
+<div class="relative overflow-hidden group rounded-xl aspect-[4/5] col-span-2 shadow-lg border border-slate-200 dark:border-primary/10">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Table Mountain landmark in Cape Town" style='background-image: linear-gradient(to top, rgba(34, 28, 16, 0.9) 0%, rgba(34, 28, 16, 0.3) 50%, rgba(34, 28, 16, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCF9zr-5LdyJUjswbAFi_YGPjQ2BcwBfhuF2mEYVoaeL5vcZHgQU9WE_cI2IXAlawgiL-u8Wn1Tx12B-QpRW0A9uIqzj1iyC3w71N2t0wn1pNO_DXsOZlbrWz4060Lcp-_Xo7g3AihEiSezyH3yE0gDuZYndZm2TtlFHH681yvYr0aOArKqOPk4p1eNMiVLKEhd53yxNiHqyQhzOMGuweDhYhgTG_3fshTfGQoY7KWlAEiq67c3AcUkLcX0DZtp9juf-JpIVJyWiPRN");'>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6">
+<p class="text-white text-xl font-bold leading-tight mb-1">Cape Town</p>
+<p class="text-primary text-sm font-medium">From R850</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-primary/20 pb-safe z-50">
+<div class="max-w-2xl mx-auto flex h-16 items-center">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Home</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary relative" href="#">
+<div class="absolute -top-1 w-10 h-1 bg-primary rounded-full"></div>
+<span class="material-symbols-outlined fill text-[24px]">distance</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Hike</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">shield_with_heart</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Safety</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Booking Confirmation - Quallor</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header Navigation -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 sticky top-0 z-10 border-b border-primary/10">
+<div class="flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Booking Confirmed</h2>
+</header>
+<main class="flex-1 overflow-y-auto">
+<!-- Success State Section -->
+<div class="flex flex-col px-4 py-8">
+<div class="flex flex-col items-center gap-6">
+<div class="relative w-24 h-24 flex items-center justify-center">
+<div class="absolute inset-0 bg-primary/20 rounded-full animate-pulse"></div>
+<div class="relative bg-primary rounded-full p-4">
+<span class="material-symbols-outlined text-background-dark text-4xl font-bold">check</span>
+</div>
+</div>
+<div class="flex max-w-[480px] flex-col items-center gap-2">
+<h1 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight text-center">Payment Successful!</h1>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal max-w-[320px] text-center">
+                        Your taxi from <span class="text-primary">Beacon Bay</span> to <span class="text-primary">Amalinda</span> is confirmed.
+                    </p>
+</div>
+<div class="w-full max-w-md bg-primary/10 border border-primary/20 rounded-xl p-6 flex flex-col gap-4">
+<div class="flex justify-between items-center border-b border-primary/10 pb-4">
+<span class="text-slate-500 dark:text-slate-400 text-sm">Amount Paid</span>
+<span class="text-primary text-xl font-bold tracking-tight">R20.00</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-slate-500 dark:text-slate-400 text-sm">Booking ID</span>
+<span class="text-slate-900 dark:text-slate-100 text-sm font-mono">#QL-88294-TX</span>
+</div>
+</div>
+<button class="w-full max-w-md flex cursor-pointer items-center justify-center rounded-xl h-14 px-6 bg-primary text-background-dark text-base font-bold transition-transform active:scale-95 shadow-lg shadow-primary/20">
+<span class="truncate">View Digital Ticket</span>
+</button>
+</div>
+</div>
+<!-- Trip Details Section -->
+<div class="px-4 pb-8">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight pb-4">Trip Summary</h3>
+<div class="flex flex-col gap-4 rounded-xl bg-slate-100 dark:bg-primary/5 p-4 border border-slate-200 dark:border-primary/10">
+<div class="flex gap-4">
+<div class="flex flex-col items-center py-1">
+<div class="size-3 rounded-full border-2 border-primary bg-background-dark"></div>
+<div class="w-0.5 flex-1 bg-slate-300 dark:bg-primary/20 my-1"></div>
+<div class="size-3 rounded-full bg-primary"></div>
+</div>
+<div class="flex-1 flex flex-col gap-6">
+<div class="flex flex-col">
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">Pickup</p>
+<p class="text-slate-900 dark:text-slate-100 font-bold">Beacon Bay Retail Park</p>
+</div>
+<div class="flex flex-col">
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">Drop-off</p>
+<p class="text-slate-900 dark:text-slate-100 font-bold">Amalinda Main Road</p>
+</div>
+</div>
+<div class="text-right flex flex-col justify-between items-end">
+<p class="text-slate-500 dark:text-slate-400 text-xs">Today, 08:30 AM</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Daily Route</p>
+</div>
+</div>
+<div class="mt-2 w-full h-40 bg-slate-200 dark:bg-primary/10 rounded-lg overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="Map showing route between Beacon Bay and Amalinda" data-location="East London, South Africa" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDYWImPRv8v4TztobtfjXUNtB8BjM1-gUGX-BXQ-JxgM6Q7d-P0M9_BV77Cu2oM0BCnwSQ5YRy160ioXAr2L-CI6bS3COrk0fmq0cggUPX8oxTxZRb2j2sqaB-ux4qpVvkMouODr-joucCVIqHU1p28LCXKoS2VrQKgCbjO2lgvAcy3r7REGIpt7UlAPDZB1zAv4GdRcHw_amG48afD_u929b0JyB4BWLjkaEDCzTY2ZdjQzQCCLX75wV1MX_OnT3roK1cgFVOi18W6");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/60 to-transparent"></div>
+<button class="absolute bottom-3 right-3 flex items-center justify-center rounded-lg h-9 px-4 bg-background-dark/80 backdrop-blur-md text-white border border-white/10 gap-2 text-xs font-bold uppercase tracking-wide">
+<span class="material-symbols-outlined text-sm">map</span>
+<span>Open Map</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="flex gap-1 border-t border-slate-200 dark:border-primary/10 bg-background-light dark:bg-background-dark px-2 pb-6 pt-2 sticky bottom-0">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<p class="text-[10px] font-bold tracking-wider">HOME</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined text-[24px]">search</span>
+<p class="text-[10px] font-bold tracking-wider">SEARCH</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-[24px] font-fill">commute</span>
+<p class="text-[10px] font-bold tracking-wider">COMMUTE</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined text-[24px]">history</span>
+<p class="text-[10px] font-bold tracking-wider">ACTIVITY</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<p class="text-[10px] font-bold tracking-wider">PROFILE</p>
+</a>
+</nav>
+</body></html>

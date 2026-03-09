@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quallor - Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header Section -->
+<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 pt-8 pb-4">
+<div class="flex items-center justify-between mb-6">
+<h1 class="text-2xl font-bold tracking-tight">Account</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 dark:bg-primary/10 text-primary">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="flex flex-col items-center">
+<div class="relative">
+<div class="w-28 h-28 rounded-full border-4 border-primary/20 p-1">
+<img alt="Sipho M." class="w-full h-full rounded-full object-cover" data-alt="Close up portrait of a smiling man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjSaLEOYzewr6MT23T_Gja9XZkosGYeU7kARE-5cDyzsAh9Y324tY1xLaftSHuvarQSTnnJMkKSmM68pXY92CrEbgFkX6FoPfG9qLUwN1yRVxGpt27AmaPiVweJtRRaMZfXYHhgfusCg6P43bZdBTmlgrt1rx3NqZvfsQ69kseUieyBw_rzoFlGLrviCs3L6NLvdUB96lJXyoCe3SnjkeJbRBNWPLoJ-JHVoGoU-ivD-dSPjsjD_v1hZ0Zdx32449YA1QAkBAxnKNn"/>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-background-dark rounded-full p-1 border-2 border-background-dark">
+<span class="material-symbols-outlined text-sm font-bold">edit</span>
+</div>
+</div>
+<div class="mt-4 text-center">
+<h2 class="text-xl font-bold">Sipho M.</h2>
+<div class="flex items-center justify-center gap-1 mt-1">
+<span class="material-symbols-outlined text-primary text-sm fill-1">star</span>
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">4.9 Rating</span>
+<span class="mx-2 text-slate-400">•</span>
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">Member since 2022</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-4 py-2 space-y-6 pb-24">
+<!-- Quick Stats / Wallet Balance -->
+<div class="bg-primary/5 dark:bg-primary/10 rounded-xl p-4 flex items-center justify-between border border-primary/20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Quallor Credits</p>
+<p class="text-lg font-bold text-primary">$142.50</p>
+</div>
+</div>
+<button class="text-primary font-bold text-sm px-4 py-2 bg-primary/20 rounded-lg">Top Up</button>
+</div>
+<!-- Menu Sections -->
+<div class="space-y-1">
+<p class="px-2 text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Profile &amp; Security</p>
+<!-- Personal Info -->
+<a class="flex items-center gap-4 p-4 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-xl transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-sky-500/10 text-sky-500 flex items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold">Personal Info</p>
+<p class="text-xs text-slate-500">Edit your profile and data</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<!-- Payments -->
+<a class="flex items-center gap-4 p-4 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-xl transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold">Payments</p>
+<p class="text-xs text-slate-500">Manage cards &amp; digital wallet</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<!-- Activity -->
+<a class="flex items-center gap-4 p-4 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-xl transition-colors group" href="{{DATA:SCREEN:SCREEN_6}}">
+<div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">history</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold">Activity</p>
+<p class="text-xs text-slate-500">View your ride history</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<!-- Safety & Security -->
+<a class="flex items-center gap-4 p-4 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-xl transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center">
+<span class="material-symbols-outlined">shield</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold">Safety &amp; Security</p>
+<p class="text-xs text-slate-500">Emergency contacts, SOS settings</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+</div>
+<div class="space-y-1">
+<p class="px-2 text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Preferences</p>
+<!-- Support -->
+<a class="flex items-center gap-4 p-4 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-xl transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">help</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold">Support</p>
+<p class="text-xs text-slate-500">Help center, FAQs, live chat</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<!-- App Settings -->
+<a class="flex items-center gap-4 p-4 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-xl transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-slate-500/10 text-slate-500 flex items-center justify-center">
+<span class="material-symbols-outlined">tune</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold">App Settings</p>
+<p class="text-xs text-slate-500">Notifications, Language, Privacy</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+</div>
+<!-- Log Out Button -->
+<div class="pt-4 px-4">
+<button class="w-full py-4 rounded-xl border border-red-500/30 text-red-500 font-bold hover:bg-red-500/5 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">logout</span>
+                Log Out
+            </button>
+<p class="text-center text-[10px] text-slate-500 mt-6 pb-4">Quallor App v2.4.1 (Build 890)</p>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2 z-20">
+<div class="flex items-center justify-around max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">local_taxi</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Ride</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Activity</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<div class="relative">
+<span class="material-symbols-outlined fill-1">account_circle</span>
+<div class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full border border-background-dark"></div>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Account</span>
+</a>
+</div>
+</nav>
+</body></html>

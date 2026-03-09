@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 border-b border-primary/10">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</div>
+<h2 class="text-lg font-bold leading-tight flex-1 text-center pr-10">Confirmation</h2>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Success Hero -->
+<div class="flex flex-col px-6 py-8 items-center text-center">
+<div class="mb-6 bg-primary/20 p-4 rounded-full">
+<span class="material-symbols-outlined text-primary !text-6xl">check_circle</span>
+</div>
+<h1 class="text-2xl font-extrabold tracking-tight mb-2">Booking Confirmed!</h1>
+<p class="text-slate-600 dark:text-slate-400 text-sm max-w-xs">
+                Your seat from East London to Port Elizabeth is secured. Get ready for your hike!
+            </p>
+</div>
+<!-- QR Code / Reference Section -->
+<div class="px-4 mb-6">
+<div class="bg-white dark:bg-slate-800/40 rounded-xl p-6 border border-primary/20 flex flex-col items-center">
+<div class="w-48 h-48 bg-white p-2 rounded-lg mb-4">
+<img alt="QR Code for boarding" data-alt="Black and white QR code for digital boarding pass" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnAlNQK1mw1W04EZ929a9-QNh_U-vmCXGIGTPR1aXgM3Gvfbk_kGv4M8wsDnLjIECw9Cl1_oPA14NaE6j8CWsMmxWdorpBWZK3fbAlWqyFcgjlgyl79YhE4wNU_IPKr1xaw_3qUsJs--MiJW0h277pY-tRsXbDiB061ZmzqHXe9M5iTNCmnrzx5e24nxv0ChdUL8r-pJj14GKDpy-1HZTZADcxg6EhZ_pWErhmES4tCDJ0IVdiTUOI-9LfQh6zQg-e3pimPJFDro5t"/>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-semibold mb-1">Booking Reference</p>
+<p class="text-xl font-mono font-bold text-primary">HK-7729-ELPE</p>
+</div>
+</div>
+<!-- Trip Details Card -->
+<div class="px-4 mb-6">
+<div class="rounded-xl bg-slate-100 dark:bg-slate-900/50 overflow-hidden border border-slate-200 dark:border-slate-800">
+<div class="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+<h3 class="font-bold text-primary">Trip Details</h3>
+<span class="text-xs bg-primary/20 text-primary px-2 py-1 rounded font-bold">PAID</span>
+</div>
+<div class="p-4 space-y-4">
+<div class="flex gap-4">
+<div class="flex flex-col items-center py-1">
+<div class="size-2 rounded-full bg-primary"></div>
+<div class="w-0.5 flex-1 bg-slate-300 dark:bg-slate-700 my-1"></div>
+<div class="size-2 rounded-full border-2 border-primary"></div>
+</div>
+<div class="flex-1 space-y-3">
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Departure</p>
+<p class="font-bold">East London Taxi Rank</p>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Arrival</p>
+<p class="font-bold">Port Elizabeth (Gqeberha)</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-2 border-t border-slate-200 dark:border-slate-800">
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Date &amp; Time</p>
+<p class="text-sm font-semibold">Oct 24, 2023 • 08:30 AM</p>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Fare Total</p>
+<p class="text-sm font-bold text-primary">R250.00</p>
+</div>
+</div>
+<div class="relative w-full h-32 rounded-lg overflow-hidden mt-4">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Map showing route between East London and Port Elizabeth" data-location="East London, South Africa" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC425COAzhLcFB_x5rFDvjYG6iVfg_CX6gGKFwdXFjyxljdjR1xbr_4T7JKa8rZ02hg20d-yY48f0nJjtH5HVNnwRWSPgV9jkawxd1Ykg2MjKbMNpyyMVre_xsZ92hXyOz8G89sV5fJ7GW_7Q4fV88cb0ZGht-AzvrbHlrY47OjTsYi8VqeUgsox74p0xpG346u_iH9k4oNEQlmVzCokRkoygUge1hHHbcoI72sAQ57KNrTfBgCd_BWkrlJn6LwW1xPk60jCnWExHzz");'></div>
+<div class="absolute inset-0 bg-black/20"></div>
+<button class="absolute bottom-2 right-2 bg-primary text-black px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined !text-sm">map</span>
+                            View Route
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="px-4 space-y-3 pb-8">
+<button class="w-full bg-primary hover:bg-primary/90 text-black font-bold py-4 rounded-xl transition-all shadow-lg shadow-primary/10">
+                View My Trips
+            </button>
+<button class="w-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold py-4 rounded-xl transition-all">
+                Return Home
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2">
+<div class="flex justify-between items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">directions_car</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Hike</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">History</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

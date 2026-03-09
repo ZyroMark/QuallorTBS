@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Daily Commute - Eastern Cape</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-full w-full flex-col overflow-x-hidden pb-24">
+<!-- Header -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 sticky top-0 z-10 border-b border-slate-200 dark:border-primary/20">
+<button class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-lg font-bold leading-tight tracking-tight flex-1 ml-2">Daily Commute</h2>
+<button class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+<!-- Title -->
+<div class="px-4 pt-6 pb-2">
+<h3 class="text-2xl font-bold leading-tight">How are you traveling today?</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Select your service type in the Eastern Cape</p>
+</div>
+<!-- Major Service Selection Cards -->
+<div class="p-4 space-y-4 @container">
+<!-- Daily Commute Card -->
+<div class="flex flex-col items-stretch justify-start rounded-xl overflow-hidden shadow-lg bg-white dark:bg-primary/10 border border-slate-200 dark:border-primary/30">
+<div class="w-full bg-center bg-no-repeat aspect-[21/9] bg-cover" data-alt="Yellow taxi fleet on a busy city street" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAxRXcmUAPF38lJg1vtpWqNjBhhU7rZz3p5uHLnzFdngohtTTmljE4mMp33Wl-Mvfa7EQ5fqoM_M7RXHGp4QeTeagHmnK67SI9MrgO5UVtsW8NbZCbllPf0CCm6X5QlI-zn9o1aF2x9A7nFd1HEwOgDBLnFmfwKPAC4zDsoYktVj1VYn99cfHDQ5R_OZtq4DTseQsrY8u-R17xc_GXxtF60RTmz-JmCYUksuwM9AfvHjts2c9EKRvzKoLOBw9B8cylye5RHHCaoAnN");'></div>
+<div class="flex w-full grow flex-col items-stretch justify-center gap-1 py-4 px-4">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-lg font-bold leading-tight text-primary">Daily Commute</p>
+<p class="text-slate-600 dark:text-slate-300 text-sm font-normal leading-normal">Local routes with fixed pricing</p>
+</div>
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">Popular</span>
+</div>
+<div class="mt-4">
+<button class="w-full flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-primary text-white text-sm font-semibold leading-normal">
+<span class="truncate">View Routes</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Hiking Card -->
+<div class="flex flex-col items-stretch justify-start rounded-xl overflow-hidden shadow-lg bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/10 opacity-90">
+<div class="w-full bg-center bg-no-repeat aspect-[21/9] bg-cover" data-alt="Long highway stretching towards distant mountains" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAx1OjZmlXFCW3Zc8u_StUazApkuIvwVXU1IGSbXvR1Zj3Q6px2TsZK46qsgO5MjmDAND3FRFfmj0v63iROmRxzdlitxNmyUcDhzha62hj1S45ZWdqxuyJBlCPK4302cxQW4i6va8nIzXVX3QtDNBOHVVt1o66j3ICJVRMcenlLTWv16S8OOewIZ47fDnMxehSkXB91pKVqywl0kPS6eet4ldN48Ho2e74e_R9kG3uKuIpIHoLh-Gh8Z5fqGcKZ5pFMWU29IRdp6KWp");'></div>
+<div class="flex w-full grow flex-col items-stretch justify-center gap-1 py-4 px-4">
+<p class="text-lg font-bold leading-tight">Hiking</p>
+<div class="flex items-end gap-3 justify-between">
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-normal">Long distance/Inter-city trips</p>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 border border-primary text-primary text-sm font-medium leading-normal">
+<span class="truncate">Select</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Route Selection Section -->
+<div class="px-4 pt-6 pb-2">
+<h4 class="text-lg font-bold leading-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+                Popular Local Routes
+            </h4>
+</div>
+<div class="px-4 space-y-3 pb-8">
+<!-- Route Tile 1 -->
+<button class="w-full flex items-center justify-between p-4 rounded-xl bg-white dark:bg-primary/10 border border-slate-200 dark:border-primary/20 hover:border-primary transition-colors group">
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-center">
+<div class="size-2 rounded-full bg-primary"></div>
+<div class="w-0.5 h-4 bg-slate-300 dark:bg-primary/30"></div>
+<div class="size-2 rounded-full border-2 border-primary"></div>
+</div>
+<div class="text-left">
+<p class="text-sm font-semibold">Beacon Bay to Amalinda</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">East London Local</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<p class="text-primary font-bold">R 18.00</p>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">chevron_right</span>
+</div>
+</button>
+<!-- Route Tile 2 -->
+<button class="w-full flex items-center justify-between p-4 rounded-xl bg-white dark:bg-primary/10 border border-slate-200 dark:border-primary/20 hover:border-primary transition-colors group">
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-center">
+<div class="size-2 rounded-full bg-primary"></div>
+<div class="w-0.5 h-4 bg-slate-300 dark:bg-primary/30"></div>
+<div class="size-2 rounded-full border-2 border-primary"></div>
+</div>
+<div class="text-left">
+<p class="text-sm font-semibold">Vincent to Mdantsane</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Mantsane Commuter</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<p class="text-primary font-bold">R 22.00</p>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">chevron_right</span>
+</div>
+</button>
+<!-- Route Tile 3 -->
+<button class="w-full flex items-center justify-between p-4 rounded-xl bg-white dark:bg-primary/10 border border-slate-200 dark:border-primary/20 hover:border-primary transition-colors group">
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-center">
+<div class="size-2 rounded-full bg-primary"></div>
+<div class="w-0.5 h-4 bg-slate-300 dark:bg-primary/30"></div>
+<div class="size-2 rounded-full border-2 border-primary"></div>
+</div>
+<div class="text-left">
+<p class="text-sm font-semibold">EL CBD to Nahoon</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Coastal Route</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<p class="text-primary font-bold">R 15.00</p>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">chevron_right</span>
+</div>
+</button>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 flex h-auto flex-col z-20">
+<div class="flex gap-2 border-t border-slate-200 dark:border-primary/20 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md px-4 pb-3 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">home</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">history</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Trips</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Wallet</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Profile</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

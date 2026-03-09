@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Header -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 border-b border-primary/10">
+<button class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1">Edit Profile</h2>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Profile Photo Section -->
+<div class="flex p-6 @container">
+<div class="flex w-full flex-col gap-4 items-center">
+<div class="flex gap-4 flex-col items-center relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 border-4 border-primary/20" data-alt="Professional male portrait for profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLu6tdyKb-AbNNSybEpz2epHfmPcoG0xca7yZ5gmTxqdppMNKE9s9U4HcSURno9COF67aD7poJXI3fwH-C4TB8e7UIuiUqi5BG67dNkWuh4HviNWfENakoJrx69jahwtWtj1s-pUXtS-6jtl1uwMLHNcUpigu3OKGn93zp5qUZ650CjikT1b9CNaiiUb9mwSikeEbDD799iKUrlfrtO05bY-KALrgnFWdUOghkGJduGJLyZHWrRSmIAZzeaEJQMhuwkCO4jYWiCl6f");'>
+</div>
+<button class="absolute bottom-10 right-0 bg-primary text-background-dark p-2 rounded-full shadow-lg border-2 border-background-dark">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+</button>
+<p class="text-primary text-base font-semibold leading-tight mt-2">Change Photo</p>
+</div>
+</div>
+</div>
+<!-- Input Fields -->
+<div class="px-4 space-y-5">
+<!-- Full Name -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-600 dark:text-slate-400 text-sm font-medium px-1">Full Name</label>
+<div class="flex w-full items-stretch">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-l-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-200 dark:border-primary/20 bg-white dark:bg-primary/5 h-14 p-4 text-base font-normal" placeholder="Enter your full name" type="text" value="Johnathan Doe"/>
+<div class="text-primary flex border border-l-0 border-slate-200 dark:border-primary/20 bg-white dark:bg-primary/5 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</div>
+</div>
+</div>
+<!-- Phone Number -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-600 dark:text-slate-400 text-sm font-medium px-1">Phone Number</label>
+<div class="flex w-full items-stretch">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-l-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-200 dark:border-primary/20 bg-white dark:bg-primary/5 h-14 p-4 text-base font-normal" placeholder="Enter phone number" type="tel" value="+1 (555) 000-1234"/>
+<div class="text-primary flex border border-l-0 border-slate-200 dark:border-primary/20 bg-white dark:bg-primary/5 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</div>
+</div>
+</div>
+<!-- Email Address -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-600 dark:text-slate-400 text-sm font-medium px-1">Email Address</label>
+<div class="flex w-full items-stretch">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-l-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-200 dark:border-primary/20 bg-white dark:bg-primary/5 h-14 p-4 text-base font-normal" placeholder="Enter email address" type="email" value="johnathan.doe@example.com"/>
+<div class="text-primary flex border border-l-0 border-slate-200 dark:border-primary/20 bg-white dark:bg-primary/5 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</div>
+</div>
+</div>
+<!-- ID Number -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-600 dark:text-slate-400 text-sm font-medium px-1">ID Number</label>
+<div class="flex w-full items-stretch">
+<input class="form-input flex w-full min-w-0 flex-1 rounded-l-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-200 dark:border-primary/20 bg-white dark:bg-primary/5 h-14 p-4 text-base font-normal" placeholder="Enter ID number" type="text" value="QX-99887722"/>
+<div class="text-primary flex border border-l-0 border-slate-200 dark:border-primary/20 bg-white dark:bg-primary/5 items-center justify-center px-4 rounded-r-lg">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Save Changes Button -->
+<div class="p-6 mt-4">
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-colors">
+                    Save Changes
+                </button>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="absolute bottom-0 w-full flex gap-2 border-t border-slate-200 dark:border-primary/10 bg-white dark:bg-background-dark px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-xs font-medium">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">search</span>
+<p class="text-xs font-medium">Search</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<p class="text-xs font-medium">Orders</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill">person</span>
+<p class="text-xs font-medium">Profile</p>
+</a>
+</nav>
+</div>
+</body></html>

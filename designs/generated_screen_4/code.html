@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quallor Operator UI/UX Flow</title>
+<!-- BEGIN: Scripts and Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            quallorDark: '#0f172a',
+            quallorAmber: '#fbbf24',
+            quallorSky: '#0ea5e9',
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Scripts and Config -->
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="layout-flow">
+    body {
+      background-color: #020617;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+    }
+    .flow-connector {
+      position: relative;
+    }
+    .flow-connector::after {
+      content: '→';
+      position: absolute;
+      right: -24px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #0ea5e9;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    @media (max-width: 768px) {
+      .flow-connector::after {
+        content: '↓';
+        right: 50%;
+        bottom: -24px;
+        top: auto;
+        transform: translateX(50%);
+      }
+    }
+    .card-shadow {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="p-4 md:p-8">
+<!-- BEGIN: Flow Header -->
+<header class="mb-12 text-center">
+<h1 class="text-3xl font-bold text-quallorAmber">Quallor Operator Experience</h1>
+<p class="text-slate-400 mt-2">Platform Management &amp; Fleet Oversight Flow</p>
+</header>
+<!-- END: Flow Header -->
+<main class="max-w-7xl mx-auto space-y-16">
+<!-- BEGIN: Step 1 - Dashboard Overview -->
+<section class="relative" id="step-dashboard">
+<div class="flex flex-col md:flex-row items-center gap-8">
+<!-- Label -->
+<div class="w-full md:w-1/4">
+<span class="text-quallorSky font-mono text-sm">STEP 01</span>
+<h2 class="text-xl font-bold mb-2">Operator Dashboard</h2>
+<p class="text-slate-400 text-sm">Real-time snapshots of platform health, active sessions, and pending alerts.</p>
+</div>
+<!-- Mockup -->
+<div class="w-full md:w-3/4 bg-quallorDark border border-slate-800 rounded-xl p-4 card-shadow flow-connector">
+<div class="flex justify-between items-center mb-6">
+<div class="h-4 w-32 bg-slate-700 rounded"></div>
+<div class="flex space-x-2">
+<div class="h-8 w-8 rounded-full bg-quallorAmber"></div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-6">
+<div class="bg-slate-900 p-4 rounded-lg border-l-4 border-quallorSky">
+<p class="text-xs text-slate-500">Active Rides</p>
+<p class="text-xl font-bold">1,284</p>
+</div>
+<div class="bg-slate-900 p-4 rounded-lg border-l-4 border-quallorAmber">
+<p class="text-xs text-slate-500">Pending Verification</p>
+<p class="text-xl font-bold text-quallorAmber">42</p>
+</div>
+<div class="bg-slate-900 p-4 rounded-lg border-l-4 border-emerald-500">
+<p class="text-xs text-slate-500">Daily Revenue</p>
+<p class="text-xl font-bold">$12.4k</p>
+</div>
+</div>
+<!-- Mini Chart Placeholder -->
+<div class="h-24 w-full bg-slate-900 rounded-lg flex items-end p-2 space-x-1">
+<div class="w-full bg-quallorSky/20 h-1/2 rounded-t"></div>
+<div class="w-full bg-quallorSky/40 h-3/4 rounded-t"></div>
+<div class="w-full bg-quallorSky/60 h-2/3 rounded-t"></div>
+<div class="w-full bg-quallorSky/80 h-full rounded-t"></div>
+<div class="w-full bg-quallorSky h-4/5 rounded-t"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Step 1 - Dashboard Overview -->
+<!-- BEGIN: Step 2 - Fleet Management -->
+<section class="relative" id="step-fleet">
+<div class="flex flex-col md:flex-row-reverse items-center gap-8">
+<!-- Label -->
+<div class="w-full md:w-1/4">
+<span class="text-quallorSky font-mono text-sm">STEP 02</span>
+<h2 class="text-xl font-bold mb-2">Fleet Monitoring</h2>
+<p class="text-slate-400 text-sm">Live GPS tracking of taxis, status filtering (Idle, Busy, Offline), and driver communication.</p>
+</div>
+<!-- Mockup -->
+<div class="w-full md:w-3/4 bg-quallorDark border border-slate-800 rounded-xl overflow-hidden card-shadow flow-connector">
+<div class="bg-slate-900 h-64 relative flex items-center justify-center overflow-hidden">
+<!-- Map Simulation -->
+<div class="absolute inset-0 opacity-20">
+<div class="grid grid-cols-12 h-full w-full border border-slate-700"></div>
+</div>
+<!-- Car Icons -->
+<div class="absolute top-1/4 left-1/3 text-quallorAmber">●</div>
+<div class="absolute top-1/2 left-1/2 text-quallorSky">●</div>
+<div class="absolute bottom-1/4 right-1/4 text-emerald-500">●</div>
+<!-- Overlay Info -->
+<div class="absolute bottom-4 left-4 bg-quallorDark/90 p-3 rounded text-[10px] border border-slate-700">
+<p class="font-bold text-quallorSky">Vehicle TX-902</p>
+<p>Status: In Progress</p>
+<p>Driver: John Doe</p>
+</div>
+</div>
+<div class="p-4 border-t border-slate-800 flex justify-between">
+<div class="flex gap-2">
+<span class="px-2 py-1 rounded bg-emerald-900/30 text-emerald-400 text-xs">Active (84)</span>
+<span class="px-2 py-1 rounded bg-slate-800 text-slate-400 text-xs">Offline (12)</span>
+</div>
+<button class="bg-quallorSky text-white text-xs px-3 py-1 rounded">Global Broadcast</button>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Step 2 - Fleet Management -->
+<!-- BEGIN: Step 3 - Driver Verification -->
+<section class="relative" id="step-verification">
+<div class="flex flex-col md:flex-row items-center gap-8">
+<!-- Label -->
+<div class="w-full md:w-1/4">
+<span class="text-quallorSky font-mono text-sm">STEP 03</span>
+<h2 class="text-xl font-bold mb-2">Driver Verification</h2>
+<p class="text-slate-400 text-sm">Document review portal. Multi-step validation for licenses, insurance, and background checks.</p>
+</div>
+<!-- Mockup -->
+<div class="w-full md:w-3/4 bg-quallorDark border border-slate-800 rounded-xl p-6 card-shadow flow-connector">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-full bg-slate-800 border-2 border-quallorAmber flex items-center justify-center">👤</div>
+<div>
+<h3 class="font-bold">Verification: Alex Smith</h3>
+<p class="text-xs text-slate-500">Submission Date: Oct 24, 2023</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-slate-900 p-3 rounded border border-slate-800">
+<p class="text-[10px] text-slate-500 mb-2 uppercase">Driver's License</p>
+<div class="h-24 bg-slate-800 rounded flex items-center justify-center italic text-xs text-slate-600">Document_Img_01.png</div>
+</div>
+<div class="bg-slate-900 p-3 rounded border border-slate-800">
+<p class="text-[10px] text-slate-500 mb-2 uppercase">Vehicle Registration</p>
+<div class="h-24 bg-slate-800 rounded flex items-center justify-center italic text-xs text-slate-600">Document_Img_02.png</div>
+</div>
+</div>
+<div class="flex gap-3 justify-end">
+<button class="px-4 py-2 border border-red-500/50 text-red-500 text-sm rounded hover:bg-red-500/10 transition">Reject with Reason</button>
+<button class="px-4 py-2 bg-emerald-600 text-white text-sm rounded hover:bg-emerald-500 transition">Approve Driver</button>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Step 3 - Driver Verification -->
+<!-- BEGIN: Step 4 - Performance Reporting -->
+<section id="step-reporting">
+<div class="flex flex-col md:flex-row-reverse items-center gap-8">
+<!-- Label -->
+<div class="w-full md:w-1/4">
+<span class="text-quallorSky font-mono text-sm">STEP 04</span>
+<h2 class="text-xl font-bold mb-2">Weekly Reporting</h2>
+<p class="text-slate-400 text-sm">Automated performance audits. KPIs for driver efficiency, customer ratings, and operational growth.</p>
+</div>
+<!-- Mockup -->
+<div class="w-full md:w-3/4 bg-quallorDark border border-slate-800 rounded-xl p-6 card-shadow">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h3 class="text-lg font-bold">Weekly Performance Report</h3>
+<p class="text-xs text-slate-500">Oct 17 - Oct 23, 2023</p>
+</div>
+<button class="text-xs border border-quallorSky text-quallorSky px-2 py-1 rounded">Export PDF</button>
+</div>
+<div class="space-y-4">
+<div data-purpose="report-stat">
+<div class="flex justify-between text-xs mb-1">
+<span>Total Fleet Efficiency</span>
+<span class="text-quallorSky">92%</span>
+</div>
+<div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-quallorSky h-full w-[92%]"></div>
+</div>
+</div>
+<div data-purpose="report-stat">
+<div class="flex justify-between text-xs mb-1">
+<span>Average Trip Rating</span>
+<span class="text-quallorAmber">4.8 / 5.0</span>
+</div>
+<div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-quallorAmber h-full w-[96%]"></div>
+</div>
+</div>
+<div class="pt-4 grid grid-cols-2 gap-4">
+<div class="text-center p-4 bg-slate-900 rounded-lg">
+<p class="text-[10px] text-slate-500">New Drivers</p>
+<p class="text-xl font-bold">+18</p>
+</div>
+<div class="text-center p-4 bg-slate-900 rounded-lg">
+<p class="text-[10px] text-slate-500">System Uptime</p>
+<p class="text-xl font-bold text-emerald-400">99.9%</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Step 4 - Performance Reporting -->
+</main>
+<!-- BEGIN: Flow Footer -->
+<footer class="mt-20 py-8 border-t border-slate-800 text-center text-slate-500 text-xs">
+<p>© 2023 Quallor Technologies. Operator Portal UX Documentation.</p>
+</footer>
+<!-- END: Flow Footer -->
+</body></html>

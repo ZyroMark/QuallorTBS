@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quallor Passenger App Flow</title>
+<!-- BEGIN: External Resources -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- END: External Resources -->
+<style data-purpose="custom-config">
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a; /* Dark Slate 900 */
+      color: #f8fafc;
+    }
+    .quallor-dark { background-color: #0f172a; }
+    .quallor-amber { color: #f59e0b; }
+    .quallor-bg-amber { background-color: #f59e0b; }
+    .quallor-sky { color: #0ea5e9; }
+    .quallor-bg-sky { background-color: #0ea5e9; }
+    .step-card {
+      min-width: 280px;
+      height: 560px;
+      border: 1px solid #334155;
+      border-radius: 1.5rem;
+      overflow-y: auto;
+      position: relative;
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+<!-- BEGIN: Header -->
+<header class="mb-12 text-center" data-purpose="page-header">
+<h1 class="text-4xl font-bold quallor-amber mb-2">Quallor Passenger Flow</h1>
+<p class="text-slate-400">Complete UI/UX journey from Onboarding to Rating</p>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: FlowContainer -->
+<main class="flex space-x-8 overflow-x-auto pb-12 snap-x" data-purpose="flow-container">
+<!-- BEGIN: Step 1 - Login/Signup -->
+<section class="step-card bg-slate-900 snap-center flex flex-col p-6" id="step-login">
+<div class="mb-8 flex justify-between items-center">
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Step 1</span>
+<div class="h-2 w-2 rounded-full quallor-bg-amber"></div>
+</div>
+<div class="flex-grow flex flex-col justify-center">
+<div class="w-16 h-16 quallor-bg-amber rounded-2xl mb-8 mx-auto flex items-center justify-center">
+<span class="text-2xl font-bold text-slate-900">Q</span>
+</div>
+<h2 class="text-2xl font-bold mb-2 text-center">Welcome back</h2>
+<p class="text-sm text-slate-400 text-center mb-8">Sign in to start your journey</p>
+<div class="space-y-4">
+<input class="w-full bg-slate-800 border-slate-700 rounded-lg p-3 text-sm focus:ring-amber-500" placeholder="Email or Phone" type="text"/>
+<input class="w-full bg-slate-800 border-slate-700 rounded-lg p-3 text-sm focus:ring-amber-500" placeholder="Password" type="password"/>
+<button class="w-full quallor-bg-amber text-slate-900 font-bold py-3 rounded-lg mt-4 shadow-lg shadow-amber-500/20">Login</button>
+</div>
+</div>
+<p class="text-xs text-center text-slate-500 mt-4">Don't have an account? <span class="quallor-amber">Sign Up</span></p>
+</section>
+<!-- END: Step 1 -->
+<!-- BEGIN: Step 2 - Travel Selection -->
+<section class="step-card bg-slate-900 snap-center flex flex-col p-6" id="step-selection">
+<div class="mb-8 flex justify-between items-center">
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Step 2</span>
+<div class="h-2 w-2 rounded-full quallor-bg-sky"></div>
+</div>
+<h2 class="text-xl font-bold mb-6">Choose your vibe</h2>
+<div class="space-y-4">
+<div class="p-5 border-2 border-amber-500/50 bg-amber-500/10 rounded-2xl cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-bold text-amber-500 text-lg">Daily Commute</h3>
+<svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+</div>
+<p class="text-xs text-slate-300">Fast, reliable city transit for your work days.</p>
+</div>
+<div class="p-5 border-2 border-slate-700 hover:border-sky-500/50 bg-slate-800/50 rounded-2xl cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-bold text-sky-400 text-lg">Adventure Hike</h3>
+<svg class="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+</div>
+<p class="text-xs text-slate-300">Off-road capable transport for your weekend escapes.</p>
+</div>
+</div>
+</section>
+<!-- END: Step 2 -->
+<!-- BEGIN: Step 3 - Destination Search -->
+<section class="step-card bg-slate-900 snap-center flex flex-col p-6" id="step-search">
+<div class="mb-4 flex justify-between items-center">
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Step 3</span>
+<div class="h-2 w-2 rounded-full bg-white"></div>
+</div>
+<div class="relative mb-6">
+<div class="absolute left-3 top-3 w-1 h-12 bg-slate-700 rounded-full"></div>
+<div class="ml-8 space-y-4">
+<input class="w-full bg-slate-800 border-none text-slate-400 rounded-lg p-2 text-sm focus:ring-0" type="text" value="Current Location"/>
+<input class="w-full bg-slate-800 border-amber-500/50 text-white rounded-lg p-2 text-sm focus:ring-amber-500" placeholder="Where to?" type="text"/>
+</div>
+</div>
+<div class="flex-grow">
+<h4 class="text-xs font-bold text-slate-500 mb-4 uppercase">Recent Destinations</h4>
+<div class="space-y-4">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400">🕒</div>
+<div>
+<p class="text-sm font-semibold">Central Park Mall</p>
+<p class="text-xs text-slate-500">12th Ave, North District</p>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400">🏠</div>
+<div>
+<p class="text-sm font-semibold">Home</p>
+<p class="text-xs text-slate-500">742 Evergreen Terrace</p>
+</div>
+</div>
+</div>
+</div>
+<div class="h-32 bg-slate-800 rounded-xl mb-2 overflow-hidden">
+<img alt="Map View" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0GEPP46YSUhB2C1W-QvyBGFD58EVkEBH-gc0lETtPJQqCIFWjHJ8z9Wc520M-LHRbNPDE4MLQ3UAONj1uq8hf6R_ceol-voGv3xJC5i5PIbKDNEisMfwSCnIUUtW3KZUldIG51aZNueLR8STwv6EzExG4js2GWDGJl3u0EY1ugADPvZQ1uzdc7qoGiudczrV1_lseBCHAA-5_XNc47V5PvPzIUQObDzrna8wwbKfIBHZ5awJn130tt0xKBWjfBuetGSDRJxoJENLl"/>
+</div>
+</section>
+<!-- END: Step 3 -->
+<!-- BEGIN: Step 4 - Available Taxis -->
+<section class="step-card bg-slate-900 snap-center flex flex-col p-0" id="step-available">
+<div class="p-6">
+<div class="mb-4 flex justify-between items-center">
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Step 4</span>
+<div class="h-2 w-2 rounded-full quallor-bg-amber"></div>
+</div>
+<h2 class="text-xl font-bold mb-4">Available Taxis</h2>
+</div>
+<div class="flex-grow px-4 space-y-3 overflow-y-auto">
+<!-- Taxi Card 1 -->
+<div class="p-4 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-12 h-12 rounded-lg bg-slate-700 flex items-center justify-center">🚕</div>
+<div>
+<p class="font-bold text-sm">Quallor Mini</p>
+<p class="text-xs text-amber-500">4 Seats Available</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-amber-500">$12.50</p>
+<p class="text-[10px] text-slate-500">2 min away</p>
+</div>
+</div>
+<!-- Taxi Card 2 -->
+<div class="p-4 bg-slate-800 border-2 border-sky-500/30 rounded-xl flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-12 h-12 rounded-lg bg-slate-700 flex items-center justify-center">🚙</div>
+<div>
+<p class="font-bold text-sm">Quallor XL</p>
+<p class="text-xs text-sky-400">6 Seats Available</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-sky-400">$18.90</p>
+<p class="text-[10px] text-slate-500">5 min away</p>
+</div>
+</div>
+<!-- Taxi Card 3 -->
+<div class="p-4 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-12 h-12 rounded-lg bg-slate-700 flex items-center justify-center">🚲</div>
+<div>
+<p class="font-bold text-sm">Quallor Moto</p>
+<p class="text-xs text-amber-500">1 Seat Available</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-amber-500">$6.20</p>
+<p class="text-[10px] text-slate-500">1 min away</p>
+</div>
+</div>
+</div>
+<div class="p-6">
+<button class="w-full bg-white text-slate-900 font-bold py-3 rounded-xl">Confirm Selection</button>
+</div>
+</section>
+<!-- END: Step 4 -->
+<!-- BEGIN: Step 5 - Booking Confirmation -->
+<section class="step-card bg-slate-900 snap-center flex flex-col items-center justify-center p-6 text-center" id="step-confirm">
+<div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6">
+<svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path></svg>
+</div>
+<h2 class="text-2xl font-bold mb-2">Booking Confirmed!</h2>
+<p class="text-sm text-slate-400 mb-8">Driver John is heading your way in a White Toyota Prius</p>
+<div class="w-full bg-slate-800 rounded-2xl p-4 mb-8 text-left border border-slate-700">
+<div class="flex justify-between items-center mb-4">
+<span class="text-xs text-slate-500 uppercase font-bold">Driver Info</span>
+<span class="text-xs bg-amber-500/20 text-amber-500 px-2 py-1 rounded">4.9 ★</span>
+</div>
+<div class="flex items-center space-x-3">
+<img alt="Driver" class="w-12 h-12 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCffMVEWq-CYbsRpQb9u0xwjBd63Za5N_qzXrUCP2XLAbBUHdHyv_d0WLtUutuPL4aADqn1f3_hPVh13n7SvA2gsn2AbTfs1pT2heasM1OsO2PyKOn15nHzAk4-V5w83Tw6fZcRWpcU8Dq7N3fNXIgoYC6xFZEIHNYiuBELgbp-5XWA354x8YxQKTy_uW-9w-d7ITBXbukNyx8671_PWII0oskc8NGHTueI1ksFIDkPAoQ7eaRlJwuVOvvXF55k-E6PfUFBjAgxCCLt"/>
+<div>
+<p class="font-bold">John Doe</p>
+<p class="text-xs text-slate-400">Plate: ABC-1234</p>
+</div>
+</div>
+</div>
+<button class="w-full quallor-bg-sky text-slate-900 font-bold py-3 rounded-xl">View Live Map</button>
+</section>
+<!-- END: Step 5 -->
+<!-- BEGIN: Step 6 - Digital Ticket -->
+<section class="step-card bg-slate-900 snap-center flex flex-col p-6" id="step-ticket">
+<div class="mb-6 flex justify-between items-center">
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Step 6</span>
+<span class="text-xs quallor-amber font-bold">Active Ticket</span>
+</div>
+<div class="bg-white rounded-3xl p-6 text-slate-900 flex flex-col h-full relative overflow-hidden">
+<!-- Ticket Punch Effect -->
+<div class="absolute left-0 top-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-slate-900"></div>
+<div class="absolute right-0 top-1/2 translate-x-1/2 w-8 h-8 rounded-full bg-slate-900"></div>
+<div class="flex justify-between items-center mb-8 border-b border-dashed border-slate-300 pb-4">
+<span class="font-bold text-xl">QUALLOR</span>
+<span class="text-xs text-slate-400">#Q-882910</span>
+</div>
+<div class="space-y-4 mb-8">
+<div>
+<p class="text-[10px] uppercase text-slate-400 font-bold">Passenger</p>
+<p class="font-bold">Alex Johnson</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="text-[10px] uppercase text-slate-400 font-bold">Seats</p>
+<p class="font-bold">2 Adult</p>
+</div>
+<div>
+<p class="text-[10px] uppercase text-slate-400 font-bold">Price</p>
+<p class="font-bold">$12.50</p>
+</div>
+</div>
+</div>
+<div class="mt-auto flex flex-col items-center">
+<div class="w-32 h-32 bg-slate-100 p-2 mb-4">
+<img alt="Ticket QR" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBRy-sKgNvC6Lai6tAjW4ZnGhD4xWZT2-4r3RS-4g8KkaRO9FCmpgy8Syy0gQc0illbhczGwHVPjYQ2Qai_SRvP_sTwAagiFTgGZbIatZQ1nTg-iTDt4PBluVBVzxEkOcptNQGSe84g3vzeVUoJZqADc8zQLslrDO9sjs4S_TeMfTni8WM2bUU1TLE2IV7wyTpQ81yRv15Fjg1oO363xUAx_1QesDSC1cGE9HMuAJc7WY7uXwinYG4InGC6T__XArqvmuccYFdeqp4"/>
+</div>
+<p class="text-[10px] text-slate-400 uppercase tracking-widest">Scan at Pickup</p>
+</div>
+</div>
+</section>
+<!-- END: Step 6 -->
+<!-- BEGIN: Step 7 - In-Transit Tracking -->
+<section class="step-card bg-slate-900 snap-center flex flex-col p-0" id="step-tracking">
+<div class="h-2/3 relative bg-slate-800">
+<img alt="Tracking Map" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBu4Actmi_0iDGDAMF5z0uTWl6ZYbENK1w8WFtHT2MQcbz8QyqTuXkc7gFDqYXxhBdHm0gWFvQgjyIVBSgdthAELUgJLnmkcq-T_xMV4SkrK1Z6FiSia4aFy960NrOlGnHqdVIa56KpdjGKcrVzxl8XvZvCc9eU8wnu_NOV04AqZpjvln1yN8K6mBdN5IPR_Qji9CfsfAilA-2fUVoxvEFssarILer0Izrej0VZr7hUxMfqMAcTMDE9N6y8HimQ8B99nhj_kDsc3zsx"/>
+<div class="absolute top-6 left-6 right-6">
+<div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-2xl flex items-center justify-between border border-slate-700">
+<div>
+<p class="text-xs text-slate-400">Arriving in</p>
+<p class="text-xl font-bold text-sky-400">8 mins</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24"><path d="M6.62 10.79c1.44 2.82 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path></svg>
+</div>
+</div>
+</div>
+</div>
+<div class="h-1/3 bg-slate-900 p-6 flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-bold">Trip to Office</h3>
+<span class="text-xs px-2 py-1 bg-sky-500/10 text-sky-400 rounded-full font-bold">On the way</span>
+</div>
+<div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mb-4">
+<div class="bg-sky-500 h-full w-2/3 rounded-full"></div>
+</div>
+<button class="text-xs text-red-500 font-bold self-start uppercase tracking-widest">Emergency Alert</button>
+</div>
+</section>
+<!-- END: Step 7 -->
+<!-- BEGIN: Step 8 - Rate Driver -->
+<section class="step-card bg-slate-900 snap-center flex flex-col p-6 items-center" id="step-rate">
+<div class="mb-8 flex justify-between w-full items-center">
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Step 8</span>
+<div class="h-2 w-2 rounded-full quallor-bg-amber"></div>
+</div>
+<div class="w-20 h-20 rounded-full border-4 border-amber-500 p-1 mb-4">
+<img alt="Driver" class="w-full h-full rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAfzEtOJ0QZ_2BjVIwfhCAsIceldn24_ODxK0_S81gD3zEyHYqlO5c4AwsEFBPNEzmqhwdgwe8w5PlxAxXFsvcst77Hj95XdvouAJPu-PimquvcKsUzMlVG7n4SEMzBgrII5t8p6jULfxorq6ilpks5peQ2GjhefzvWeZki6Wmg67aka6oE1VIhBmYEfdRSjjK10pzgASHs59AD9gTYRd3kM34nUFcDv8U4e_lufVf9fH5fsUAshaEk-Urqosz6NxfrJav2MPrDckp"/>
+</div>
+<h2 class="text-xl font-bold mb-1">How was John?</h2>
+<p class="text-sm text-slate-400 mb-8 text-center">Your feedback helps improve the Quallor community.</p>
+<div class="flex space-x-2 mb-8">
+<span class="text-3xl text-amber-500">★</span>
+<span class="text-3xl text-amber-500">★</span>
+<span class="text-3xl text-amber-500">★</span>
+<span class="text-3xl text-amber-500">★</span>
+<span class="text-3xl text-slate-700">★</span>
+</div>
+<div class="w-full mb-8">
+<p class="text-xs text-slate-500 mb-2 font-bold uppercase">Leave a comment</p>
+<textarea class="w-full bg-slate-800 border-slate-700 rounded-xl p-4 text-sm focus:ring-amber-500" placeholder="Driver was great and the car was clean..." rows="3"></textarea>
+</div>
+<div class="mt-auto w-full space-y-3">
+<button class="w-full quallor-bg-amber text-slate-900 font-bold py-3 rounded-xl">Submit Rating</button>
+<button class="w-full text-slate-500 text-xs font-bold uppercase">Skip for now</button>
+</div>
+</section>
+<!-- END: Step 8 -->
+</main>
+<!-- END: FlowContainer -->
+<!-- BEGIN: Navigation Indicators -->
+<footer class="mt-8 text-center">
+<p class="text-slate-500 text-sm italic">Scroll horizontally to follow the passenger's journey →</p>
+</footer>
+<!-- END: Navigation Indicators -->
+</body></html>

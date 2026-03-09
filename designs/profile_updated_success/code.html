@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile Updated - Quallor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 justify-between border-b border-primary/10">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined cursor-pointer">close</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-12">Success</h2>
+</div>
+<!-- Main Content -->
+<div class="flex flex-1 flex-col items-center justify-center px-6 py-12 text-center">
+<!-- Success Icon/Illustration -->
+<div class="mb-8 flex flex-col items-center">
+<div class="relative mb-6">
+<div class="absolute inset-0 bg-primary/20 rounded-full blur-2xl"></div>
+<div class="relative flex h-24 w-24 items-center justify-center rounded-full bg-primary/10 border-2 border-primary">
+<span class="material-symbols-outlined text-primary !text-5xl" style="font-variation-settings: 'FILL' 1">check_circle</span>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+                        Profile Updated Successfully
+                    </h1>
+<p class="text-slate-600 dark:text-slate-400 text-base max-w-[280px] mx-auto">
+                        Your changes have been saved and applied to your account.
+                    </p>
+</div>
+</div>
+<!-- Visual Decorative Element -->
+<div class="w-full max-w-sm aspect-video rounded-xl bg-primary/5 mb-10 overflow-hidden relative border border-primary/10">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
+<img alt="Abstract success pattern" class="w-full h-full object-cover mix-blend-overlay opacity-50" data-alt="Abstract golden amber gradient background pattern" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkPkLC2BuZxgaoMRa_cxhe1puhh3atzKRZjf0Qkbs7J1F0hBcWkD8sm3SdpEDCPjEBwhf0QxIIOC7KrEtCWoRwUzuH27rsClyN4EWuFOrnC_6JHcKGVVPG7z30Y5ISVG8M78gYzvCtAl2VgpuRBdAsMj5cfsjmK2L1wcnLIRQ8rwsnO0z9bwGcChQzW3kQvOHihZIfda9x_KFNkdMmzFaNzgjHgs9uhZGe64aLOkqG4dzOjdGJruuiH0d0EaPTY0D0I-0dYSMqxykc"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary/40 !text-6xl">person_check</span>
+</div>
+</div>
+<!-- Action Button -->
+<div class="w-full max-w-xs space-y-4">
+<button class="w-full flex cursor-pointer items-center justify-center rounded-lg h-14 px-6 bg-primary text-background-dark text-base font-bold transition-all active:scale-[0.98]">
+                    Back to Profile
+                </button>
+</div>
+</div>
+<!-- Bottom Navigation Bar (Mockup state) -->
+<div class="mt-auto flex gap-2 border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">search</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Search</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Orders</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">person</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#f2a60d",
+                "background-dark": "#1a1608",
+                "surface-dark": "#262214",
+              },
+              fontFamily: {
+                "display": ["Public Sans"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="dark:bg-background-dark dark:text-slate-100 font-display bg-[#1a1608]">
+<div class="relative flex h-auto min-h-screen w-full flex-col dark:bg-background-dark overflow-x-hidden max-w-md mx-auto shadow-2xl bg-[#1a1608]">
+<!-- Header Section -->
+<div class="flex items-center dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-primary/10 bg-[#1a1608] border-white/5">
+<div class="flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex-1 flex flex-col items-center">
+<h2 class="dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Available Taxis</h2>
+<p class="text-xs text-primary font-medium">Eastern Cape Transport</p>
+</div>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-xl h-12 bg-transparent text-primary">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</div>
+<!-- Route Details -->
+<div class="px-4 py-4 bg-primary/5">
+<div class="flex items-center gap-3">
+<div class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-primary text-sm leading-none">trip_origin</span>
+<div class="w-0.5 h-6 bg-primary/30"></div>
+<span class="material-symbols-outlined text-primary text-sm leading-none">location_on</span>
+</div>
+<div class="flex flex-col gap-2">
+<p class="text-sm font-semibold text-slate-700 dark:text-slate-300 text-gray-300">Beacon Bay</p>
+<p class="text-sm font-semibold dark:text-slate-100 text-gray-300">Amalinda</p>
+</div>
+</div>
+</div>
+<!-- Tabs -->
+<div class="pb-1">
+<div class="flex border-b border-primary/10 px-4 gap-8 bg-background-light dark:bg-background-dark">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-primary text-primary pb-3 pt-4" href="#">
+<p class="text-sm font-bold tracking-wide">LOCAL</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 pb-3 pt-4" href="#">
+<p class="text-sm font-bold tracking-wide">LONG DISTANCE</p>
+</a>
+</div>
+</div>
+<!-- Taxi List -->
+<div class="flex flex-col gap-4 p-4 mb-20">
+<!-- Taxi Card 1 -->
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-primary/5 p-4 border border-primary/10 shadow-sm bg-[#262214] border-white/5">
+<div class="flex flex-[2_2_0px] flex-col gap-3">
+<div class="flex flex-col gap-1">
+<p class="text-primary text-xs font-bold uppercase tracking-wider">ID: TX-402</p>
+<p class="dark:text-slate-100 text-lg font-bold">Khululeka Express</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-primary text-sm">schedule</span>
+<p class="dark:text-slate-400 text-sm font-medium">Departs: 08:30 AM</p>
+</div>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-500/10 text-green-600 dark:text-green-400 w-fit">
+<span class="material-symbols-outlined text-sm">groups</span>
+<span class="text-xs font-bold">4 Seats Available</span>
+</div>
+</div>
+<div class="w-32 bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex-shrink-0 border border-primary/10" data-alt="Side view of white commuter taxi van" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAROC487U6nv9j9QiFPvwu9E63rzg15rjJVUN0Bp4B4QeRqxoRHE7j3U38GJzZB9ggP1mGayuISoQ1TpYnvNMBsy8fycyfRzuzXqtNQUjV--w31wTYVcX1thofou7S_w5gid6CvxZQSPIfuOpgGxJk5luB08Vl_kaGVIBOQ7B_pzwtr8x59Q17TsYggIMZIoBlmNl0UKuDG2UaPWsP0BGkuUnDUX-ZNXLKz18zKOAjWZakTnRTeojn60TPLjWvipSLJ7_4KamtagPfK");'></div>
+</div>
+<!-- Taxi Card 2 -->
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-primary/5 p-4 border border-primary/10 shadow-sm opacity-90 bg-[#262214] border-white/5">
+<div class="flex flex-[2_2_0px] flex-col gap-3">
+<div class="flex flex-col gap-1">
+<p class="text-primary text-xs font-bold uppercase tracking-wider">ID: TX-511</p>
+<p class="dark:text-slate-100 text-lg font-bold">Border Star Shuttle</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-primary text-sm">schedule</span>
+<p class="dark:text-slate-400 text-sm font-medium">Departs: 08:45 AM</p>
+</div>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-600 dark:text-red-400 w-fit">
+<span class="material-symbols-outlined text-sm">block</span>
+<span class="text-xs font-bold">Full</span>
+</div>
+</div>
+<div class="w-32 bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex-shrink-0 border border-primary/10 grayscale" data-alt="Modern white minibus parked at terminal" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAcUSk-Z_1vNBgJqQY-suExMksuxbeesvwDcDIhzIvM3pGfPjxVLZBOONRsMewBssW4GrSHkJoOdswKEgS1VVRixXYvdjm7f9M-F6lB27i6C5XdZ0ECg6IK7kFqdEh8TbI3NKNFbbX79-k9KHSMqqKiCDg3qStHw0Q_-nVdE9eoaNrT3lxNxZ680w-LOZ7dlw0dE8ZfgiD9tvWiQRbf95bB8AWMxElRqXlSkR9RsFx_S93WRzPrBwAuVO6Mb2Ib3QpKjTavgu4nvqYc");'></div>
+</div>
+<!-- Taxi Card 3 -->
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-primary/5 p-4 border border-primary/10 shadow-sm bg-[#262214] border-white/5">
+<div class="flex flex-[2_2_0px] flex-col gap-3">
+<div class="flex flex-col gap-1">
+<p class="text-primary text-xs font-bold uppercase tracking-wider">ID: TX-229</p>
+<p class="dark:text-slate-100 text-lg font-bold">Imvusa Transit</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-primary text-sm">schedule</span>
+<p class="dark:text-slate-400 text-sm font-medium">Departs: 09:15 AM</p>
+</div>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary w-fit">
+<span class="material-symbols-outlined text-sm">groups</span>
+<span class="text-xs font-bold">8 Seats Available</span>
+</div>
+</div>
+<div class="w-32 bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex-shrink-0 border border-primary/10" data-alt="South African style minibus taxi vehicle" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAiBTojzqlNGD_xXLYBY2Q3NhvOZFo77DvTa9f-0tEBi-DH2yju9lRe6Q25CjPdSwfUHOGem8lPykrzDyVsiSBIGbqO_ffe4WYa8-AMYng8HMaEdjg4W_yw0L77O66P0Y-1FfGGrh4IZ8tv1Ao6gR6OsLOJOoNacVCTLe7R3X_oF8njkcBpX0JdB3dlUwSNkgQRlPd-jnkWW2RCB-l7dQdOI_Fgb4zYnZdUDidZk1ICPISz363UCem7QfsZMYQ2Wapf9Lp1mYgCmIar");'></div>
+</div>
+<!-- Taxi Card 4 -->
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-primary/5 p-4 border border-primary/10 shadow-sm bg-[#262214] border-white/5">
+<div class="flex flex-[2_2_0px] flex-col gap-3">
+<div class="flex flex-col gap-1">
+<p class="text-primary text-xs font-bold uppercase tracking-wider">ID: TX-304</p>
+<p class="dark:text-slate-100 text-lg font-bold">Siyaya Link</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-primary text-sm">schedule</span>
+<p class="dark:text-slate-400 text-sm font-medium">Departs: 09:40 AM</p>
+</div>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-500/10 text-green-600 dark:text-green-400 w-fit">
+<span class="material-symbols-outlined text-sm">groups</span>
+<span class="text-xs font-bold">2 Seats Available</span>
+</div>
+</div>
+<div class="w-32 bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex-shrink-0 border border-primary/10" data-alt="Dashboard view of a transport vehicle" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA19XXU-NQtV-KGYI1WGG8-WXKjaJyLumuGV4Jvj7dZOGezxHo2EqsAePylBLo0u-CpNngc6PaXNHttjM8CjCjrEIBC7GI6nh1NpDZwP7hH-p5wUWnbVF4dLkjvso2R_0OINgRsn6y4ANFmzMYzOCIRCrEdK3sWX0cCNFib60QRpaijxJj40D8DYpCEMyCQHA34VQEuROXVL_nM_RwsYGDs-qfmsmphSG0UZAqjgsCeaWJhNeko6gnpREHm-0mgraC7ZtEsmrYYIB33");'></div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-20">
+<div class="flex gap-2 border-t border-primary/20 bg-background-light dark:bg-background-dark px-4 pb-6 pt-3 shadow-2xl bg-[#1a1608] border-white/10">
+<a class="flex flex-1 flex-col items-center justify-center gap-1" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-bold uppercase">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; color: #f2a60d;">directions_bus</span>
+<p class="text-[10px] font-bold uppercase">Taxis</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1" href="#">
+<span class="material-symbols-outlined">history</span>
+<p class="text-[10px] font-bold uppercase">History</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase">Profile</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

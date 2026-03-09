@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quallor - Driver Registration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Bar -->
+<div class="sticky top-0 z-50 flex items-center bg-background-light dark:bg-background-dark p-4 border-b border-primary/10">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 cursor-pointer">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</div>
+<h2 class="text-lg font-bold flex-1 text-center pr-10">Driver Registration</h2>
+</div>
+<div class="max-w-md mx-auto pb-12">
+<!-- Progress Bar -->
+<div class="flex flex-col gap-3 p-6">
+<div class="flex gap-6 justify-between items-center">
+<p class="text-primary text-base font-semibold">Registration Progress</p>
+<p class="text-slate-400 text-sm font-medium">Step 1 of 3</p>
+</div>
+<div class="rounded-full bg-primary/20 h-2.5 overflow-hidden">
+<div class="h-full rounded-full bg-primary" style="width: 33%;"></div>
+</div>
+</div>
+<form class="space-y-8 px-6">
+<!-- Personal Information Section -->
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xl">person</span>
+<h3 class="text-lg font-bold">Personal Information</h3>
+</div>
+<div class="space-y-4">
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-400">Full Name</span>
+<input class="w-full rounded-lg border-primary/20 bg-primary/5 dark:bg-primary/10 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 placeholder:text-slate-500" placeholder="e.g. John Doe" type="text"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-400">Contact Number</span>
+<input class="w-full rounded-lg border-primary/20 bg-primary/5 dark:bg-primary/10 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 placeholder:text-slate-500" placeholder="+1 (555) 000-0000" type="tel"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-400">License Number</span>
+<input class="w-full rounded-lg border-primary/20 bg-primary/5 dark:bg-primary/10 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 placeholder:text-slate-500" placeholder="ABC-12345-6789" type="text"/>
+</label>
+</div>
+</section>
+<!-- Vehicle Details Section -->
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xl">directions_car</span>
+<h3 class="text-lg font-bold">Vehicle Details</h3>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<label class="flex flex-col gap-2 col-span-2">
+<span class="text-sm font-medium text-slate-400">Registration Plate</span>
+<input class="w-full rounded-lg border-primary/20 bg-primary/5 dark:bg-primary/10 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 placeholder:text-slate-500" placeholder="Enter plate number" type="text"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-400">Model</span>
+<input class="w-full rounded-lg border-primary/20 bg-primary/5 dark:bg-primary/10 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 placeholder:text-slate-500" placeholder="Toyota Camry" type="text"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-400">Color</span>
+<input class="w-full rounded-lg border-primary/20 bg-primary/5 dark:bg-primary/10 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 placeholder:text-slate-500" placeholder="Midnight Blue" type="text"/>
+</label>
+</div>
+</section>
+<!-- Document Upload Section -->
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xl">description</span>
+<h3 class="text-lg font-bold">Document Upload</h3>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<div class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-400">Driver's License (Front)</span>
+<div class="border-2 border-dashed border-primary/30 rounded-xl p-6 flex flex-col items-center justify-center gap-2 bg-primary/5 hover:bg-primary/10 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl">upload_file</span>
+<span class="text-xs text-primary font-medium">Click to upload photo</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-400">Vehicle Permit</span>
+<div class="border-2 border-dashed border-primary/30 rounded-xl p-6 flex flex-col items-center justify-center gap-2 bg-primary/5 hover:bg-primary/10 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl">add_a_photo</span>
+<span class="text-xs text-primary font-medium">Click to upload photo</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Actions -->
+<div class="pt-6 pb-10">
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold text-lg h-14 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-transform active:scale-95" type="button">
+                    Submit for Verification
+                    <span class="material-symbols-outlined">verified_user</span>
+</button>
+<p class="text-center text-xs text-slate-500 mt-4 px-4">
+                    By submitting, you agree to Quallor's Terms of Service and Privacy Policy.
+                </p>
+</div>
+</form>
+</div>
+<!-- Navigation Bar Overlay (Bottom spacing for mobile) -->
+<div class="h-10"></div>
+</body></html>

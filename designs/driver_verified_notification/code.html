@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verification Success - Quallor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#f2a60d",
+                "background-light": "#f8f7f5",
+                "background-dark": "#221c10",
+              },
+              fontFamily: {
+                "display": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="text-primary flex size-12 shrink-0 items-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Verification</h2>
+</div>
+<!-- Main Content -->
+<div class="flex flex-col items-center justify-center grow px-6 py-8">
+<!-- Success Illustration/Badge Area -->
+<div class="relative mb-8 w-full max-w-xs aspect-square flex items-center justify-center">
+<!-- Decorative Glow -->
+<div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full"></div>
+<!-- Main Badge Card -->
+<div class="relative w-full h-full rounded-3xl bg-gradient-to-br from-primary/30 to-background-dark border border-primary/20 overflow-hidden flex flex-col items-center justify-center p-6 shadow-2xl">
+<div class="w-24 h-24 bg-primary rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(242,166,13,0.4)]">
+<span class="material-symbols-outlined text-background-dark text-5xl font-bold">verified</span>
+</div>
+<div class="text-center">
+<div class="bg-primary/10 border border-primary/30 px-4 py-1.5 rounded-full mb-2">
+<span class="text-primary text-xs font-bold uppercase tracking-widest">Active Status</span>
+</div>
+<p class="text-slate-400 text-sm mb-1">Operator ID</p>
+<p class="text-primary text-2xl font-bold tracking-tight">#8829</p>
+</div>
+</div>
+</div>
+<!-- Text Content -->
+<div class="text-center max-w-sm">
+<h1 class="text-slate-900 dark:text-slate-100 tracking-tight text-4xl font-bold leading-tight mb-3">You're Verified!</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed mb-8">
+                    Congratulations, <span class="text-slate-900 dark:text-slate-100 font-semibold">Marcus Thorne</span>! Your driver credentials have been approved and you're ready to hit the road.
+                </p>
+</div>
+<!-- Action Area -->
+<div class="w-full max-w-sm space-y-4">
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                    Start Driving
+                    <span class="material-symbols-outlined">navigation</span>
+</button>
+<button class="w-full bg-slate-800/50 dark:bg-slate-800/50 hover:bg-slate-800 text-slate-100 font-semibold py-4 rounded-xl transition-all">
+                    View Profile
+                </button>
+</div>
+</div>
+<!-- Summary Stats (Optional but fills the space nicely) -->
+<div class="px-6 pb-12">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-slate-100 dark:bg-slate-800/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+<p class="text-slate-500 dark:text-slate-400 text-xs mb-1">Region</p>
+<p class="text-slate-900 dark:text-slate-100 font-semibold">Metropolitan</p>
+</div>
+<div class="bg-slate-100 dark:bg-slate-800/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+<p class="text-slate-500 dark:text-slate-400 text-xs mb-1">Tier</p>
+<p class="text-primary font-semibold flex items-center gap-1">
+                        Gold Partner
+                        <span class="material-symbols-outlined text-xs">star</span>
+</p>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-900/50 backdrop-blur-md px-4 pb-6 pt-3 sticky bottom-0">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">home</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">route</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Routes</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Earnings</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

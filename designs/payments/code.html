@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Payments - Quallor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#f2a60d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221c10",
+            },
+            fontFamily: {
+              "display": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden">
+<!-- Header -->
+<header class="flex items-center p-4 sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-10 border-b border-primary/10">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="text-xl font-bold flex-1 text-center mr-10 uppercase tracking-wider">Payments</h1>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Saved Payment Methods Section -->
+<section class="px-4 py-6">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg font-bold">Saved Payment Methods</h2>
+<button class="text-primary text-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                        Add New
+                    </button>
+</div>
+<div class="space-y-3">
+<!-- Visa Card -->
+<div class="flex items-center gap-4 bg-white dark:bg-primary/5 p-4 rounded-xl border border-primary/10 hover:border-primary/30 transition-all cursor-pointer">
+<div class="bg-slate-800 dark:bg-slate-700 h-10 w-14 rounded-lg flex items-center justify-center overflow-hidden">
+<img alt="Visa Logo" class="w-10 h-auto" data-alt="Blue and yellow Visa credit card logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvCdnUldPvINakNrQSNz17EEByUvwBkN6Li7EIMHzzXbxZYHLvRGiInyyJIKJpI_mlD-aI4iIiDDOAPX2kzyIavol_vm3ckmBqqitPFFJEXbou3sEfHxZiU3O5IGJsdh3uwFa08C2pC81CqnsTrdHwEMYr1lO5-JcmMACUlAdT55yF-yoDFwtLj24B5Qmbdj6a_niJ17i_2npHvvZxHvDDq2iT46H1Cj8fkkX6QvLc8KIWjLefLxMlY52v-Wq9vXDGd_iO6_wVciiT"/>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-base font-medium">Visa ending in 1234</p>
+<p class="text-slate-500 dark:text-primary/60 text-sm">Expires 12/26</p>
+</div>
+<span class="material-symbols-outlined text-primary/40">chevron_right</span>
+</div>
+<!-- Digital Wallet -->
+<div class="flex items-center gap-4 bg-white dark:bg-primary/5 p-4 rounded-xl border border-primary/10 hover:border-primary/30 transition-all cursor-pointer">
+<div class="bg-slate-800 dark:bg-slate-700 h-10 w-14 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-100">account_balance_wallet</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-base font-medium">Digital Wallet</p>
+<p class="text-primary text-xs font-semibold uppercase tracking-tighter">Default method</p>
+</div>
+<span class="material-symbols-outlined text-primary/40">chevron_right</span>
+</div>
+<!-- Master Card -->
+<div class="flex items-center gap-4 bg-white dark:bg-primary/5 p-4 rounded-xl border border-primary/10 hover:border-primary/30 transition-all cursor-pointer">
+<div class="bg-slate-800 dark:bg-slate-700 h-10 w-14 rounded-lg flex items-center justify-center overflow-hidden">
+<img alt="Mastercard Logo" class="w-8 h-auto" data-alt="Red and orange circles Mastercard logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQjQObO__c-NCsPniV0xBH85ett-o4gYJvo9JZf78xaO7hUjo9ijT5Pj0CcDVs3RQ2QqAYUNNdUF53qbZqflRDKC8enrW77QYhUPkvFrIWecvjcZAVOpAcbDQWQ3M6kbAeu_L8roTVw0lWqXwDjW7-h2K6p0_XOegUcZ7LyD7pMDRbedyiMqpF7jm5aCpucWg5PdmqpEjE7uemzKIW5pFXTHqMYZNEZj9yfpxFzDJmdvvk0qK6uAp74d7YfqnvHItfEraZcxLn78po"/>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-base font-medium">Mastercard ending in 8892</p>
+<p class="text-slate-500 dark:text-primary/60 text-sm">Expires 05/25</p>
+</div>
+<span class="material-symbols-outlined text-primary/40">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Transaction History Section -->
+<section class="px-4 py-4">
+<h2 class="text-lg font-bold mb-4">Transaction History</h2>
+<div class="bg-white dark:bg-primary/5 rounded-xl border border-primary/10 overflow-hidden">
+<!-- Item 1 -->
+<div class="flex items-center gap-4 p-4 border-b border-primary/5 last:border-0">
+<div class="bg-primary/20 size-10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">directions_car</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-sm font-medium">Commute to Downtown</p>
+<p class="text-xs text-slate-500 dark:text-primary/40">Today, 08:45 AM</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold">-$12.50</p>
+<p class="text-[10px] text-primary uppercase">Completed</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center gap-4 p-4 border-b border-primary/5 last:border-0">
+<div class="bg-primary/20 size-10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">electric_bolt</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-sm font-medium">EV Charging Station #42</p>
+<p class="text-xs text-slate-500 dark:text-primary/40">Yesterday, 06:12 PM</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold">-$8.20</p>
+<p class="text-[10px] text-primary uppercase">Completed</p>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center gap-4 p-4 border-b border-primary/5 last:border-0">
+<div class="bg-primary/20 size-10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">payments</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-sm font-medium">Wallet Top-up</p>
+<p class="text-xs text-slate-500 dark:text-primary/40">Oct 24, 02:30 PM</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-green-500">+$50.00</p>
+<p class="text-[10px] text-primary uppercase">Completed</p>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="flex items-center gap-4 p-4 border-b border-primary/5 last:border-0">
+<div class="bg-primary/20 size-10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">local_parking</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-sm font-medium">City Parking - Zone A</p>
+<p class="text-xs text-slate-500 dark:text-primary/40">Oct 23, 11:15 AM</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold">-$4.00</p>
+<p class="text-[10px] text-primary uppercase">Completed</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 py-3 text-sm font-bold text-primary hover:bg-primary/5 rounded-lg transition-colors">
+                    View Full Statement
+                </button>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg border-t border-primary/10 px-4 pb-6 pt-2">
+<div class="flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-primary/40" href="#">
+<span class="material-symbols-outlined text-[26px]">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-primary/40" href="#">
+<span class="material-symbols-outlined text-[26px]">commute</span>
+<span class="text-[10px] font-medium">Commute</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-primary/40" href="#">
+<span class="material-symbols-outlined text-[26px]">shield</span>
+<span class="text-[10px] font-medium">Safety</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined material-symbols-fill text-[26px]">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Floating Add Button Alternative/Enhancement -->
+<div class="fixed bottom-24 right-4 max-w-md">
+<button class="bg-primary text-background-dark size-14 rounded-full shadow-lg shadow-primary/20 flex items-center justify-center active:scale-95 transition-transform">
+<span class="material-symbols-outlined font-bold">add</span>
+</button>
+</div>
+</div>
+</body></html>

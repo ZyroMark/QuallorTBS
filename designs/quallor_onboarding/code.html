@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quallor - Smart Taxi Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a60d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
+<div class="relative min-h-screen flex flex-col items-center justify-between overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-10 pointer-events-none" data-alt="Faint geometric pattern background" style="background-image: radial-gradient(circle at 2px 2px, #f2a60d 1px, transparent 0); background-size: 40px 40px;">
+</div>
+<div class="absolute inset-0 z-0 bg-gradient-to-br from-primary/5 via-transparent to-sky-400/5 pointer-events-none"></div>
+<header class="w-full pt-12 pb-6 px-6 flex flex-col items-center z-10">
+<div class="w-24 h-24 mb-8 bg-background-dark rounded-2xl flex items-center justify-center border-2 border-primary/30 shadow-[0_0_30px_rgba(242,166,13,0.15)]">
+<div class="relative">
+<span class="text-7xl font-extrabold text-primary tracking-tighter">Q</span>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-sky-400 rounded-full border-2 border-background-dark"></div>
+</div>
+</div>
+</header>
+<main class="w-full flex-1 flex flex-col items-center justify-center px-6 text-center z-10">
+<div class="w-full max-w-lg">
+<div class="relative mb-10 mx-auto w-full aspect-video rounded-xl overflow-hidden shadow-2xl border border-white/5" data-alt="Modern yellow taxi driving through a South African city at night" data-location="Johannesburg" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDP6zqhaP1A5MboUsyj6pfzHK1Urc6sFNiaJ8h84aN2Wl8qGDTp9tlmQ1I4157AK2OGVCx1twNF_-ePyySNicslsJDMn-9RKlDBzRB1eiu-jwYHZc8NSBNH17gOWYPqXyMGaCwOj41KA6L8ypdIGnEIzMg_iXXZYJMGaqhWJD1oPTSL7L0Ie2RjhNnST-G5jIfikzwrLPyizly80xJRtXZcZ7CeLsnNYUsvz3GpuB5rvy2pBBEtspNuBuNuWMZC4kO5HnCtMwn0Xfw7'); background-size: cover; background-position: center;">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-xs font-medium text-slate-300 uppercase tracking-widest">Platform Live</span>
+</div>
+</div>
+<h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 leading-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+                    Faster Rides.<br/>Higher Incomes.<br/>Organized Operations.
+                </h1>
+<p class="text-lg text-slate-400 font-normal max-w-xs mx-auto mb-10">
+                    The smart taxi platform for <span class="text-primary font-semibold">South Africa</span>.
+                </p>
+<div class="flex flex-col gap-4 w-full max-w-sm mx-auto">
+<button class="bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 px-8 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 group">
+                        Get Started
+                        <span class="material-symbols-outlined font-bold group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<button class="bg-white/5 hover:bg-white/10 text-slate-200 font-semibold py-4 px-8 rounded-xl transition-all border border-white/10">
+                        Become a Partner
+                    </button>
+</div>
+</div>
+</main>
+<footer class="w-full p-8 flex justify-center items-center gap-6 z-10">
+<div class="flex items-center gap-2 text-slate-500 text-sm">
+<span class="material-symbols-outlined text-sm">shield</span>
+<span>Secure Payments</span>
+</div>
+<div class="w-1 h-1 rounded-full bg-slate-700"></div>
+<div class="flex items-center gap-2 text-slate-500 text-sm">
+<span class="material-symbols-outlined text-sm">public</span>
+<span>Nationwide Network</span>
+</div>
+</footer>
+<div class="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
+<div class="absolute top-1/2 -right-24 w-48 h-48 bg-sky-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+</div>
+</body></html>
