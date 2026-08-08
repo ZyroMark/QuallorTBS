@@ -85,7 +85,7 @@ export default function SeatSelectionPage() {
 
                 {/* Front indicator */}
                 <div className="mx-4 mb-4 py-2 rounded-[10px] bg-q-stone-100 text-center font-sans text-xs font-bold uppercase tracking-widest text-q-stone-500">
-                    Front of Taxi — Driver
+                    Front of Taxi · Driver
                 </div>
 
                 {/* Seat Grid */}
@@ -145,7 +145,7 @@ export default function SeatSelectionPage() {
                     disabled={!selectedSeat}
                     className="q-btn-primary-lg w-full justify-center disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                    {selectedSeat ? `Confirm Seat ${selectedSeat} — Pay R ${taxi.fare}.00` : "Select a Seat"}
+                    {selectedSeat ? `Confirm Seat ${selectedSeat} · Pay R ${taxi.fare}.00` : "Select a Seat"}
                 </button>
             </div>
         </main>

@@ -26,7 +26,7 @@ function WalkUpTicketContent() {
 
     const isCash = booking.paymentMethod === "cash";
     const isCard = booking.paymentMethod === "card";
-    const paymentLabel = isCash ? "PAID — CASH" : isCard ? "PAID — CARD" : "APP BOOKING";
+    const paymentLabel = isCash ? "PAID · CASH" : isCard ? "PAID · CARD" : "APP BOOKING";
     const paymentCls = isCash
         ? "bg-green-100 text-green-700 border-green-200"
         : isCard
@@ -57,7 +57,7 @@ function WalkUpTicketContent() {
                             <p className="font-sans text-sm font-semibold text-white/80">→ {booking.to}</p>
                         </div>
                         <div className="w-12 h-12 bg-white rounded-[10px] flex items-center justify-center">
-                            <span className="font-display font-bold text-q-brown text-2xl leading-none">Q</span>
+                            <span className="material-symbols-outlined text-q-brown text-2xl">directions_bus</span>
                         </div>
                     </div>
 

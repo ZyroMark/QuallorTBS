@@ -1,268 +1,255 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
+import { Reveal, WordReveal } from "@/components/motion";
+import { SiteNav, SiteFooter, CtaBand, Photo } from "@/components/marketing";
 
-// ─── NAV ─────────────────────────────────────────────────────────────────────
-function NavBar() {
-    const [scrolled, setScrolled] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
+/*
+  Landing page, styled after godaylight.com:
+  big serif headlines that reveal word by word, mono uppercase eyebrows,
+  full-bleed photography, alternating light and dark bands, one idea per screen.
 
-    useEffect(() => {
-        const fn = () => setScrolled(window.scrollY > 40);
-        window.addEventListener("scroll", fn, { passive: true });
-        return () => window.removeEventListener("scroll", fn);
-    }, []);
+  Nav, footer, CTA band, and the Photo block live in components/marketing.tsx
+  and are shared with /how-it-works, /why-quallor, and /network.
+*/
 
-    return (
-        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur-md shadow-q-sm border-b border-q-stone-200" : "bg-transparent"}`}>
-            <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-[10px] bg-q-brown flex items-center justify-center shadow-q-sm">
-                        <span className="font-display font-bold text-white text-lg leading-none">Q</span>
-                    </div>
-                    <span className="font-display text-xl font-semibold text-q-stone-900">Quallor</span>
-                </Link>
-
-                <nav className="hidden md:flex items-center gap-8">
-                    {["Routes", "For Drivers", "For Operators", "About"].map((item) => (
-                        <a key={item} href="#" className="font-sans text-sm font-medium text-q-stone-600 hover:text-q-brown transition-colors">
-                            {item}
-                        </a>
-                    ))}
-                </nav>
-
-                <div className="hidden md:flex items-center gap-3">
-                    <Link href="/auth/login" className="q-btn-ghost text-sm px-4 py-2">
-                        Sign In
-                    </Link>
-                    <Link href="/auth/signup" className="q-btn-primary text-sm">
-                        Get Started
-                    </Link>
-                </div>
-
-                <button
-                    className="md:hidden flex items-center justify-center w-10 h-10 rounded-[10px] text-q-stone-700 hover:bg-q-stone-100 transition-colors"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                >
-                    <span className="material-symbols-outlined">{menuOpen ? "close" : "menu"}</span>
-                </button>
-            </div>
-
-            {menuOpen && (
-                <div className="md:hidden bg-white border-t border-q-stone-200 px-6 py-4 space-y-3">
-                    {["Routes", "For Drivers", "For Operators", "About"].map((item) => (
-                        <a key={item} href="#" className="block font-sans text-base font-medium text-q-stone-700 py-2">
-                            {item}
-                        </a>
-                    ))}
-                    <div className="flex flex-col gap-2 pt-2 border-t border-q-stone-200">
-                        <Link href="/auth/login" className="q-btn-secondary w-full justify-center">Sign In</Link>
-                        <Link href="/auth/signup" className="q-btn-primary w-full justify-center">Get Started</Link>
-                    </div>
-                </div>
-            )}
-        </header>
-    );
-}
-
-// ─── HERO ─────────────────────────────────────────────────────────────────────
+/* ── HERO: full-bleed photo, white serif headline over the image ── */
 function Hero() {
     return (
-        <section className="relative min-h-screen flex items-center bg-q-bg-page overflow-hidden pt-16">
-            {/* Dot grid texture */}
+        <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
+            {/* Background photograph */}
             <div
-                className="absolute inset-0 opacity-50"
+                className="absolute inset-0"
+                role="img"
+                aria-label="Minibus taxis lined up at the rank"
                 style={{
-                    backgroundImage: "radial-gradient(#C9B49A 1px, transparent 1px)",
-                    backgroundSize: "28px 28px",
+                    backgroundImage: "url('/images/quantum4.jpg')",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
                 }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-q-bg-page via-transparent to-q-bg-page" />
+            {/* Legibility overlay */}
+            <div
+                className="absolute inset-0"
+                style={{
+                    background:
+                        "linear-gradient(100deg, rgba(10,8,4,0.68) 0%, rgba(10,8,4,0.34) 55%, rgba(10,8,4,0.45) 100%)",
+                }}
+            />
 
-            <div className="relative max-w-6xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center">
-                <div className="animate-q-fade-up">
-                    <div className="flex items-center gap-2 mb-6">
-                        <span className="w-2 h-2 rounded-full bg-q-brown animate-pulse" />
-                        <span className="font-sans text-xs font-bold text-q-brown uppercase tracking-widest">Eastern Cape&apos;s Digital Taxi Network</span>
-                    </div>
+            {/* Hairline grid, like Daylight's */}
+            <div className="absolute top-0 bottom-0 hidden lg:block" style={{ left: "64%", width: 1, backgroundColor: "rgba(255,255,255,0.22)" }} />
+            <div className="absolute left-0 right-0 hidden lg:block" style={{ top: "42%", height: 1, backgroundColor: "rgba(255,255,255,0.22)" }} />
 
-                    <h1 className="font-display text-5xl lg:text-6xl font-semibold text-q-stone-900 mb-6 leading-[1.1]">
-                        Book your taxi.<br />
-                        <span className="text-q-brown">Track it live.</span><br />
-                        Board with a QR.
-                    </h1>
+            {/* Content */}
+            <div className="relative w-full max-w-[1400px] mx-auto px-6 sm:px-10 pb-14 pt-40">
+                <Reveal delay={200} className="mb-6">
+                    <span
+                        className="font-mono text-xs font-medium uppercase"
+                        style={{ color: "rgba(255,255,255,0.9)", letterSpacing: "0.3em" }}
+                    >
+                        Rides you control
+                    </span>
+                </Reveal>
 
-                    <p className="q-body text-lg mb-10 max-w-md">
-                        Quallor connects passengers, drivers, and operators across the Eastern Cape — with seamless bookings, real-time tracking, and offline support.
+                <h1
+                    className="mb-10"
+                    style={{
+                        fontFamily: '"Fraunces", Georgia, serif',
+                        fontWeight: 400,
+                        fontSize: "clamp(3.2rem, 7.5vw, 6.8rem)",
+                        lineHeight: 1.08,
+                        letterSpacing: "-0.02em",
+                        color: "#FFF7E9",
+                        maxWidth: "13ch",
+                    }}
+                >
+                    <WordReveal text="Ride the rank on your terms" delay={300} stagger={90} />
+                </h1>
+
+                <Reveal delay={800} className="mb-12">
+                    <p
+                        className="font-sans text-xl sm:text-2xl leading-snug"
+                        style={{ color: "rgba(255,255,255,0.92)", maxWidth: "26ch" }}
+                    >
+                        Confirmed seats and live tracking. A QR ticket that works without signal.
                     </p>
+                </Reveal>
 
-                    <div className="flex flex-wrap gap-4">
-                        <Link href="/auth/signup" className="q-btn-primary-lg">
-                            <span className="material-symbols-outlined text-xl">confirmation_number</span>
-                            Book a Ride
-                        </Link>
-                        <Link href="/auth/signup?role=driver" className="q-btn-secondary">
-                            <span className="material-symbols-outlined text-xl">directions_car</span>
-                            Register as a Driver
-                        </Link>
-                    </div>
-
-                    <div className="flex items-center gap-8 mt-12">
-                        {[
-                            { value: "24+", label: "Active Routes" },
-                            { value: "1,200+", label: "Daily Passengers" },
-                            { value: "100%", label: "Offline Ready" },
-                        ].map((stat) => (
-                            <div key={stat.label}>
-                                <p className="font-display text-2xl font-bold text-q-brown">{stat.value}</p>
-                                <p className="font-sans text-xs font-medium text-q-stone-500">{stat.label}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="hidden lg:block animate-q-scale-in">
-                    <div className="relative">
-                        {/* Phone mockup */}
-                        <div className="mx-auto w-72 bg-white rounded-[40px] shadow-q-2xl border border-q-stone-200 overflow-hidden">
-                            <div className="bg-q-bg-section px-6 pt-10 pb-6">
-                                <p className="font-sans text-xs font-bold text-q-stone-500 uppercase tracking-wider mb-1">Your Taxi</p>
-                                <p className="font-display text-2xl font-semibold text-q-stone-900">Khululeka Express</p>
-                                <p className="font-sans text-sm text-q-brown mt-0.5">Arriving in 4 min · Seat A2</p>
-                            </div>
-                            <div className="h-40 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=600')" }} />
-                            <div className="px-6 py-5">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div>
-                                        <p className="font-sans text-xs text-q-stone-500">Beacon Bay</p>
-                                        <p className="font-sans text-xs text-q-brown font-semibold">→ Amalinda</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="font-display text-xl font-bold text-q-brown">R 20.00</p>
-                                    </div>
-                                </div>
-                                <div className="w-full h-1.5 bg-q-stone-200 rounded-full overflow-hidden mb-4">
-                                    <div className="h-full bg-q-brown rounded-full w-[35%]" />
-                                </div>
-                                <button className="w-full py-3 rounded-[14px] bg-q-brown text-white font-sans font-semibold text-sm flex items-center justify-center gap-2">
-                                    <span className="material-symbols-outlined text-base">qr_code</span>
-                                    View Boarding Pass
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Floating badge */}
-                        <div className="absolute -top-4 -right-4 bg-white rounded-[14px] px-4 py-3 shadow-q-lg border border-q-stone-200">
-                            <p className="font-sans text-xs font-bold text-green-600 flex items-center gap-1.5">
-                                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                Live tracking active
-                            </p>
-                        </div>
-
-                        {/* Offline badge */}
-                        <div className="absolute -bottom-4 -left-4 bg-white rounded-[14px] px-4 py-3 shadow-q-lg border border-q-stone-200">
-                            <p className="font-sans text-xs font-bold text-q-brown flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-base">offline_bolt</span>
-                                Works offline
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                <Reveal delay={950} className="flex flex-wrap gap-4">
+                    <Link href="/auth/signup" className="q-btn-primary-lg">
+                        Book a seat
+                        <span className="material-symbols-outlined text-xl">arrow_forward</span>
+                    </Link>
+                    <Link
+                        href="/auth/signup?role=driver"
+                        className="inline-flex items-center justify-center h-14 px-8 rounded-full font-mono text-sm font-medium uppercase tracking-wider transition-colors hover:bg-white/10"
+                        style={{ color: "#FFFFFF", border: "1.5px solid rgba(255,255,255,0.55)" }}
+                    >
+                        Drive with Quallor
+                    </Link>
+                </Reveal>
             </div>
         </section>
     );
 }
 
-// ─── FEATURES ─────────────────────────────────────────────────────────────────
-function Features() {
-    const features = [
+/* ── THREE PILLARS: BOOK / TRACK / BOARD ── */
+function Pillars() {
+    const pillars = [
         {
-            icon: "confirmation_number",
-            title: "Confirmed Seats",
-            desc: "Book your exact seat in advance. No more uncertainty at the taxi rank — just a QR code and a confirmed spot.",
+            eyebrow: "Book",
+            statement: "Pick your seat before you leave the house",
+            src: "/images/quantum1.jpg",
+            label: "Quallor minibus taxi ready for booking",
+            fallback: "#EEF1EA",
         },
         {
-            icon: "location_on",
-            title: "Real-Time Tracking",
-            desc: "See your taxi on the map as it moves toward you. Share your ETA with family or colleagues with one tap.",
+            eyebrow: "Track",
+            statement: "Watch your taxi move on the map in real time",
+            src: "/images/quantum5.jpg",
+            label: "Minibus taxi on the road",
+            fallback: "#E1EDF5",
         },
         {
-            icon: "offline_bolt",
-            title: "Works Offline",
-            desc: "Your digital ticket is always accessible — even without internet. Perfect for areas with patchy signal.",
-        },
-        {
-            icon: "qr_code_scanner",
-            title: "QR Boarding",
-            desc: "Board with a simple QR scan. Drivers verify in seconds, keeping queues short and departures on time.",
-        },
-        {
-            icon: "payments",
-            title: "Flexible Payment",
-            desc: "Pay via app, card, or cash. Drivers can process walk-up passengers and sync later when online.",
-        },
-        {
-            icon: "monitoring",
-            title: "Fleet Insights",
-            desc: "Operators get a live dashboard of every vehicle, route, and revenue figure — across the entire fleet.",
+            eyebrow: "Board",
+            statement: "Scan one QR code and take your seat",
+            src: "/images/quantum6.jpg",
+            label: "Gaatjie opening the taxi door for boarding",
+            fallback: "#EEF1EA",
         },
     ];
 
     return (
-        <section className="bg-white py-24">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="text-center mb-16">
-                    <p className="font-sans text-xs font-bold text-q-brown uppercase tracking-widest mb-3">Built for the Eastern Cape</p>
-                    <h2 className="font-display text-4xl font-semibold text-q-stone-900 mb-4">Everything you need,<br />on every journey.</h2>
-                    <p className="q-body max-w-lg mx-auto">From urban commutes to inter-city hikes — Quallor handles the complexity so you can focus on the road.</p>
-                </div>
+        <section className="py-24" style={{ backgroundColor: "#FFFCF9" }}>
+            <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-6">
+                {pillars.map((p, i) => (
+                    <Reveal key={p.eyebrow} delay={i * 140}>
+                        <div
+                            className="relative overflow-hidden h-[520px] lg:h-[560px]"
+                            style={{ borderRadius: "28px", backgroundColor: p.fallback }}
+                        >
+                            {/* Photo */}
+                            <div
+                                className="absolute inset-0"
+                                role="img"
+                                aria-label={p.label}
+                                style={{
+                                    backgroundImage: `url('${p.src}')`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}
+                            />
+                            {/* Soft darkening so the glass panel reads */}
+                            <div
+                                className="absolute inset-0"
+                                style={{ background: "linear-gradient(180deg, rgba(10,8,4,0.10) 0%, rgba(10,8,4,0.30) 100%)" }}
+                            />
 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {features.map((f, i) => (
-                        <div key={i} className="q-card-interactive p-6">
-                            <div className="w-12 h-12 rounded-[12px] bg-q-brown-100 flex items-center justify-center mb-5">
-                                <span className="material-symbols-outlined text-q-brown text-2xl">{f.icon}</span>
+                            {/* Frosted glass panel, sized to its text, centred in the card */}
+                            <div
+                                className="absolute left-5 right-5 sm:left-6 sm:right-6 top-1/2 -translate-y-1/2 p-6"
+                                style={{
+                                    borderRadius: "20px",
+                                    backgroundColor: "rgba(28,26,22,0.38)",
+                                    backdropFilter: "blur(14px)",
+                                    WebkitBackdropFilter: "blur(14px)",
+                                    border: "1px solid rgba(255,255,255,0.14)",
+                                }}
+                            >
+                                <p
+                                    className="font-mono text-[0.66rem] font-medium uppercase mb-4"
+                                    style={{ color: "#CDDFF6", letterSpacing: "0.22em" }}
+                                >
+                                    {p.eyebrow}
+                                </p>
+                                <h3
+                                    style={{
+                                        fontFamily: '"Fraunces", Georgia, serif',
+                                        fontWeight: 500,
+                                        fontSize: "clamp(1.5rem, 2vw, 1.9rem)",
+                                        lineHeight: 1.18,
+                                        letterSpacing: "-0.01em",
+                                        color: "#FFF7E9",
+                                    }}
+                                >
+                                    {p.statement}
+                                </h3>
+                                <div className="flex items-center justify-between mt-6">
+                                    <span className="font-sans text-sm" style={{ color: "rgba(255,255,255,0.75)" }}>
+                                        Step 0{i + 1}
+                                    </span>
+                                    <span className="material-symbols-outlined text-xl" style={{ color: "rgba(255,255,255,0.75)" }}>
+                                        arrow_outward
+                                    </span>
+                                </div>
                             </div>
-                            <h3 className="font-display text-lg font-semibold text-q-stone-900 mb-2">{f.title}</h3>
-                            <p className="font-sans text-sm text-q-stone-500 leading-relaxed">{f.desc}</p>
                         </div>
-                    ))}
-                </div>
+                    </Reveal>
+                ))}
             </div>
         </section>
     );
 }
 
-// ─── HOW IT WORKS ─────────────────────────────────────────────────────────────
+/* ── HOW QUALLOR WORKS: intro + 3 steps ── */
 function HowItWorks() {
     const steps = [
-        { num: "01", title: "Choose your route", desc: "Browse daily commute routes or long-distance hikes across the Eastern Cape." },
-        { num: "02", title: "Pick your seat", desc: "Select your exact seat on a live seat map. Pay by app, card, or cash." },
-        { num: "03", title: "Track & board", desc: "Watch your taxi approach in real time, then board with a QR scan." },
+        {
+            num: "Step 1",
+            title: "Choose your route",
+            eyebrow: "Every route, one app",
+            body: "Browse daily commutes and long-distance hikes across the Eastern Cape. Fixed fares are shown upfront, so the price you see is the price you pay.",
+            src: "/images/quantum3.jpg",
+            label: "Minibus taxi on a city route",
+        },
+        {
+            num: "Step 2",
+            title: "Pick your seat",
+            eyebrow: "A confirmed spot, not a queue",
+            body: "Choose your exact seat on a live seat map and pay by app, card, or cash. Your ticket is issued instantly and stored on your phone.",
+            src: "/images/quantum2.jpg",
+            label: "Freshly washed minibus taxi",
+        },
+        {
+            num: "Step 3",
+            title: "Track and board",
+            eyebrow: "Rides you control",
+            body: "Watch the taxi approach in real time, walk out as it arrives, and board with a single QR scan. The ticket keeps working even with no signal.",
+            src: "/images/quantum6.jpg",
+            label: "Boarding through the sliding door",
+        },
     ];
 
     return (
-        <section className="bg-q-bg-section py-24">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="text-center mb-16">
-                    <p className="font-sans text-xs font-bold text-q-brown uppercase tracking-widest mb-3">Simple by design</p>
-                    <h2 className="font-display text-4xl font-semibold text-q-stone-900">How Quallor works</h2>
-                </div>
+        <section id="how" className="py-28" style={{ backgroundColor: "#FFFFFF" }}>
+            <div className="max-w-7xl mx-auto px-6">
+                <Reveal className="mb-4">
+                    <p className="q-eyebrow">How Quallor works</p>
+                </Reveal>
+                <h2 className="q-display mb-8" style={{ fontSize: "clamp(2.4rem, 5vw, 4.2rem)", maxWidth: "18ch" }}>
+                    <WordReveal text="A new way to ride the routes you already know" />
+                </h2>
+                <Reveal delay={200} className="mb-20">
+                    <p className="q-prose" style={{ maxWidth: "48ch" }}>
+                        Quallor connects passengers, drivers, and operators on the same trips.
+                        You book the seat, the driver sees the manifest, and the operator sees the fleet.
+                    </p>
+                </Reveal>
 
-                <div className="grid lg:grid-cols-3 gap-8">
-                    {steps.map((step, i) => (
-                        <div key={i} className="relative">
-                            {i < steps.length - 1 && (
-                                <div className="hidden lg:block absolute top-10 left-full w-full h-px bg-q-brown-200 -translate-x-1/2 z-0" />
-                            )}
-                            <div className="relative q-card p-8 text-center">
-                                <div className="w-16 h-16 rounded-full bg-q-brown flex items-center justify-center mx-auto mb-6 shadow-q-md">
-                                    <span className="font-display text-xl font-bold text-white">{step.num}</span>
-                                </div>
-                                <h3 className="font-display text-xl font-semibold text-q-stone-900 mb-3">{step.title}</h3>
-                                <p className="font-sans text-sm text-q-stone-500 leading-relaxed">{step.desc}</p>
-                            </div>
+                <div className="space-y-24">
+                    {steps.map((s, i) => (
+                        <div key={s.num} className={`grid lg:grid-cols-2 gap-10 lg:gap-16 items-center`}>
+                            <Reveal className={i % 2 === 1 ? "lg:order-2" : ""}>
+                                <p className="q-eyebrow mb-4" style={{ color: "#1D3686" }}>{s.num}</p>
+                                <h3 className="q-heading mb-3" style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)" }}>{s.title}</h3>
+                                <p className="font-mono text-xs uppercase tracking-widest mb-5" style={{ color: "#8A8884" }}>{s.eyebrow}</p>
+                                <p className="q-body" style={{ maxWidth: "46ch" }}>{s.body}</p>
+                            </Reveal>
+                            <Reveal variant="media" delay={120} className={i % 2 === 1 ? "lg:order-1" : ""}>
+                                <Photo src={s.src} label={s.label} className="h-[340px] lg:h-[420px]" fallback={i % 2 === 0 ? "#EEF1EA" : "#E1EDF5"} />
+                            </Reveal>
                         </div>
                     ))}
                 </div>
@@ -271,93 +258,173 @@ function HowItWorks() {
     );
 }
 
-// ─── ROLES ────────────────────────────────────────────────────────────────────
+/* ── WHY QUALLOR: dark band ── */
+function Why() {
+    const risks = [
+        "Waiting at the rank with no idea when the taxi fills up",
+        "Cash-only fares with no record and no receipt",
+        "Operators running whole fleets on paper and phone calls",
+    ];
+
+    return (
+        <section id="why" className="py-28" style={{ backgroundColor: "#1F1F1F" }}>
+            <div className="max-w-7xl mx-auto px-6">
+                <Reveal className="mb-4">
+                    <p className="q-eyebrow" style={{ color: "rgba(255,255,255,0.45)" }}>Why Quallor</p>
+                </Reveal>
+                <h2 className="q-display mb-16" style={{ fontSize: "clamp(2.4rem, 5vw, 4.2rem)", color: "#FFFCF9", maxWidth: "18ch" }}>
+                    <WordReveal text="The rank was built for yesterday's commute" />
+                </h2>
+
+                <div className="grid lg:grid-cols-2 gap-14">
+                    <div>
+                        <Reveal>
+                            <p className="font-mono text-xs uppercase tracking-widest mb-6" style={{ color: "#CDDFF6" }}>The problem</p>
+                        </Reveal>
+                        <ul className="space-y-6">
+                            {risks.map((r, i) => (
+                                <Reveal key={i} delay={i * 120} as="li" className="flex items-start gap-4 pb-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+                                    <span className="font-mono text-xs mt-1" style={{ color: "rgba(255,255,255,0.4)" }}>0{i + 1}</span>
+                                    <p className="q-prose" style={{ color: "rgba(255,252,249,0.85)", fontSize: "1.05rem" }}>{r}</p>
+                                </Reveal>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div>
+                        <Reveal>
+                            <p className="font-mono text-xs uppercase tracking-widest mb-6" style={{ color: "#CDDFF6" }}>One route at a time</p>
+                        </Reveal>
+                        <Reveal delay={120}>
+                            <p className="q-prose mb-10" style={{ color: "#FFFCF9", fontSize: "1.35rem", maxWidth: "34ch" }}>
+                                Quallor puts the whole trip on one screen: the passenger&apos;s seat, the driver&apos;s
+                                manifest, and the operator&apos;s fleet.
+                            </p>
+                        </Reveal>
+                        <div className="grid grid-cols-3 gap-6">
+                            {[
+                                { value: "24+", label: "Active routes" },
+                                { value: "1,200+", label: "Daily passengers" },
+                                { value: "100%", label: "Offline ready" },
+                            ].map((stat, i) => (
+                                <Reveal key={stat.label} delay={200 + i * 100}>
+                                    <p className="font-sans font-black text-3xl mb-1" style={{ color: "#CDDFF6", letterSpacing: "-0.03em" }}>{stat.value}</p>
+                                    <p className="font-mono text-[0.62rem] uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.5)" }}>{stat.label}</p>
+                                </Reveal>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+/* ── NETWORK: marquee + statement ── */
+function Network() {
+    const routes = [
+        "East London", "Mdantsane", "Beacon Bay", "Amalinda", "King William's Town",
+        "Gqeberha", "Mthatha", "Butterworth", "Komani", "Zwelitsha",
+    ];
+
+    return (
+        <section id="network" className="py-28 overflow-hidden" style={{ backgroundColor: "#E1EDF5" }}>
+            <div className="max-w-7xl mx-auto px-6 mb-14">
+                <Reveal className="mb-4">
+                    <p className="q-eyebrow" style={{ color: "#1D3686" }}>A growing network</p>
+                </Reveal>
+                <h2 className="q-display mb-8" style={{ fontSize: "clamp(2.4rem, 5vw, 4.2rem)", maxWidth: "16ch" }}>
+                    <WordReveal text="Every trip makes the network stronger" />
+                </h2>
+                <Reveal delay={200}>
+                    <p className="q-prose" style={{ maxWidth: "46ch" }}>
+                        Each booked seat gives drivers a fuller manifest and operators a clearer
+                        picture of their routes. The more the network carries, the better it runs.
+                    </p>
+                </Reveal>
+            </div>
+
+            {/* Route marquee */}
+            <div className="q-marquee mb-14" aria-hidden>
+                <div className="q-marquee__track" style={{ color: "#1D3686" }}>
+                    {[...routes, ...routes].map((r, i) => (
+                        <span key={i} className="flex items-center gap-10">
+                            {r}
+                            <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: "#1D3686" }} />
+                        </span>
+                    ))}
+                </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto px-6">
+                <Reveal variant="media">
+                    <Photo
+                        src="/images/quantum4.jpg"
+                        label="Taxis across the Eastern Cape network"
+                        className="w-full h-[40vh] min-h-[280px]"
+                        fallback="#CDDFF6"
+                    />
+                </Reveal>
+            </div>
+        </section>
+    );
+}
+
+/* ── ROLES ── */
 function Roles() {
     const roles = [
         {
-            role: "Passenger",
-            icon: "person",
-            headline: "Travel smarter across the Eastern Cape",
-            points: [
-                "Book any route with a confirmed seat",
-                "Real-time taxi tracking on the map",
-                "Digital QR boarding pass — works offline",
-                "Transparent fixed fares, no surprises",
-            ],
-            cta: "Book a Ride",
+            role: "Passengers",
+            headline: "Travel with a confirmed seat",
+            points: ["Book any route in advance", "Track the taxi on a live map", "QR ticket that works offline", "Fixed fares with no surprises"],
+            cta: "Book a seat",
             href: "/auth/signup",
         },
         {
-            role: "Driver",
-            icon: "directions_car",
-            headline: "Manage your passengers, grow your earnings",
-            points: [
-                "View your full passenger manifest",
-                "Scan QR codes to verify boarding",
-                "Add walk-up passengers with cash/card",
-                "Offline mode with automatic sync",
-            ],
-            cta: "Register as Driver",
+            role: "Drivers",
+            headline: "Run fuller trips with less admin",
+            points: ["See your passenger manifest", "Scan QR codes to verify boarding", "Add walk-up passengers in seconds", "Offline mode that syncs later"],
+            cta: "Drive with Quallor",
             href: "/auth/signup?role=driver",
-            featured: true,
         },
         {
-            role: "Operator",
-            icon: "business",
-            headline: "Run your fleet with full visibility",
-            points: [
-                "Live dashboard for every vehicle",
-                "Revenue and trip analytics",
-                "Driver management and onboarding",
-                "Safety alerts and fleet compliance",
-            ],
-            cta: "Register as Operator",
+            role: "Operators",
+            headline: "See your whole fleet at once",
+            points: ["Live dashboard for every vehicle", "Revenue and trip analytics", "Driver onboarding and management", "Safety alerts across the fleet"],
+            cta: "Register a fleet",
             href: "/auth/signup?role=operator",
         },
     ];
 
     return (
-        <section className="bg-white py-24">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="text-center mb-16">
-                    <p className="font-sans text-xs font-bold text-q-brown uppercase tracking-widest mb-3">For everyone on the road</p>
-                    <h2 className="font-display text-4xl font-semibold text-q-stone-900">One platform.<br />Three roles.</h2>
-                </div>
+        <section className="py-28" style={{ backgroundColor: "#FFFCF9" }}>
+            <div className="max-w-7xl mx-auto px-6">
+                <Reveal className="mb-4">
+                    <p className="q-eyebrow">Built for everyone on the road</p>
+                </Reveal>
+                <h2 className="q-display mb-16" style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", maxWidth: "16ch" }}>
+                    <WordReveal text="One platform, three seats at the table" />
+                </h2>
 
                 <div className="grid lg:grid-cols-3 gap-6">
                     {roles.map((r, i) => (
-                        <div
-                            key={i}
-                            className={`rounded-[24px] p-8 flex flex-col ${r.featured ? "bg-q-brown text-white shadow-q-2xl" : "bg-q-bg-section border border-q-stone-200"}`}
-                        >
-                            <div className={`w-12 h-12 rounded-[12px] flex items-center justify-center mb-6 ${r.featured ? "bg-white/20" : "bg-q-brown-100"}`}>
-                                <span className={`material-symbols-outlined text-2xl ${r.featured ? "text-white" : "text-q-brown"}`}>{r.icon}</span>
-                            </div>
-
-                            <p className={`font-sans text-xs font-bold uppercase tracking-widest mb-2 ${r.featured ? "text-white/70" : "text-q-brown"}`}>{r.role}</p>
-                            <h3 className={`font-display text-xl font-semibold mb-5 leading-snug ${r.featured ? "text-white" : "text-q-stone-900"}`}>{r.headline}</h3>
-
+                        <Reveal key={r.role} delay={i * 130} className="q-card p-8 flex flex-col">
+                            <p className="q-eyebrow mb-3" style={{ color: "#1D3686" }}>{r.role}</p>
+                            <h3 className="q-heading mb-6" style={{ fontSize: "1.5rem" }}>{r.headline}</h3>
                             <ul className="space-y-3 flex-1 mb-8">
-                                {r.points.map((p, j) => (
-                                    <li key={j} className="flex items-start gap-3">
-                                        <span className={`material-symbols-outlined text-base flex-shrink-0 mt-0.5 ${r.featured ? "text-white/80" : "text-q-brown"}`} style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                                        <span className={`font-sans text-sm ${r.featured ? "text-white/90" : "text-q-stone-600"}`}>{p}</span>
+                                {r.points.map((p) => (
+                                    <li key={p} className="flex items-start gap-3">
+                                        <span className="material-symbols-outlined text-base flex-shrink-0 mt-0.5" style={{ color: "#1D3686" }}>
+                                            check
+                                        </span>
+                                        <span className="q-body text-sm">{p}</span>
                                     </li>
                                 ))}
                             </ul>
-
-                            <Link
-                                href={r.href}
-                                className={`flex items-center justify-center gap-2 py-3 rounded-[14px] font-sans font-semibold text-sm transition-all ${
-                                    r.featured
-                                        ? "bg-white text-q-brown hover:bg-q-stone-50"
-                                        : "bg-q-brown text-white hover:bg-q-brown-600"
-                                }`}
-                            >
+                            <Link href={r.href} className="q-btn-secondary w-full justify-center">
                                 {r.cta}
-                                <span className="material-symbols-outlined text-base">arrow_forward</span>
                             </Link>
-                        </div>
+                        </Reveal>
                     ))}
                 </div>
             </div>
@@ -365,136 +432,22 @@ function Roles() {
     );
 }
 
-// ─── TESTIMONIALS ─────────────────────────────────────────────────────────────
-function Testimonials() {
-    const quotes = [
-        { name: "Thabo M.", role: "Daily Commuter, East London", text: "Before Quallor I never knew if the taxi was coming. Now I book my seat the night before and track it on my phone. Changed everything." },
-        { name: "Sipho N.", role: "Taxi Driver, Beacon Bay Route", text: "The walk-up feature is perfect for days when internet is poor. I can still process cash passengers and sync later. My boss can see everything." },
-        { name: "Nolwazi K.", role: "Fleet Operator, EC Commuters Association", text: "The analytics dashboard alone saved us hours every week. We can see which routes are profitable and respond quickly to driver issues." },
-    ];
-
-    return (
-        <section className="bg-q-bg-section py-24">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="text-center mb-16">
-                    <p className="font-sans text-xs font-bold text-q-brown uppercase tracking-widest mb-3">Trusted by commuters</p>
-                    <h2 className="font-display text-4xl font-semibold text-q-stone-900">Real people, real routes.</h2>
-                </div>
-
-                <div className="grid lg:grid-cols-3 gap-6">
-                    {quotes.map((q, i) => (
-                        <div key={i} className="q-card p-8">
-                            <div className="flex gap-0.5 mb-6">
-                                {Array(5).fill(0).map((_, j) => (
-                                    <span key={j} className="material-symbols-outlined text-q-brown text-base" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                                ))}
-                            </div>
-                            <p className="font-sans text-base text-q-stone-700 leading-relaxed mb-6 italic">&ldquo;{q.text}&rdquo;</p>
-                            <div>
-                                <p className="font-sans font-semibold text-q-stone-900">{q.name}</p>
-                                <p className="font-sans text-xs text-q-stone-500">{q.role}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-// ─── CTA ──────────────────────────────────────────────────────────────────────
-function CTA() {
-    return (
-        <section className="bg-q-brown py-24">
-            <div className="max-w-3xl mx-auto px-6 text-center">
-                <h2 className="font-display text-4xl lg:text-5xl font-semibold text-white mb-6 leading-tight">
-                    Ready to travel smarter<br />in the Eastern Cape?
-                </h2>
-                <p className="font-sans text-lg text-white/80 mb-10 max-w-lg mx-auto">
-                    Join thousands of passengers, drivers and operators who have made Quallor part of their daily commute.
-                </p>
-                <div className="flex flex-wrap gap-4 justify-center">
-                    <Link
-                        href="/auth/signup"
-                        className="flex items-center gap-2 px-8 py-4 rounded-[14px] bg-white text-q-brown font-sans font-bold text-base hover:bg-q-stone-50 transition-colors shadow-q-cta"
-                    >
-                        <span className="material-symbols-outlined">confirmation_number</span>
-                        Get Started Free
-                    </Link>
-                    <Link
-                        href="/auth/login"
-                        className="flex items-center gap-2 px-8 py-4 rounded-[14px] bg-white/10 text-white font-sans font-semibold text-base hover:bg-white/20 transition-colors border border-white/20"
-                    >
-                        Sign In
-                    </Link>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-// ─── FOOTER ───────────────────────────────────────────────────────────────────
-function Footer() {
-    return (
-        <footer className="bg-q-stone-900 text-q-stone-400 py-16">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-                    <div>
-                        <Link href="/" className="flex items-center gap-3 mb-4">
-                            <div className="w-9 h-9 rounded-[10px] bg-q-brown flex items-center justify-center">
-                                <span className="font-display font-bold text-white text-lg leading-none">Q</span>
-                            </div>
-                            <span className="font-display text-xl font-semibold text-white">Quallor</span>
-                        </Link>
-                        <p className="font-sans text-sm text-q-stone-500 leading-relaxed">
-                            The Eastern Cape&apos;s digital taxi booking and management platform.
-                        </p>
-                    </div>
-                    {[
-                        { title: "Product", links: ["Book a Ride", "Track My Taxi", "Digital Tickets", "Offline Mode"] },
-                        { title: "For Business", links: ["Driver App", "Operator Dashboard", "Fleet Analytics", "API Access"] },
-                        { title: "Company", links: ["About Us", "Careers", "Privacy Policy", "Terms of Service"] },
-                    ].map((col) => (
-                        <div key={col.title}>
-                            <p className="font-sans text-sm font-bold text-white uppercase tracking-widest mb-4">{col.title}</p>
-                            <ul className="space-y-2">
-                                {col.links.map((link) => (
-                                    <li key={link}>
-                                        <a href="#" className="font-sans text-sm text-q-stone-500 hover:text-q-brown transition-colors">{link}</a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="border-t border-q-stone-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <p className="font-sans text-sm text-q-stone-600">© 2026 Quallor. Built for the Eastern Cape.</p>
-                    <div className="flex items-center gap-4">
-                        {["twitter", "instagram", "linkedin"].map((s) => (
-                            <a key={s} href="#" className="w-9 h-9 rounded-full bg-q-stone-800 flex items-center justify-center hover:bg-q-brown transition-colors text-q-stone-400 hover:text-white">
-                                <span className="material-symbols-outlined text-sm">{s === "twitter" ? "alternate_email" : s === "instagram" ? "photo_camera" : "work"}</span>
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </footer>
-    );
-}
-
-// ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function HomePage() {
     return (
         <>
-            <NavBar />
+            <SiteNav />
             <Hero />
-            <Features />
+            <Pillars />
             <HowItWorks />
+            <Why />
+            <Network />
             <Roles />
-            <Testimonials />
-            <CTA />
-            <Footer />
+            <CtaBand
+                eyebrow="The rank is moving on"
+                heading="Step into Quallor"
+                body="Ready to control your ride? Book your next trip with a confirmed seat and a ticket that never runs out of signal."
+            />
+            <SiteFooter />
         </>
     );
 }

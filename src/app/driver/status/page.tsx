@@ -18,7 +18,7 @@ export default function DriverStatusPage() {
 
     const driverName = user?.name || "New Driver";
     const vehicleModel = user?.vehicleModel || "Toyota Quantum";
-    const vehiclePlate = user?.vehiclePlate || "—";
+    const vehiclePlate = user?.vehiclePlate || "-";
 
     return (
         <main className="min-h-screen bg-q-bg-page flex flex-col">

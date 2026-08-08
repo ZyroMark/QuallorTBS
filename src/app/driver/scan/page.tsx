@@ -58,7 +58,7 @@ export default function ScanToBoardPage() {
                                     name: ticket.passengerName,
                                     ticketId: ticket.bookingId,
                                     time: "Just now",
-                                    seat: ticket.seatNumber || "—",
+                                    seat: ticket.seatNumber || "-",
                                     isWalkUp: ticket.bookedByDriver,
                                     paymentMethod: ticket.paymentMethod,
                                 },
@@ -66,11 +66,11 @@ export default function ScanToBoardPage() {
                             ]);
                         } else {
                             setScanResult(null);
-                            setScanError("INVALID TICKET — This QR code is not a valid Quallor boarding pass.");
+                            setScanError("INVALID TICKET: This QR code is not a valid Quallor boarding pass.");
                         }
                     } catch {
                         setScanResult(null);
-                        setScanError("UNRECOGNISED QR CODE — Please scan a valid Quallor digital ticket.");
+                        setScanError("UNRECOGNISED QR CODE: Please scan a valid Quallor digital ticket.");
                     }
                 },
                 () => { /* Ignore continuous scan errors */ }
@@ -84,8 +84,8 @@ export default function ScanToBoardPage() {
 
     const paymentBadge = scanResult?.bookedByDriver
         ? scanResult.paymentMethod === "cash"
-            ? { label: "Walk-Up — Cash", cls: "bg-green-50 text-green-700 border-green-200" }
-            : { label: "Walk-Up — Card", cls: "bg-blue-50 text-blue-700 border-blue-200" }
+            ? { label: "Walk-Up · Cash", cls: "bg-green-50 text-green-700 border-green-200" }
+            : { label: "Walk-Up · Card", cls: "bg-blue-50 text-blue-700 border-blue-200" }
         : { label: "App Booking", cls: "bg-q-brown-100 text-q-brown border-q-brown-200" };
 
     return (
@@ -128,7 +128,7 @@ export default function ScanToBoardPage() {
                         #qr-reader { background: transparent !important; border: none !important; }
                         #qr-reader__header_message { display: none !important; }
                         #qr-reader__dashboard_section_swaplink { display: none !important; }
-                        #qr-reader__status_span { color: #C9B49A !important; font-size: 11px !important; font-family: "DM Sans", sans-serif !important; }
+                        #qr-reader__status_span { color: #B4B2AC !important; font-size: 11px !important; font-family: "DM Sans", sans-serif !important; }
                         #qr-reader video { border-radius: 8px !important; }
                         #qr-reader img { display: none !important; }
                     `}</style>
@@ -158,7 +158,7 @@ export default function ScanToBoardPage() {
                         </div>
                         <div className="bg-white rounded-[10px] p-2 border border-green-100">
                             <p className="font-bold text-q-stone-500 uppercase mb-0.5">Seat</p>
-                            <p className="font-bold text-q-brown">{scanResult.seatNumber || "—"}</p>
+                            <p className="font-bold text-q-brown">{scanResult.seatNumber || "-"}</p>
                         </div>
                         <div className="bg-white rounded-[10px] p-2 border border-green-100 col-span-2">
                             <p className="font-bold text-q-stone-500 uppercase mb-0.5">Route</p>

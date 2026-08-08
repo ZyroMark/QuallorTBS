@@ -80,46 +80,58 @@ function SignupForm() {
         else router.push("/dashboard");
     };
 
-    const activeDetail = ROLE_DETAILS[role];
-
     return (
-        <div className="min-h-screen grid lg:grid-cols-2">
-            {/* Left panel */}
-            <div className="hidden lg:flex flex-col bg-q-bg-section px-16 py-20 border-r border-q-stone-200 relative overflow-hidden">
+        <div className="min-h-screen grid lg:grid-cols-2" style={{ backgroundColor: "#FFFCF9" }}>
+            {/* Left panel - warm branding */}
+            <div
+                className="hidden lg:flex flex-col px-16 py-20 relative overflow-hidden"
+                style={{ backgroundColor: "#E1EDF5" }}
+            >
                 <div
-                    className="absolute inset-0 opacity-40"
+                    className="absolute inset-0 opacity-[0.07]"
                     style={{
-                        backgroundImage: "radial-gradient(#C9B49A 1px, transparent 1px)",
+                        backgroundImage: "radial-gradient(circle at 1px 1px, #111 1px, transparent 0)",
                         backgroundSize: "24px 24px",
                     }}
                 />
-                <Link href="/" className="flex items-center gap-3 mb-16 relative">
-                    <div className="w-10 h-10 rounded-[10px] bg-q-brown flex items-center justify-center shadow-q-sm">
-                        <span className="font-display font-bold text-white text-xl leading-none">Q</span>
-                    </div>
-                    <span className="font-display text-xl font-semibold text-q-stone-900">Quallor</span>
+
+                <Link href="/" className="flex items-center mb-16 relative">
+                    <span className="q-wordmark text-2xl" style={{ color: "#111111" }}>Quallor</span>
                 </Link>
 
                 <div className="relative flex-1 flex flex-col justify-center">
-                    <h2 className="font-display text-3xl font-semibold text-q-stone-900 mb-4 leading-snug">
+                    <h2
+                        className="font-sans font-black text-3xl mb-4 leading-none"
+                        style={{ color: "#111111", letterSpacing: "-0.03em" }}
+                    >
                         Join the Eastern Cape&apos;s<br />digital taxi network.
                     </h2>
-                    <p className="q-body mb-10">
-                        Whether you&apos;re a passenger, a driver, or an operator — Quallor connects you to every route in the region.
+                    <p className="font-sans text-base mb-10" style={{ color: "rgba(17,17,17,0.60)", lineHeight: 1.65 }}>
+                        Whether you&apos;re a passenger, a driver, or an operator, Quallor connects you to every route in the region.
                     </p>
 
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                         {(Object.entries(ROLE_DETAILS) as [Role, typeof ROLE_DETAILS.passenger][]).map(([key, detail]) => (
                             <div
                                 key={key}
-                                className={`q-card p-4 flex items-start gap-4 transition-all duration-200 ${role === key ? "border-q-brown shadow-q-md" : ""}`}
+                                className="p-4 flex items-start gap-4 rounded-[14px] transition-all duration-200"
+                                style={role === key
+                                    ? { backgroundColor: "#FFFFFF", boxShadow: "0 4px 20px rgba(17,17,17,0.12)" }
+                                    : { backgroundColor: "rgba(255,255,255,0.40)" }
+                                }
                             >
-                                <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0 ${role === key ? "bg-q-brown text-white" : "bg-q-stone-100 text-q-stone-500"}`}>
+                                <div
+                                    className="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0"
+                                    style={role === key
+                                        ? { backgroundColor: "#111111", color: "#CDDFF6" }
+                                        : { backgroundColor: "rgba(17,17,17,0.10)", color: "#5C5A56" }
+                                    }
+                                >
                                     <span className="material-symbols-outlined text-xl">{detail.icon}</span>
                                 </div>
                                 <div>
-                                    <p className="font-display font-semibold text-q-stone-900 text-base">{detail.label}</p>
-                                    <p className="font-sans text-sm text-q-stone-500 mt-0.5">{detail.description}</p>
+                                    <p className="font-sans font-black text-base" style={{ color: "#111111", letterSpacing: "-0.01em" }}>{detail.label}</p>
+                                    <p className="font-sans text-sm" style={{ color: "rgba(17,17,17,0.55)" }}>{detail.description}</p>
                                 </div>
                             </div>
                         ))}
@@ -127,31 +139,39 @@ function SignupForm() {
                 </div>
             </div>
 
-            {/* Right panel */}
-            <div className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-16 bg-white min-h-screen">
+            {/* Right panel - form */}
+            <div
+                className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-16 min-h-screen"
+                style={{ backgroundColor: "#FFFCF9" }}
+            >
                 <div className="w-full max-w-sm mx-auto">
-                    <Link href="/" className="flex items-center gap-2.5 mb-10 lg:hidden">
-                        <div className="w-9 h-9 rounded-[10px] bg-q-brown flex items-center justify-center">
-                            <span className="font-display font-bold text-white text-lg leading-none">Q</span>
-                        </div>
-                        <span className="font-display font-semibold text-q-stone-900 text-lg">Quallor</span>
+                    {/* Mobile logo */}
+                    <Link href="/" className="flex items-center mb-10 lg:hidden">
+                        <span className="q-wordmark text-2xl" style={{ color: "#111111" }}>Quallor</span>
                     </Link>
 
-                    <h1 className="font-display text-2xl font-semibold text-q-stone-900 mb-2">Create your account</h1>
-                    <p className="font-sans text-sm text-q-stone-500 mb-6">Join Quallor and start travelling smarter today.</p>
+                    <h1 className="font-sans font-black text-3xl mb-2" style={{ color: "#111111", letterSpacing: "-0.03em", lineHeight: 1.05 }}>
+                        Create your account
+                    </h1>
+                    <p className="font-sans text-sm mb-6" style={{ color: "#8A8678" }}>
+                        Join Quallor and start travelling smarter today.
+                    </p>
 
                     {/* Role toggle */}
-                    <div className="flex gap-1 p-1 bg-q-stone-100 rounded-[12px] mb-6">
+                    <div
+                        className="flex gap-1 p-1 rounded-[14px] mb-6"
+                        style={{ backgroundColor: "#EEF1EA" }}
+                    >
                         {(Object.entries(ROLE_DETAILS) as [Role, typeof ROLE_DETAILS.passenger][]).map(([key, detail]) => (
                             <button
                                 key={key}
                                 type="button"
                                 onClick={() => setRole(key)}
-                                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-[10px] font-sans text-xs font-semibold transition-all duration-200 ${
-                                    role === key
-                                        ? "bg-q-brown text-white shadow-q-sm"
-                                        : "text-q-stone-500 hover:text-q-stone-700"
-                                }`}
+                                className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-[10px] font-sans text-xs font-bold transition-all duration-200"
+                                style={role === key
+                                    ? { backgroundColor: "#111111", color: "#FFFFFF" }
+                                    : { color: "#8A8678" }
+                                }
                             >
                                 <span className="material-symbols-outlined text-base">{detail.icon}</span>
                                 {detail.label}
@@ -159,8 +179,12 @@ function SignupForm() {
                         ))}
                     </div>
 
+                    {/* Error */}
                     {error && (
-                        <div className="mb-5 px-4 py-3 rounded-[10px] bg-red-50 border border-red-200 text-red-700 font-sans text-sm font-medium">
+                        <div
+                            className="mb-5 px-4 py-3 rounded-[12px] font-sans text-sm font-semibold"
+                            style={{ backgroundColor: "rgba(220,38,38,0.07)", border: "1.5px solid rgba(220,38,38,0.20)", color: "#DC2626" }}
+                        >
                             {error}
                         </div>
                     )}
@@ -216,7 +240,8 @@ function SignupForm() {
                             <div className="flex">
                                 <input
                                     type={showPassword ? "text" : "password"}
-                                    className="q-input-lg rounded-r-none border-r-0 flex-1"
+                                    className="q-input-lg flex-1"
+                                    style={{ borderRadius: "12px 0 0 12px", borderRight: "none" }}
                                     placeholder="Create a password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -225,7 +250,16 @@ function SignupForm() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="h-14 px-4 border border-q-stone-200 bg-q-bg-input rounded-[10px] rounded-l-none border-l-0 text-q-stone-400 hover:text-q-brown transition-colors"
+                                    className="h-14 px-4 flex-shrink-0 transition-colors"
+                                    style={{
+                                        backgroundColor: "#FFFFFF",
+                                        border: "1.5px solid rgba(17,17,17,0.12)",
+                                        borderLeft: "none",
+                                        borderRadius: "0 12px 12px 0",
+                                        color: "#AEA89C",
+                                    }}
+                                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#111111"; }}
+                                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "#AEA89C"; }}
                                 >
                                     <span className="material-symbols-outlined text-xl">
                                         {showPassword ? "visibility_off" : "visibility"}
@@ -233,6 +267,7 @@ function SignupForm() {
                                 </button>
                             </div>
                         </div>
+
                         <div>
                             <label className="q-label">Confirm Password</label>
                             <input
@@ -250,25 +285,26 @@ function SignupForm() {
                                 type="checkbox"
                                 checked={agreed}
                                 onChange={(e) => setAgreed(e.target.checked)}
-                                className="mt-1 w-4 h-4 rounded border-q-stone-300 accent-[#8C6A4A]"
+                                className="mt-1 w-4 h-4 rounded"
+                                style={{ accentColor: "#111111" }}
                             />
-                            <span className="font-sans text-sm text-q-stone-600">
+                            <span className="font-sans text-sm" style={{ color: "#5C5A56" }}>
                                 I agree to the{" "}
-                                <Link href="/terms" className="text-q-brown font-semibold hover:underline">Terms of Service</Link>
+                                <Link href="/terms" className="font-bold hover:underline" style={{ color: "#111111" }}>Terms of Service</Link>
                                 {" "}and{" "}
-                                <Link href="/privacy" className="text-q-brown font-semibold hover:underline">Privacy Policy</Link>
+                                <Link href="/privacy" className="font-bold hover:underline" style={{ color: "#111111" }}>Privacy Policy</Link>
                             </span>
                         </label>
 
-                        <button type="submit" disabled={loading} className="q-btn-primary-lg w-full mt-2">
+                        <button type="submit" disabled={loading} className="q-btn-dark-lg w-full mt-2">
                             {loading ? "Creating account..." : "Create Account"}
                             {!loading && <span className="material-symbols-outlined text-xl">arrow_forward</span>}
                         </button>
                     </form>
 
-                    <p className="font-sans text-sm text-q-stone-500 text-center mt-8">
+                    <p className="font-sans text-sm text-center mt-8" style={{ color: "#8A8678" }}>
                         Already have an account?{" "}
-                        <Link href="/auth/login" className="text-q-brown font-semibold hover:underline">
+                        <Link href="/auth/login" className="font-bold hover:underline" style={{ color: "#111111" }}>
                             Sign In
                         </Link>
                     </p>
@@ -280,7 +316,7 @@ function SignupForm() {
 
 export default function SignupPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-q-bg-page flex items-center justify-center"><span className="font-sans text-q-stone-500">Loading...</span></div>}>
+        <Suspense>
             <SignupForm />
         </Suspense>
     );

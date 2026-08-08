@@ -29,7 +29,7 @@ export default function AvailableHikingTaxisPage() {
             driver: "Phumzile K.",
             plate: "CB 987-654",
             fare: 250,
-            seats: "Filling Up — 1 Seat Left",
+            seats: "Filling Up · 1 Seat Left",
             percent: 92,
             rule: "09:00 AM Departure",
             img: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=200",

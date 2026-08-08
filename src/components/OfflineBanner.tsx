@@ -26,7 +26,7 @@ export default function OfflineBanner() {
         return (
             <div className="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-center gap-2 py-2.5 px-4 bg-green-600 text-white text-sm font-sans font-semibold shadow-q-md">
                 <span className="material-symbols-outlined text-sm">wifi</span>
-                Back online — your data is syncing
+                Back online. Your data is syncing
             </div>
         );
     }
@@ -36,7 +36,7 @@ export default function OfflineBanner() {
     return (
         <div className="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-center gap-2 py-2.5 px-4 bg-amber-600 text-white text-sm font-sans font-semibold shadow-q-md">
             <span className="w-2 h-2 rounded-full bg-white animate-pulse inline-block flex-shrink-0"></span>
-            <span>No internet connection — working offline</span>
+            <span>No internet connection. Working offline</span>
         </div>
     );
 }

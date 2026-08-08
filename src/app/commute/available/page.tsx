@@ -32,7 +32,7 @@ export default function AvailableTaxisPage() {
             fare: 20,
             seatsLeft: 0,
             totalSeats: 14,
-            rule: "Full — waiting for next run",
+            rule: "Full · waiting for next run",
             departureTime: "08:45 AM",
             img: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=200",
             urgent: false,
@@ -87,7 +87,7 @@ export default function AvailableTaxisPage() {
                     const seatLabel = taxi.seatsLeft === 0
                         ? "No Seats Available"
                         : taxi.urgent
-                            ? `Filling Up — ${taxi.seatsLeft} Seat${taxi.seatsLeft === 1 ? "" : "s"} Left`
+                            ? `Filling Up · ${taxi.seatsLeft} Seat${taxi.seatsLeft === 1 ? "" : "s"} Left`
                             : `${taxi.seatsLeft} Seats Available`;
 
                     return (

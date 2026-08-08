@@ -91,7 +91,7 @@ export default function DriverRegisterPage() {
                 )}
 
                 <div className="space-y-8 px-6 text-left">
-                    {/* Step 1 — Personal Info */}
+                    {/* Step 1 - Personal Info */}
                     {step === 1 && (
                         <section>
                             <div className="flex items-center gap-2 mb-6">
@@ -123,7 +123,7 @@ export default function DriverRegisterPage() {
                         </section>
                     )}
 
-                    {/* Step 2 — Vehicle Details */}
+                    {/* Step 2 - Vehicle Details */}
                     {step === 2 && (
                         <section>
                             <div className="flex items-center gap-2 mb-6">
@@ -149,7 +149,7 @@ export default function DriverRegisterPage() {
                         </section>
                     )}
 
-                    {/* Step 3 — Document Upload */}
+                    {/* Step 3 - Document Upload */}
                     {step === 3 && (
                         <section>
                             <div className="flex items-center gap-2 mb-6">

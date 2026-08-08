@@ -8,7 +8,7 @@ export default function ServiceWorkerRegistrar() {
             navigator.serviceWorker
                 .register("/sw.js")
                 .catch(() => {
-                    // Fail silently — app still works without SW
+                    // Fail silently - app still works without SW
                 });
         }
     }, []);

@@ -37,7 +37,7 @@ export default function TrackingPage() {
 
     return (
         <main className="h-screen w-full flex flex-col overflow-hidden">
-            {/* Map — top 55% */}
+            {/* Map - top 55% */}
             <div className="relative" style={{ height: "55%" }}>
                 <TrackingMap from={from} to={to} taxiId={taxiId} onProgress={setMapProgress} />
                 <button

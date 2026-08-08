@@ -157,7 +157,7 @@ function WalkUpContent() {
                     </div>
 
                     <div className="mb-3 py-2 rounded-[10px] bg-q-stone-100 text-center font-sans text-xs font-bold uppercase tracking-widest text-q-stone-500">
-                        Front — Driver
+                        Front · Driver
                     </div>
 
                     <div className="space-y-3">
@@ -228,7 +228,7 @@ function WalkUpContent() {
                     {loading
                         ? "Booking..."
                         : selectedSeat
-                        ? `Confirm Seat ${selectedSeat} — Paid ${paymentMethod === "cash" ? "Cash" : "by Card"}`
+                        ? `Confirm Seat ${selectedSeat} · Paid ${paymentMethod === "cash" ? "Cash" : "by Card"}`
                         : "Select a Seat to Continue"}
                 </button>
             </div>

@@ -11,14 +11,11 @@ export default function OnboardingPage() {
             {/* Dot grid texture */}
             <div
                 className="absolute inset-0 z-0 opacity-40 pointer-events-none"
-                style={{ backgroundImage: "radial-gradient(circle at 2px 2px, #C4A882 1px, transparent 0)", backgroundSize: "32px 32px" }}
+                style={{ backgroundImage: "radial-gradient(circle at 2px 2px, #B0AEA8 1px, transparent 0)", backgroundSize: "32px 32px" }}
             />
 
             <header className="w-full pt-12 pb-6 px-6 flex flex-col items-center z-10">
-                <div className="w-20 h-20 mb-6 bg-white rounded-[18px] flex items-center justify-center border-2 border-q-brown-200 shadow-q-md">
-                    <span className="font-display text-5xl font-bold text-q-brown leading-none">Q</span>
-                </div>
-                <p className="font-sans text-xs font-bold text-q-brown uppercase tracking-widest">Quallor</p>
+                <p className="q-wordmark text-4xl" style={{ color: "#111111" }}>Quallor</p>
             </header>
 
             <div className="w-full flex-1 flex flex-col items-center justify-center px-6 text-center z-10">

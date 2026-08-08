@@ -6,7 +6,7 @@ export default function OfflinePage() {
     return (
         <main className="min-h-screen bg-q-bg-page flex flex-col items-center justify-center px-6 text-center">
             <div className="w-24 h-24 rounded-[20px] bg-q-brown-50 border-2 border-q-brown-200 flex items-center justify-center relative mb-8 shadow-q-md">
-                <span className="font-display text-5xl font-bold text-q-brown leading-none">Q</span>
+                <span className="material-symbols-outlined text-5xl text-q-brown">wifi_off</span>
                 <div className="absolute bottom-2 right-2 w-3 h-3 bg-red-500 rounded-full border-2 border-white" />
             </div>
 

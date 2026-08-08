@@ -36,60 +36,127 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen grid lg:grid-cols-2">
-            {/* Left panel — warm branding */}
-            <div className="hidden lg:flex flex-col bg-q-bg-section px-16 py-20 border-r border-q-stone-200 relative overflow-hidden">
+        <div
+            className="min-h-screen grid lg:grid-cols-2"
+            style={{ backgroundColor: "#FFFCF9" }}
+        >
+            {/* ── Left panel - warm hero ── */}
+            <div
+                className="hidden lg:flex flex-col px-16 py-20 relative overflow-hidden"
+                style={{ backgroundColor: "#E1EDF5" }}
+            >
+                {/* Subtle texture pattern */}
                 <div
-                    className="absolute inset-0 opacity-40"
+                    className="absolute inset-0 opacity-[0.06]"
                     style={{
-                        backgroundImage: "radial-gradient(#C9B49A 1px, transparent 1px)",
-                        backgroundSize: "24px 24px",
+                        backgroundImage: "radial-gradient(circle at 1px 1px, #111 1px, transparent 0)",
+                        backgroundSize: "32px 32px",
                     }}
                 />
-                <Link href="/" className="flex items-center gap-3 mb-16 relative">
-                    <div className="w-10 h-10 rounded-[10px] bg-q-brown flex items-center justify-center shadow-q-sm">
-                        <span className="font-display font-bold text-white text-xl leading-none">Q</span>
-                    </div>
-                    <span className="font-display text-xl font-semibold text-q-stone-900">Quallor</span>
+
+                {/* Logo */}
+                <Link href="/" className="flex items-center gap-3 mb-20 relative z-10">
+                    <span
+                        className="q-wordmark text-2xl"
+                        style={{ color: "#111111" }}
+                    >
+                        Quallor
+                    </span>
                 </Link>
-                <div className="relative flex-1 flex flex-col justify-center">
-                    <h2 className="font-display text-3xl font-semibold text-q-stone-900 mb-6 leading-snug">
-                        The Eastern Cape&apos;s<br />digital taxi network.
-                    </h2>
-                    <p className="q-body mb-10">
-                        Book a confirmed seat, track your taxi in real time, and board with a digital QR ticket — even when you&apos;re offline.
+
+                {/* Hero text */}
+                <div className="relative z-10 flex-1 flex flex-col justify-center">
+                    {/* Eyebrow */}
+                    <p
+                        className="font-sans font-bold text-xs uppercase tracking-widest mb-6"
+                        style={{ color: "rgba(17,17,17,0.55)" }}
+                    >
+                        Eastern Cape Network
                     </p>
-                    <div className="grid grid-cols-2 gap-4">
+
+                    <h2
+                        className="font-sans font-black mb-6 leading-none"
+                        style={{
+                            fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                            color: "#111111",
+                            letterSpacing: "-0.03em",
+                        }}
+                    >
+                        The smarter<br />way to travel<br />the Eastern<br />Cape.
+                    </h2>
+
+                    <p
+                        className="font-sans text-base leading-relaxed mb-12"
+                        style={{ color: "rgba(17,17,17,0.60)", maxWidth: "340px" }}
+                    >
+                        Book a confirmed seat, track your taxi in real time, and board
+                        with a digital QR ticket, even when you&apos;re offline.
+                    </p>
+
+                    {/* Stats row */}
+                    <div className="flex flex-wrap gap-3">
                         {[
                             { label: "Active Routes", value: "24+" },
-                            { label: "Daily Passengers", value: "1,200+" },
+                            { label: "Daily Passengers", value: "1 200+" },
                             { label: "Works Offline", value: "100%" },
-                            { label: "Walk-Up Friendly", value: "Always" },
                         ].map((stat) => (
-                            <div key={stat.label} className="q-card p-4">
-                                <p className="font-display text-2xl font-semibold text-q-brown mb-1">{stat.value}</p>
-                                <p className="font-sans text-xs text-q-stone-500 font-medium">{stat.label}</p>
+                            <div
+                                key={stat.label}
+                                className="px-5 py-4 rounded-[14px]"
+                                style={{
+                                    backgroundColor: "rgba(255,255,255,0.55)",
+                                    backdropFilter: "blur(8px)",
+                                }}
+                            >
+                                <p
+                                    className="font-sans font-black text-2xl leading-none mb-1"
+                                    style={{ color: "#111111", letterSpacing: "-0.03em" }}
+                                >
+                                    {stat.value}
+                                </p>
+                                <p className="font-sans text-xs font-semibold" style={{ color: "rgba(17,17,17,0.55)" }}>
+                                    {stat.label}
+                                </p>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
 
-            {/* Right panel — form */}
-            <div className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-16 bg-white min-h-screen">
+            {/* ── Right panel - form ── */}
+            <div
+                className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-16 min-h-screen"
+                style={{ backgroundColor: "#FFFCF9" }}
+            >
                 <div className="w-full max-w-sm mx-auto">
-                    <Link href="/" className="flex items-center gap-2.5 mb-10 lg:hidden">
-                        <div className="w-9 h-9 rounded-[10px] bg-q-brown flex items-center justify-center">
-                            <span className="font-display font-bold text-white text-lg leading-none">Q</span>
-                        </div>
-                        <span className="font-display font-semibold text-q-stone-900 text-lg">Quallor</span>
+
+                    {/* Mobile logo */}
+                    <Link href="/" className="flex items-center mb-10 lg:hidden">
+                        <span className="q-wordmark text-2xl" style={{ color: "#111111" }}>
+                            Quallor
+                        </span>
                     </Link>
 
-                    <h1 className="font-display text-2xl font-semibold text-q-stone-900 mb-2">Welcome back</h1>
-                    <p className="font-sans text-sm text-q-stone-500 mb-8">Sign in to your Quallor account to continue.</p>
+                    <h1
+                        className="font-sans font-black text-4xl mb-2"
+                        style={{ color: "#111111", letterSpacing: "-0.03em", lineHeight: 1.05 }}
+                    >
+                        Welcome back
+                    </h1>
+                    <p className="font-sans text-sm mb-8" style={{ color: "#8A8678" }}>
+                        Sign in to your Quallor account to continue.
+                    </p>
 
+                    {/* Error */}
                     {error && (
-                        <div className="mb-6 px-4 py-3 rounded-[10px] bg-red-50 border border-red-200 text-red-700 font-sans text-sm font-medium">
+                        <div
+                            className="mb-6 px-4 py-3 rounded-[12px] font-sans text-sm font-semibold"
+                            style={{
+                                background: "rgba(220,38,38,0.07)",
+                                border: "1.5px solid rgba(220,38,38,0.20)",
+                                color: "#DC2626",
+                            }}
+                        >
                             {error}
                         </div>
                     )}
@@ -106,12 +173,14 @@ export default function LoginPage() {
                                 required
                             />
                         </div>
+
                         <div>
                             <label className="q-label">Password</label>
                             <div className="flex">
                                 <input
                                     type={showPassword ? "text" : "password"}
-                                    className="q-input-lg rounded-r-none border-r-0 flex-1"
+                                    className="q-input-lg flex-1"
+                                    style={{ borderRadius: "12px 0 0 12px", borderRight: "none" }}
                                     placeholder="••••••••"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -120,7 +189,20 @@ export default function LoginPage() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="h-14 px-4 border border-q-stone-200 bg-q-bg-input rounded-[10px] rounded-l-none border-l-0 text-q-stone-400 hover:text-q-brown transition-colors"
+                                    className="h-14 px-4 transition-colors flex-shrink-0"
+                                    style={{
+                                        backgroundColor: "#FFFFFF",
+                                        border: "1.5px solid rgba(17,17,17,0.12)",
+                                        borderLeft: "none",
+                                        borderRadius: "0 12px 12px 0",
+                                        color: "#AEA89C",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        (e.currentTarget as HTMLElement).style.color = "#111111";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        (e.currentTarget as HTMLElement).style.color = "#AEA89C";
+                                    }}
                                 >
                                     <span className="material-symbols-outlined text-xl">
                                         {showPassword ? "visibility_off" : "visibility"}
@@ -128,16 +210,24 @@ export default function LoginPage() {
                                 </button>
                             </div>
                         </div>
-                        <button type="submit" disabled={loading} className="q-btn-primary-lg w-full mt-2">
-                            {loading ? "Signing in..." : "Sign In"}
-                            {!loading && <span className="material-symbols-outlined text-xl">arrow_forward</span>}
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="q-btn-dark-lg w-full mt-2"
+                        >
+                            {loading ? "Signing in…" : "Sign In"}
+                            {!loading && (
+                                <span className="material-symbols-outlined text-xl">arrow_forward</span>
+                            )}
                         </button>
                     </form>
 
-                    <div className="flex items-center gap-4 my-6">
-                        <div className="flex-1 h-px bg-q-stone-200" />
-                        <span className="font-sans text-sm text-q-stone-400">or</span>
-                        <div className="flex-1 h-px bg-q-stone-200" />
+                    {/* Divider */}
+                    <div className="flex items-center gap-4 my-7">
+                        <div className="flex-1 h-px" style={{ backgroundColor: "rgba(17,17,17,0.09)" }} />
+                        <span className="font-sans text-sm font-semibold" style={{ color: "#AEA89C" }}>or</span>
+                        <div className="flex-1 h-px" style={{ backgroundColor: "rgba(17,17,17,0.09)" }} />
                     </div>
 
                     <Link href="/auth/signup?role=driver" className="q-btn-secondary w-full justify-center">
@@ -145,9 +235,13 @@ export default function LoginPage() {
                         Register as a Driver
                     </Link>
 
-                    <p className="font-sans text-sm text-q-stone-500 text-center mt-8">
+                    <p className="font-sans text-sm text-center mt-8" style={{ color: "#8A8678" }}>
                         Don&apos;t have an account?{" "}
-                        <Link href="/auth/signup" className="text-q-brown font-semibold hover:underline">
+                        <Link
+                            href="/auth/signup"
+                            className="font-bold hover:underline"
+                            style={{ color: "#111111" }}
+                        >
                             Sign Up
                         </Link>
                     </p>
