@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Reveal, WordReveal } from "@/components/motion";
-import { SiteNav, SiteFooter, CtaBand, Photo } from "@/components/marketing";
+import { SiteNav, SiteFooter, CtaBand, Photo, SceneBanner } from "@/components/marketing";
 
 const PROBLEMS = [
     "Waiting at the rank with no idea when the taxi fills up",
@@ -33,24 +33,13 @@ export default function WhyQuallorPage() {
         <>
             <SiteNav />
 
-            {/* Intro */}
-            <section className="pt-44 pb-20" style={{ backgroundColor: "#FFFCF9" }}>
-                <div className="max-w-7xl mx-auto px-6">
-                    <Reveal className="mb-4">
-                        <p className="q-eyebrow" style={{ color: "#1D3686" }}>Why Quallor</p>
-                    </Reveal>
-                    <h1 className="q-display mb-8" style={{ fontSize: "clamp(2.8rem, 6.5vw, 5.5rem)", maxWidth: "17ch" }}>
-                        <WordReveal text="The rank was built for yesterday's commute" />
-                    </h1>
-                    <Reveal delay={250}>
-                        <p className="q-prose" style={{ maxWidth: "48ch" }}>
-                            Minibus taxis carry most of the Eastern Cape every single day, and almost
-                            all of it still runs on queues, cash, and guesswork. Quallor keeps what
-                            works and fixes what does not.
-                        </p>
-                    </Reveal>
-                </div>
-            </section>
+            {/* Banner */}
+            <SceneBanner
+                eyebrow="Why Quallor"
+                skyLines={["Come,"]}
+                fieldLines={["take", "a", "seat."]}
+                body="Minibus taxis carry most of the Eastern Cape every single day, and almost all of it still runs on queues, cash, and guesswork. Quallor keeps what works and fixes what does not."
+            />
 
             {/* Dark problem band */}
             <section className="py-28" style={{ backgroundColor: "#1F1F1F" }}>

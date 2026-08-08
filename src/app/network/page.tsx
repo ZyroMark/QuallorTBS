@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Reveal, WordReveal } from "@/components/motion";
-import { SiteNav, SiteFooter, CtaBand, Photo } from "@/components/marketing";
+import { SiteNav, SiteFooter, CtaBand, Photo, SceneBanner } from "@/components/marketing";
 
 const ROUTES = [
     "East London", "Mdantsane", "Beacon Bay", "Amalinda", "King William's Town",
@@ -23,35 +23,25 @@ export default function NetworkPage() {
         <>
             <SiteNav />
 
-            {/* Intro */}
-            <section className="pt-44 pb-20 overflow-hidden" style={{ backgroundColor: "#E1EDF5" }}>
-                <div className="max-w-7xl mx-auto px-6 mb-14">
-                    <Reveal className="mb-4">
-                        <p className="q-eyebrow" style={{ color: "#1D3686" }}>A growing network</p>
-                    </Reveal>
-                    <h1 className="q-display mb-8" style={{ fontSize: "clamp(2.8rem, 6.5vw, 5.5rem)", maxWidth: "16ch" }}>
-                        <WordReveal text="Every trip makes the network stronger" />
-                    </h1>
-                    <Reveal delay={250}>
-                        <p className="q-prose" style={{ maxWidth: "46ch" }}>
-                            Each booked seat gives drivers a fuller manifest and operators a clearer
-                            picture of their routes. The more the network carries, the better it runs.
-                        </p>
-                    </Reveal>
-                </div>
-
+            {/* Banner */}
+            <SceneBanner
+                eyebrow="A growing network"
+                skyLines={["From"]}
+                fieldLines={["here", "to", "there."]}
+                body="Each booked seat gives drivers a fuller manifest and operators a clearer picture of their routes. The more the network carries, the better it runs."
+            >
                 {/* Route marquee */}
-                <div className="q-marquee" aria-hidden>
-                    <div className="q-marquee__track" style={{ color: "#1D3686" }}>
+                <div className="q-marquee relative mt-16" aria-hidden>
+                    <div className="q-marquee__track" style={{ color: "#CDDFF6" }}>
                         {[...ROUTES, ...ROUTES].map((r, i) => (
                             <span key={i} className="flex items-center gap-10">
                                 {r}
-                                <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: "#1D3686" }} />
+                                <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: "#CDDFF6" }} />
                             </span>
                         ))}
                     </div>
                 </div>
-            </section>
+            </SceneBanner>
 
             {/* Photo band */}
             <section className="py-24" style={{ backgroundColor: "#FFFCF9" }}>

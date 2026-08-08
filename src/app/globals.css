@@ -874,3 +874,53 @@
 .honeycomb--ink div { background: #1D3686; }
 .honeycomb--ink div:after  { border-bottom-color: #1D3686; }
 .honeycomb--ink div:before { border-top-color: #1D3686; }
+
+/* ─── SCENE BANNER TAXI (animated Quantum braking icon) ─────────────── */
+/* Drives in from the left, dips as it brakes, wheels spin, skid marks,
+   tyre smoke and speed streaks. Used by BannerTaxi in marketing.tsx. */
+@keyframes q-tx-drive {
+  0%   { transform: translateX(-380px); }
+  58%  { transform: translateX(10px); }
+  74%  { transform: translateX(-4px); }
+  88%  { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+}
+@keyframes q-tx-dip {
+  0%, 34% { transform: rotate(0deg); }
+  60%     { transform: rotate(1.8deg); }
+  78%     { transform: rotate(-0.7deg); }
+  92%     { transform: rotate(0.25deg); }
+  100%    { transform: rotate(0deg); }
+}
+@keyframes q-tx-spin {
+  0%   { transform: rotate(0deg); }
+  55%  { transform: rotate(760deg); }
+  100% { transform: rotate(792deg); }
+}
+@keyframes q-tx-skid {
+  0%   { transform: scaleX(0); opacity: 0; }
+  6%   { opacity: 0.62; }
+  27%  { transform: scaleX(1); opacity: 0.62; }
+  55%  { opacity: 0.34; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+@keyframes q-tx-smoke {
+  0%   { transform: translate(0,0) scale(0.4); opacity: 0; }
+  22%  { opacity: 0.5; }
+  100% { transform: translate(-70px,-26px) scale(2.3); opacity: 0; }
+}
+@keyframes q-tx-streak {
+  0%   { transform: translateX(60px) scaleX(0.2); opacity: 0; }
+  20%  { opacity: 0.75; }
+  70%  { opacity: 0; }
+  100% { transform: translateX(-260px) scaleX(1.6); opacity: 0; }
+}
+@keyframes q-tx-shadow {
+  0%   { transform: translateX(-380px) scaleX(1.25); opacity: 0.15; }
+  58%  { transform: translateX(10px) scaleX(1); opacity: 0.4; }
+  100% { transform: translateX(0) scaleX(1); opacity: 0.4; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .q-tx * { animation: none !important; }
+  .q-tx .q-tx-fx { display: none; }
+}

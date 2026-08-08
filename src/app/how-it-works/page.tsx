@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Reveal, WordReveal } from "@/components/motion";
-import { SiteNav, SiteFooter, CtaBand, Photo } from "@/components/marketing";
+import { SiteNav, SiteFooter, CtaBand, Photo, SceneBanner } from "@/components/marketing";
 
 const STEPS = [
     {
@@ -54,23 +54,13 @@ export default function HowItWorksPage() {
         <>
             <SiteNav />
 
-            {/* Intro */}
-            <section className="pt-44 pb-20" style={{ backgroundColor: "#FFFCF9" }}>
-                <div className="max-w-7xl mx-auto px-6">
-                    <Reveal className="mb-4">
-                        <p className="q-eyebrow" style={{ color: "#1D3686" }}>How Quallor works</p>
-                    </Reveal>
-                    <h1 className="q-display mb-8" style={{ fontSize: "clamp(2.8rem, 6.5vw, 5.5rem)", maxWidth: "16ch" }}>
-                        <WordReveal text="Three steps from home to your seat" />
-                    </h1>
-                    <Reveal delay={250}>
-                        <p className="q-prose" style={{ maxWidth: "48ch" }}>
-                            Quallor puts the passenger, the driver, and the operator on the same trip.
-                            You book the seat, the driver sees the manifest, and the fleet stays in view.
-                        </p>
-                    </Reveal>
-                </div>
-            </section>
+            {/* Banner */}
+            <SceneBanner
+                eyebrow="How Quallor works"
+                skyLines={["Book,"]}
+                fieldLines={["track,", "hop", "in."]}
+                body="Quallor puts the passenger, the driver, and the operator on the same trip. You book the seat, the driver sees the manifest, and the fleet stays in view."
+            />
 
             {/* Steps */}
             <section className="py-24" style={{ backgroundColor: "#FFFFFF" }}>
