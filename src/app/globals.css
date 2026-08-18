@@ -921,8 +921,12 @@
   100% { transform: translateX(0) scaleX(1); opacity: 0.4; }
 }
 @media (prefers-reduced-motion: reduce) {
+  /* The taxi keeps its parked pose, but every transient effect has to go:
+     these are drawn in full in the markup and only the keyframes clear them,
+     so without this the skid marks, smoke and speed streaks stay painted on
+     the road as if the taxi had just stopped there. */
   .q-tx * { animation: none !important; }
-  .q-tx .q-tx-fx { display: none; }
+  .q-tx .q-tx-fx { display: none !important; }
 }
 
 /* ─── CONFIDENTIALITY LAYER (ZYROMARK PTY LTD) ──────────────────────── */
@@ -1108,6 +1112,19 @@ body.q-noselect canvas {
     margin: 0 auto 0.75rem;
     line-height: 1.6;
   }
+}
+
+/* ─── TAB BAR CLEARANCE ─────────────────────────────────────────────── */
+/* The passenger tab bar is fixed to the bottom of the viewport, so it covers
+   whatever the page ends with. BottomNav sets .q-has-tabbar while it is on
+   screen; this reserves its height at the end of the document so the last row
+   of cards, links and buttons can still be reached and tapped. The bar hides
+   itself from the large layout, so the reservation ends there too. */
+body.q-has-tabbar {
+  padding-bottom: calc(5.9rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 1024px) {
+  body.q-has-tabbar { padding-bottom: 0; }
 }
 
 /* Access gate --------------------------------------------------------- */

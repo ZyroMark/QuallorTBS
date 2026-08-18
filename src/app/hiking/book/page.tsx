@@ -69,7 +69,7 @@ export default function HikeSeatSelectionPage() {
                 </div>
             )}
 
-            <div className="flex-1 overflow-y-auto pb-32">
+            <div className="flex-1 pb-40">
                 {/* Route strip */}
                 <div className="px-4 py-4 bg-q-bg-section border-b border-q-stone-200">
                     <div className="flex items-center justify-between">
@@ -157,7 +157,7 @@ export default function HikeSeatSelectionPage() {
                 )}
             </div>
 
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-q-stone-200 p-4 pb-8 shadow-q-lg">
+            <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-q-stone-200 p-4 pb-8 shadow-q-lg" style={{ paddingBottom: "calc(2rem + env(safe-area-inset-bottom))" }}>
                 <button
                     onClick={handleConfirm}
                     disabled={!selectedSeat}

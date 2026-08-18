@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, type ReactNode } from "react";
+import React, { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Reveal, WordReveal } from "@/components/motion";
@@ -54,13 +54,72 @@ export function Photo({
    Keyframes (q-tx-*) live in globals.css. */
 function BannerTaxi() {
     const [run, setRun] = useState(0);
+    const [started, setStarted] = useState(false);
+    const hostRef = useRef<HTMLDivElement>(null);
+
+    // The boot loader covers the screen for roughly 1.7s, which outlasts the
+    // 1.5s drive, so an animation started on mount finishes before anyone can
+    // see it. Wait until the taxi is on screen and the loader has cleared.
+    useEffect(() => {
+        const el = hostRef.current;
+        if (!el) return;
+        let done = false;
+
+        const inView = () => {
+            const r = el.getBoundingClientRect();
+            return r.top < window.innerHeight * 0.85 && r.bottom > 0;
+        };
+        const start = () => {
+            if (done) return;
+            done = true;
+            setStarted(true);
+            cleanup();
+        };
+        const onScroll = () => {
+            if (inView()) start();
+        };
+
+        // Already on screen at load: drive once the loader is out of the way.
+        const bootTimer = setTimeout(() => {
+            if (inView()) start();
+        }, 1900);
+        // Scrolled to later: drive on arrival.
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+        // Whatever happens above, the scene must never stay invisible.
+        const failsafe = setTimeout(start, 6000);
+
+        function cleanup() {
+            clearTimeout(bootTimer);
+            clearTimeout(failsafe);
+            window.removeEventListener("scroll", onScroll);
+            window.removeEventListener("resize", onScroll);
+        }
+        return cleanup;
+    }, []);
+
+    // Until it starts, the scene must not paint: the keyframes carry the
+    // opening state (taxi off to the left, skid marks and smoke invisible), so
+    // the raw artwork would otherwise show parked with full skid marks drawn.
+    const anim = (value: string): React.CSSProperties => (started ? { animation: value } : {});
+
     return (
-        <div onClick={() => setRun((r) => r + 1)} title="Click to replay" style={{ cursor: "pointer" }}>
+        <div
+            ref={hostRef}
+            onClick={() => setRun((r) => r + 1)}
+            title="Click to replay"
+            style={{ cursor: "pointer" }}
+        >
             <svg
                 key={run}
                 className="q-tx"
                 viewBox="0 0 660 300"
-                style={{ width: "clamp(190px, 34vw, 430px)", height: "auto", display: "block" }}
+                style={{
+                    width: "clamp(190px, 34vw, 430px)",
+                    height: "auto",
+                    display: "block",
+                    opacity: started ? 1 : 0,
+                }}
                 fill="none"
                 aria-hidden
             >
@@ -83,14 +142,14 @@ function BannerTaxi() {
                 </defs>
 
                 {/* Speed streaks */}
-                <g className="q-tx-fx" style={{ animation: "q-tx-streak 0.9s cubic-bezier(.2,.7,.3,1) 0.06s both" }}>
+                <g className="q-tx-fx" style={{ ...anim("q-tx-streak 0.9s cubic-bezier(.2,.7,.3,1) 0.06s both") }}>
                     <rect x="120" y="132" width="120" height="4" rx="2" fill="#8fb0ff" opacity="0.5" />
                     <rect x="70" y="164" width="170" height="4" rx="2" fill="#8fb0ff" opacity="0.35" />
                     <rect x="150" y="196" width="90" height="4" rx="2" fill="#8fb0ff" opacity="0.45" />
                 </g>
 
                 {/* Skid marks */}
-                <g style={{ transformBox: "fill-box", transformOrigin: "right center", animation: "q-tx-skid 3.4s cubic-bezier(.16,.85,.2,1) 0.06s both" }}>
+                <g className="q-tx-fx" style={{ transformBox: "fill-box", transformOrigin: "right center", ...anim("q-tx-skid 3.4s cubic-bezier(.16,.85,.2,1) 0.06s both") }}>
                     <rect x="34" y="238" width="198" height="7" rx="3.5" fill="#0b1130" />
                     <rect x="272" y="238" width="198" height="7" rx="3.5" fill="#0b1130" />
                 </g>
@@ -98,12 +157,12 @@ function BannerTaxi() {
                 {/* Ground shadow */}
                 <ellipse
                     cx="352" cy="245" rx="150" ry="9" fill="#101a4d" opacity="0.4"
-                    style={{ transformBox: "fill-box", transformOrigin: "center", animation: "q-tx-shadow 1.5s cubic-bezier(.14,.86,.16,1) 0.06s both" }}
+                    style={{ transformBox: "fill-box", transformOrigin: "center", ...anim("q-tx-shadow 1.5s cubic-bezier(.14,.86,.16,1) 0.06s both") }}
                 />
 
                 {/* Minibus */}
-                <g style={{ animation: "q-tx-drive 1.5s cubic-bezier(.14,.86,.16,1) 0.06s both" }}>
-                    <g style={{ transformBox: "fill-box", transformOrigin: "20% 92%", animation: "q-tx-dip 1.5s cubic-bezier(.3,.8,.3,1) 0.06s both" }}>
+                <g style={{ ...anim("q-tx-drive 1.5s cubic-bezier(.14,.86,.16,1) 0.06s both") }}>
+                    <g style={{ transformBox: "fill-box", transformOrigin: "20% 92%", ...anim("q-tx-dip 1.5s cubic-bezier(.3,.8,.3,1) 0.06s both") }}>
                         <path d="M170 216 L170 152 C170 132 178 118 196 110 C214 102 246 98 300 98 L420 98 C440 98 454 103 465 114 L508 154 C516 162 521 172 521 183 L521 205 C521 211 517 216 511 216 Z" fill="url(#qtxBody)" />
                         <path d="M198 105 C216 99 248 96 300 96 L418 96 C428 96 436 98 442 102 L438 108 C430 104 420 102 410 102 L300 102 C250 102 218 106 202 111 Z" fill="url(#qtxRoof)" />
                         <path d="M203 152 C203 137 210 126 224 121 C238 116 262 114 296 114 L336 114 C340 114 342 116 342 120 L342 152 C342 156 340 158 336 158 L209 158 C205 158 203 156 203 152 Z" fill="url(#qtxGlass)" />
@@ -129,13 +188,13 @@ function BannerTaxi() {
                         <path d="M440 216 a30 30 0 0 1 60 0 Z" fill="#1a2033" opacity="0.7" />
                         <path d="M196 216 C196 195 212 180 232 180 C252 180 268 195 268 216 L262 216 C262 199 249 186 232 186 C215 186 202 199 202 216 Z" fill="#eef2fb" />
                         <path d="M434 216 C434 195 450 180 470 180 C490 180 506 195 506 216 L500 216 C500 199 487 186 470 186 C453 186 440 199 440 216 Z" fill="#eef2fb" />
-                        <g style={{ transformBox: "fill-box", transformOrigin: "center", animation: "q-tx-spin 1.5s cubic-bezier(.14,.86,.16,1) 0.06s both" }}>
+                        <g style={{ transformBox: "fill-box", transformOrigin: "center", ...anim("q-tx-spin 1.5s cubic-bezier(.14,.86,.16,1) 0.06s both") }}>
                             <circle cx="232" cy="216" r="14" fill="#f7f9ff" />
                             <circle cx="232" cy="216" r="5" fill="#c7d3ee" />
                             <rect x="230.5" y="202" width="3" height="28" rx="1.5" fill="#ccd8f2" />
                             <rect x="218" y="214.5" width="28" height="3" rx="1.5" fill="#ccd8f2" />
                         </g>
-                        <g style={{ transformBox: "fill-box", transformOrigin: "center", animation: "q-tx-spin 1.5s cubic-bezier(.14,.86,.16,1) 0.06s both" }}>
+                        <g style={{ transformBox: "fill-box", transformOrigin: "center", ...anim("q-tx-spin 1.5s cubic-bezier(.14,.86,.16,1) 0.06s both") }}>
                             <circle cx="470" cy="216" r="14" fill="#f7f9ff" />
                             <circle cx="470" cy="216" r="5" fill="#c7d3ee" />
                             <rect x="468.5" y="202" width="3" height="28" rx="1.5" fill="#ccd8f2" />
@@ -148,9 +207,9 @@ function BannerTaxi() {
 
                 {/* Tyre smoke */}
                 <g className="q-tx-fx" fill="#aebfe8">
-                    <circle cx="248" cy="236" r="12" style={{ transformBox: "fill-box", transformOrigin: "center", animation: "q-tx-smoke 1.6s ease-out 0.5s both" }} />
-                    <circle cx="286" cy="240" r="9" style={{ transformBox: "fill-box", transformOrigin: "center", animation: "q-tx-smoke 1.7s ease-out 0.62s both" }} />
-                    <circle cx="486" cy="238" r="10" style={{ transformBox: "fill-box", transformOrigin: "center", animation: "q-tx-smoke 1.5s ease-out 0.56s both" }} />
+                    <circle cx="248" cy="236" r="12" style={{ transformBox: "fill-box", transformOrigin: "center", ...anim("q-tx-smoke 1.6s ease-out 0.5s both") }} />
+                    <circle cx="286" cy="240" r="9" style={{ transformBox: "fill-box", transformOrigin: "center", ...anim("q-tx-smoke 1.7s ease-out 0.62s both") }} />
+                    <circle cx="486" cy="238" r="10" style={{ transformBox: "fill-box", transformOrigin: "center", ...anim("q-tx-smoke 1.5s ease-out 0.56s both") }} />
                 </g>
             </svg>
         </div>

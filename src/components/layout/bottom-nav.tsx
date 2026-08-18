@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -18,16 +18,29 @@ const HIDE_ON_PATHS = [
     "/operator", "/fleet",
     "/terms", "/privacy",
     "/how-it-works", "/why-quallor", "/network",
+    // Seat selection is a checkout step: its own confirm bar owns the bottom
+    // of the screen, and two stacked bars leave the confirm button untappable.
+    "/commute/book", "/hiking/book",
 ];
 
 export function BottomNav() {
     const pathname = usePathname();
 
-    const shouldHide = HIDE_ON_PATHS.some((p) =>
-        pathname === p || pathname.startsWith(p + "/") || pathname.startsWith("/auth")
-    );
+    const shouldHide =
+        pathname === "/" ||
+        HIDE_ON_PATHS.some(
+            (p) => pathname === p || pathname.startsWith(p + "/") || pathname.startsWith("/auth")
+        );
+
+    // Pages cannot see this component, so tell them the bar is there and let
+    // globals.css reserve the space. Without it the bar sits on top of whatever
+    // ends the page, and those controls cannot be tapped.
+    useEffect(() => {
+        document.body.classList.toggle("q-has-tabbar", !shouldHide);
+        return () => document.body.classList.remove("q-has-tabbar");
+    }, [shouldHide]);
+
     if (shouldHide) return null;
-    if (pathname === "/") return null;
 
     return (
         <nav
