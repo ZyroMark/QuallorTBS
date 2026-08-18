@@ -1,7 +1,15 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-export type UserRole = "passenger" | "driver" | "operator";
+/**
+ * Four roles, three of them operational and one back-office.
+ *
+ * "operator" runs a fleet day to day and sees only their own vehicles.
+ * "fleet" is the fleet manager, a Quallor role that owns the vehicle register
+ * across every operator: adding vehicles, running assessments and taking
+ * vehicles off the road are their job, not the operator's.
+ */
+export type UserRole = "passenger" | "driver" | "operator" | "fleet";
 
 export interface User {
   id: string;
@@ -18,6 +26,10 @@ export interface User {
   companyName?: string;
   fleetSize?: number;
   operatorStatus?: "pending" | "verified";
+  /** Fleet manager staff number, used on assessment records. */
+  staffNumber?: string;
+  /** Set on a driver once their vehicle is on the register. */
+  vehicleId?: string;
 }
 
 interface SignupData {
@@ -32,6 +44,7 @@ interface SignupData {
   vehicleColor?: string;
   companyName?: string;
   fleetSize?: number;
+  staffNumber?: string;
 }
 
 interface AuthContextType {
@@ -39,6 +52,8 @@ interface AuthContextType {
   login: (email: string, password: string) => { success: boolean; error?: string };
   signup: (data: SignupData) => { success: boolean; error?: string };
   logout: () => void;
+  updateUser: (patch: Partial<User>) => { success: boolean; error?: string };
+  changePassword: (current: string, next: string) => { success: boolean; error?: string };
   isLoading: boolean;
 }
 
@@ -92,6 +107,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         fleetSize: data.fleetSize || 0,
         operatorStatus: "pending",
       }),
+      ...(data.role === "fleet" && {
+        staffNumber: data.staffNumber,
+        companyName: "Quallor Fleet Office",
+      }),
     };
 
     users[data.email] = { user: newUser, password: data.password };
@@ -106,8 +125,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("quallor_current_user");
   }
 
+  /**
+   * Edit the signed-in account. Changing the email re-keys the user record,
+   * since accounts are stored by email address.
+   */
+  function updateUser(patch: Partial<User>) {
+    if (!user) return { success: false, error: "You are not signed in." };
+
+    const users = getAllUsers();
+    const existing = users[user.email];
+    if (!existing) return { success: false, error: "Account record not found." };
+
+    const nextEmail = patch.email?.trim() || user.email;
+    if (nextEmail !== user.email && users[nextEmail]) {
+      return { success: false, error: "That email is already used by another account." };
+    }
+
+    const updated: User = { ...user, ...patch, email: nextEmail, id: user.id, role: user.role };
+
+    if (nextEmail !== user.email) delete users[user.email];
+    users[nextEmail] = { user: updated, password: existing.password };
+
+    localStorage.setItem("quallor_users", JSON.stringify(users));
+    localStorage.setItem("quallor_current_user", JSON.stringify(updated));
+    setUser(updated);
+    return { success: true };
+  }
+
+  function changePassword(current: string, next: string) {
+    if (!user) return { success: false, error: "You are not signed in." };
+    const users = getAllUsers();
+    const record = users[user.email];
+    if (!record) return { success: false, error: "Account record not found." };
+    if (record.password !== current) return { success: false, error: "Your current password is incorrect." };
+    if (next.length < 6) return { success: false, error: "Use at least 6 characters." };
+    if (next === current) return { success: false, error: "Choose a password you have not used before." };
+
+    users[user.email] = { ...record, password: next };
+    localStorage.setItem("quallor_users", JSON.stringify(users));
+    return { success: true };
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, updateUser, changePassword, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

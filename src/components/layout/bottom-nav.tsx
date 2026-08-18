@@ -12,7 +12,13 @@ const passengerNav = [
     { icon: "person",         label: "Account", href: "/profile" },
 ];
 
-const HIDE_ON_PATHS = ["/auth", "/", "/driver", "/commute/tracking", "/operator", "/how-it-works", "/why-quallor", "/network"];
+const HIDE_ON_PATHS = [
+    "/auth", "/", "/driver", "/commute/tracking",
+    // Back-office areas keep the passenger tab bar out of the way.
+    "/operator", "/fleet",
+    "/terms", "/privacy",
+    "/how-it-works", "/why-quallor", "/network",
+];
 
 export function BottomNav() {
     const pathname = usePathname();

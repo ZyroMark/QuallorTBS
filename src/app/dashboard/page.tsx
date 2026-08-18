@@ -6,6 +6,7 @@ import { useAuth } from "@/app/context/AuthContext";
 import { useBooking } from "@/app/context/BookingContext";
 import AuthGuard from "@/components/AuthGuard";
 import AppLayout from "@/components/layout/AppLayout";
+import RouteArt from "@/components/RouteArt";
 
 function DashboardContent() {
     const { user } = useAuth();
@@ -83,12 +84,9 @@ function DashboardContent() {
                                 (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(17,17,17,0.07)";
                             }}
                         >
-                            <div
-                                className="w-full aspect-[16/7] bg-cover bg-center"
-                                style={{
-                                    backgroundImage: 'url("https://images.unsplash.com/photo-1549423155-227364ac5d14?q=80&w=1000&auto=format&fit=crop")',
-                                }}
-                            />
+                            <div className="w-full aspect-[16/7]">
+                                <RouteArt from="Beacon Bay" to="Amalinda" tone="blue" />
+                            </div>
                             <div className="p-5">
                                 <div className="flex justify-between items-start mb-4">
                                     <div>
@@ -132,12 +130,9 @@ function DashboardContent() {
                                 (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(17,17,17,0.05)";
                             }}
                         >
-                            <div
-                                className="w-full aspect-[16/7] bg-cover bg-center"
-                                style={{
-                                    backgroundImage: 'url("https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1000&auto=format&fit=crop")',
-                                }}
-                            />
+                            <div className="w-full aspect-[16/7]">
+                                <RouteArt from="East London" to="Mthatha" tone="sage" />
+                            </div>
                             <div className="p-5">
                                 <div className="flex items-end justify-between">
                                     <div>

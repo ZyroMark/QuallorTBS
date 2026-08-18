@@ -1,6 +1,8 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
+export type BookingStatus = "confirmed" | "in-transit" | "completed" | "cancelled" | "pending-sync";
+
 export interface BookingDetails {
   bookingId: string;
   tripType: "commute" | "hiking";
@@ -14,10 +16,16 @@ export interface BookingDetails {
   passengerName: string;
   passengerId: string;
   date: string;
-  status: "confirmed" | "in-transit" | "completed" | "pending-sync";
+  status: BookingStatus;
   qrData: string;
   paymentMethod?: "cash" | "card" | "app";
   bookedByDriver?: boolean;
+  /** Groups the legs of one journey, so a two-taxi trip reads as a single trip. */
+  journeyId?: string;
+  legIndex?: number;
+  legCount?: number;
+  /** Set by the gaatjie or the QR scanner when the passenger actually boards. */
+  boardedAt?: string;
 }
 
 export interface SelectedTaxi {
@@ -27,9 +35,18 @@ export interface SelectedTaxi {
   fare: number;
 }
 
+export interface RouteSelection {
+  from: string;
+  to: string;
+  tripType: "commute" | "hiking";
+  /** Set when this selection is the second taxi of a connecting journey. */
+  journeyId?: string;
+  legIndex?: number;
+}
+
 interface BookingContextType {
-  selectedRoute: { from: string; to: string; tripType: "commute" | "hiking" } | null;
-  setSelectedRoute: (r: { from: string; to: string; tripType: "commute" | "hiking" }) => void;
+  selectedRoute: RouteSelection | null;
+  setSelectedRoute: (r: RouteSelection) => void;
   selectedTaxi: SelectedTaxi | null;
   setSelectedTaxi: (t: SelectedTaxi) => void;
   currentBooking: BookingDetails | null;
@@ -37,18 +54,27 @@ interface BookingContextType {
   addBooking: (booking: BookingDetails) => void;
   myBookings: BookingDetails[];
   clearCurrentBooking: () => void;
+  cancelBooking: (bookingId: string) => void;
+  setBoarded: (bookingId: string, boarded: boolean) => void;
+  /** Every leg of the journey a booking belongs to, in travel order. */
+  journeyLegs: (booking: BookingDetails) => BookingDetails[];
+  setCurrentBooking: (booking: BookingDetails) => void;
 }
 
 const BookingContext = createContext<BookingContextType | null>(null);
 
 function generateBookingId(): string {
-  const a = Math.random().toString(36).substr(2, 4).toUpperCase();
-  const b = Math.random().toString(36).substr(2, 4).toUpperCase();
+  const a = Math.random().toString(36).slice(2, 6).toUpperCase();
+  const b = Math.random().toString(36).slice(2, 6).toUpperCase();
   return `QLR-${a}-${b}`;
 }
 
+export function generateJourneyId(): string {
+  return `JRN-${Date.now().toString(36).toUpperCase()}`;
+}
+
 export function BookingProvider({ children }: { children: React.ReactNode }) {
-  const [selectedRoute, setSelectedRoute] = useState<BookingContextType["selectedRoute"]>(null);
+  const [selectedRoute, setSelectedRoute] = useState<RouteSelection | null>(null);
   const [selectedTaxi, setSelectedTaxi] = useState<SelectedTaxi | null>(null);
   const [currentBooking, setCurrentBooking] = useState<BookingDetails | null>(null);
   const [myBookings, setMyBookings] = useState<BookingDetails[]>([]);
@@ -60,6 +86,11 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
     if (current) setCurrentBooking(JSON.parse(current));
   }, []);
 
+  function persist(next: BookingDetails[]) {
+    setMyBookings(next);
+    localStorage.setItem("quallor_bookings", JSON.stringify(next));
+  }
+
   function confirmBooking(details: Omit<BookingDetails, "bookingId" | "qrData">): BookingDetails {
     const bookingId = generateBookingId();
     const booking: BookingDetails = {
@@ -69,23 +100,52 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
     };
     setCurrentBooking(booking);
     localStorage.setItem("quallor_current_booking", JSON.stringify(booking));
-    const updated = [booking, ...myBookings];
-    setMyBookings(updated);
-    localStorage.setItem("quallor_bookings", JSON.stringify(updated));
+    persist([booking, ...myBookings]);
     return booking;
   }
 
   function addBooking(booking: BookingDetails) {
     setCurrentBooking(booking);
     localStorage.setItem("quallor_current_booking", JSON.stringify(booking));
-    const updated = [booking, ...myBookings.filter((b) => b.bookingId !== booking.bookingId)];
-    setMyBookings(updated);
-    localStorage.setItem("quallor_bookings", JSON.stringify(updated));
+    persist([booking, ...myBookings.filter((b) => b.bookingId !== booking.bookingId)]);
   }
 
   function clearCurrentBooking() {
     setCurrentBooking(null);
     localStorage.removeItem("quallor_current_booking");
+  }
+
+  function cancelBooking(bookingId: string) {
+    const next = myBookings.map((b) =>
+      b.bookingId === bookingId ? { ...b, status: "cancelled" as const } : b
+    );
+    persist(next);
+    if (currentBooking?.bookingId === bookingId) {
+      const updated = next.find((b) => b.bookingId === bookingId) ?? null;
+      setCurrentBooking(updated);
+      if (updated) localStorage.setItem("quallor_current_booking", JSON.stringify(updated));
+    }
+  }
+
+  function setBoarded(bookingId: string, boarded: boolean) {
+    const next = myBookings.map((b) =>
+      b.bookingId === bookingId
+        ? { ...b, boardedAt: boarded ? new Date().toISOString() : undefined, status: boarded ? ("in-transit" as const) : b.status }
+        : b
+    );
+    persist(next);
+  }
+
+  function journeyLegs(booking: BookingDetails): BookingDetails[] {
+    if (!booking.journeyId) return [booking];
+    return myBookings
+      .filter((b) => b.journeyId === booking.journeyId)
+      .sort((a, b) => (a.legIndex ?? 0) - (b.legIndex ?? 0));
+  }
+
+  function selectCurrentBooking(booking: BookingDetails) {
+    setCurrentBooking(booking);
+    localStorage.setItem("quallor_current_booking", JSON.stringify(booking));
   }
 
   return (
@@ -94,6 +154,8 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
       selectedTaxi, setSelectedTaxi,
       currentBooking, confirmBooking,
       addBooking, myBookings, clearCurrentBooking,
+      cancelBooking, setBoarded, journeyLegs,
+      setCurrentBooking: selectCurrentBooking,
     }}>
       {children}
     </BookingContext.Provider>

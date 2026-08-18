@@ -1,6 +1,10 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
+
+// Leaflet needs window, so the map panel is client-only.
+const MiniMap = dynamic(() => import("@/components/MiniMap"), { ssr: false });
 
 export default function PartnerDashboardPage() {
     const stats = [
@@ -66,15 +70,20 @@ export default function PartnerDashboardPage() {
                                 <button className="font-sans px-3 py-1 text-xs rounded-full bg-q-stone-100 text-q-stone-600">Satellite</button>
                             </div>
                         </div>
-                        <div
-                            className="relative w-full aspect-video rounded-[18px] overflow-hidden border border-q-stone-200 shadow-q-md bg-cover bg-center"
-                            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000')" }}
-                        >
-                            <div className="absolute inset-0 bg-q-stone-900/30" />
-                            <div className="absolute bottom-4 left-4">
+                        <div className="relative w-full aspect-video rounded-[18px] overflow-hidden border border-q-stone-200 shadow-q-md">
+                            <MiniMap
+                                center={{ lat: -32.96, lng: 27.87 }}
+                                zoom={11}
+                                markers={[
+                                    { lat: -32.9836, lng: 27.9196, label: "T01", color: "#16A34A" },
+                                    { lat: -32.9299, lng: 27.8049, label: "T02", color: "#1D3686" },
+                                    { lat: -32.9902, lng: 27.8878, label: "T03", color: "#16A34A" },
+                                ]}
+                            />
+                            <div className="absolute bottom-4 left-4 z-[500]">
                                 <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full border border-q-stone-200 shadow-q-sm flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-q-brown animate-pulse" />
-                                    <span className="font-sans text-xs font-semibold text-q-stone-900">12 Vehicles in Sandton</span>
+                                    <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "#16A34A" }} />
+                                    <span className="font-sans text-xs font-semibold text-q-stone-900">12 vehicles in East London</span>
                                 </div>
                             </div>
                         </div>

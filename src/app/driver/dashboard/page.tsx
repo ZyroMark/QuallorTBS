@@ -3,13 +3,22 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useAuth } from "@/app/context/AuthContext";
 import { useBooking } from "@/app/context/BookingContext";
+import { useFleet } from "@/app/context/FleetContext";
+import { useToast } from "@/components/Toast";
 import AuthGuard from "@/components/AuthGuard";
+import { coordsFor } from "@/lib/places";
+
+// Leaflet needs window, so the map panel is client-only.
+const MiniMap = dynamic(() => import("@/components/MiniMap"), { ssr: false });
 
 function DriverDashboardContent() {
     const { user, logout } = useAuth();
     const { myBookings } = useBooking();
+    const { vehicleForDriver, blockingReason } = useFleet();
+    const { toast } = useToast();
     const router = useRouter();
     const [isOnline, setIsOnline] = useState(() => {
         if (typeof window !== "undefined") {
@@ -18,9 +27,22 @@ function DriverDashboardContent() {
         return true;
     });
 
+    // The driver's vehicle as the fleet office sees it. If the fleet manager
+    // suspends it or an inspection fails, that lands here and the driver cannot
+    // go online until it is cleared.
+    const vehicle = vehicleForDriver(user?.id, user?.vehiclePlate);
+    const blocked = vehicle ? blockingReason(vehicle) : null;
+    const noVehicle = !vehicle;
+    const canGoOnline = Boolean(vehicle) && !blocked;
+
     useEffect(() => {
         localStorage.setItem("driver_online_status", String(isOnline));
     }, [isOnline]);
+
+    // Being taken off the road forces the driver offline straight away.
+    useEffect(() => {
+        if (!canGoOnline && isOnline) setIsOnline(false);
+    }, [canGoOnline, isOnline]);
 
     function handleLogout() {
         logout();
@@ -34,9 +56,8 @@ function DriverDashboardContent() {
         return bDate === today && (b.taxiId === user?.vehiclePlate || b.bookedByDriver);
     });
 
-    const initials = user?.name
-        ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
-        : "DV";
+    // Centre the map on the first pickup of the day, otherwise on East London.
+    const homeCoords = coordsFor(todaysPassengers[0]?.from ?? "East London");
 
     return (
         <main className="h-screen w-full flex flex-col overflow-hidden" style={{ backgroundColor: "#FFFCF9" }}>
@@ -58,16 +79,25 @@ function DriverDashboardContent() {
                         >
                             {user?.name || "Quallor Driver"}
                         </p>
-                        <button onClick={() => setIsOnline(!isOnline)} className="flex items-center gap-1.5">
+                        <button
+                            onClick={() => {
+                                if (!canGoOnline) {
+                                    toast(blocked ?? "No vehicle is assigned to you yet", "error");
+                                    return;
+                                }
+                                setIsOnline(!isOnline);
+                            }}
+                            className="flex items-center gap-1.5"
+                        >
                             <span
                                 className={`w-2 h-2 rounded-full ${isOnline ? "animate-pulse" : ""}`}
-                                style={{ backgroundColor: isOnline ? "#16A34A" : "#AEA89C" }}
+                                style={{ backgroundColor: isOnline ? "#16A34A" : canGoOnline ? "#AEA89C" : "#DC2626" }}
                             />
                             <span
                                 className="font-sans text-[10px] font-bold uppercase tracking-wider"
-                                style={{ color: isOnline ? "#16A34A" : "#AEA89C" }}
+                                style={{ color: isOnline ? "#16A34A" : canGoOnline ? "#AEA89C" : "#DC2626" }}
                             >
-                                {isOnline ? "Online" : "Offline"}
+                                {isOnline ? "Online" : canGoOnline ? "Offline" : "Off the road"}
                             </span>
                         </button>
                     </div>
@@ -105,16 +135,32 @@ function DriverDashboardContent() {
                 </div>
             </header>
 
+            {/* ── Compliance banner from the fleet office ── */}
+            {(blocked || noVehicle) && (
+                <div
+                    className="flex items-start gap-3 px-4 py-3 flex-shrink-0"
+                    style={{ backgroundColor: "rgba(220,38,38,0.08)", borderBottom: "1px solid rgba(220,38,38,0.20)" }}
+                >
+                    <span className="material-symbols-outlined flex-shrink-0" style={{ color: "#DC2626" }}>block</span>
+                    <div className="flex-1 min-w-0">
+                        <p className="font-sans font-bold text-sm" style={{ color: "#DC2626" }}>
+                            {noVehicle ? "No vehicle assigned to you" : `${vehicle?.plate} is off the road`}
+                        </p>
+                        <p className="font-sans text-xs mt-0.5" style={{ color: "rgba(17,17,17,0.72)", lineHeight: 1.5 }}>
+                            {noVehicle
+                                ? "The fleet office needs to register and verify your taxi before you can carry passengers."
+                                : `${blocked?.replace(/\.?$/, ".")} Contact the Quallor fleet office once it is corrected.`}
+                        </p>
+                    </div>
+                </div>
+            )}
+
             {/* ── Map area ── */}
-            <div
-                className="relative flex-1 bg-cover bg-center"
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000')" }}
-            >
-                {/* Light overlay */}
-                <div className="absolute inset-0" style={{ backgroundColor: "rgba(247,244,239,0.25)" }} />
+            <div className="relative flex-1">
+                <MiniMap center={homeCoords} zoom={13} interactive />
 
                 {/* Top action buttons */}
-                <div className="absolute top-4 left-4 right-4 z-10 flex gap-2">
+                <div className="absolute top-4 left-4 right-4 z-[500] flex gap-2">
                     <Link
                         href="/driver/scan"
                         className="flex items-center justify-center gap-2 flex-1 py-3 px-4 rounded-[9999px] font-sans font-bold text-sm active:scale-95 transition-all"
@@ -141,8 +187,8 @@ function DriverDashboardContent() {
                     </Link>
                 </div>
 
-                {/* Driver pin */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                {/* Driver pin, drawn over the map centre */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-[500] pointer-events-none">
                     <div className="relative">
                         <div
                             className="absolute -inset-4 rounded-full animate-ping"
@@ -172,32 +218,16 @@ function DriverDashboardContent() {
                     </div>
                 </div>
 
-                {/* Map controls */}
-                <div className="absolute right-4 top-20 flex flex-col gap-2">
-                    {["add", "remove"].map((icon) => (
-                        <button
-                            key={icon}
-                            className="w-11 h-11 flex items-center justify-center rounded-[12px]"
-                            style={{
-                                backgroundColor: "rgba(255,255,255,0.92)",
-                                backdropFilter: "blur(8px)",
-                                boxShadow: "0 2px 8px rgba(17,17,17,0.12)",
-                                color: "#111111",
-                            }}
-                        >
-                            <span className="material-symbols-outlined">{icon}</span>
-                        </button>
-                    ))}
-                    <button
-                        className="mt-4 w-11 h-11 flex items-center justify-center rounded-[12px]"
-                        style={{
-                            backgroundColor: "#111111",
-                            color: "#FFFFFF",
-                            boxShadow: "0 4px 16px rgba(17,17,17,0.30)",
-                        }}
+                {/* Gaatjie shortcut */}
+                <div className="absolute right-4 bottom-4 z-[500]">
+                    <Link
+                        href="/driver/gaatjie"
+                        className="flex items-center gap-2 px-4 py-3 rounded-full font-sans font-bold text-sm active:scale-95 transition-transform"
+                        style={{ backgroundColor: "#FFFFFF", color: "#111111", boxShadow: "0 4px 16px rgba(17,17,17,0.22)" }}
                     >
-                        <span className="material-symbols-outlined">navigation</span>
-                    </button>
+                        <span className="material-symbols-outlined text-lg">groups</span>
+                        Gaatjie Mode
+                    </Link>
                 </div>
             </div>
 

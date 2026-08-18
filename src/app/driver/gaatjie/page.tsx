@@ -3,221 +3,280 @@
 /**
  * Gaatjie / Conductor Mode
  *
- * This screen is designed for the person riding alongside the driver -
- * the "gaatjie" - who manages passenger boarding using the Quallor-supplied
- * smartphone. Each taxi gets one device. The gaatjie uses this screen to:
- *   1. See all pre-booked passengers for the current run
- *   2. Confirm each passenger has boarded (tap to mark)
- *   3. Add walk-up passengers quickly
- *   4. Monitor seat capacity in real time
+ * The screen used by the person riding alongside the driver, on the phone that
+ * belongs to the taxi. Boarding is recorded against the booking itself rather
+ * than in local component state, so the manifest survives a reload, matches what
+ * the QR scanner records, and is still correct if the phone is handed over
+ * mid-run.
  */
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useBooking } from "@/app/context/BookingContext";
+import { useBooking, type BookingDetails } from "@/app/context/BookingContext";
 import { useAuth } from "@/app/context/AuthContext";
+import { useToast } from "@/components/Toast";
 import AuthGuard from "@/components/AuthGuard";
 
 const ROWS = ["A", "B", "C", "D"];
 const COLS = [1, 2, 3, 4];
-const TOTAL_SEATS = 14; // standard Quantum 16-seater minus driver + 1
+const TOTAL_SEATS = 14; // standard Quantum 16-seater minus driver and gaatjie
 
 function GaatjieContent() {
     const router = useRouter();
     const { user } = useAuth();
-    const { myBookings } = useBooking();
+    const { myBookings, setBoarded } = useBooking();
+    const { toast } = useToast();
 
-    const [boardedIds, setBoardedIds] = useState<Set<string>>(new Set());
     const [activeTab, setActiveTab] = useState<"manifest" | "seats">("manifest");
+    const [query, setQuery] = useState("");
+    const [searchOpen, setSearchOpen] = useState(false);
 
     const today = new Date().toDateString();
 
-    // All bookings for today's run on this taxi
-    const todaysBookings = myBookings.filter((b) => {
-        const bDate = new Date(b.date).toDateString();
-        return bDate === today;
-    });
+    // Today's run on this taxi. Cancelled seats drop off the manifest.
+    const todaysBookings = useMemo(
+        () =>
+            myBookings.filter(
+                (b) => new Date(b.date).toDateString() === today && b.status !== "cancelled"
+            ),
+        [myBookings, today]
+    );
 
     const appBookings = todaysBookings.filter((b) => !b.bookedByDriver);
     const walkUpBookings = todaysBookings.filter((b) => b.bookedByDriver);
 
-    const boardedCount = boardedIds.size + walkUpBookings.length;
-    const fillPercent = Math.round((boardedCount / TOTAL_SEATS) * 100);
+    // Walk-ups are on board by definition, app bookings count once scanned or tapped.
+    const boardedApp = appBookings.filter((b) => Boolean(b.boardedAt));
+    const boardedCount = boardedApp.length + walkUpBookings.length;
+    const fillPercent = Math.min(100, Math.round((boardedCount / TOTAL_SEATS) * 100));
 
-    // Seats occupied by confirmed bookings
-    const bookedSeats = new Set(todaysBookings.map((b) => b.seatNumber).filter(Boolean));
-    const boardedSeats = new Set(
-        [...boardedIds]
-            .map((id) => todaysBookings.find((b) => b.bookingId === id)?.seatNumber)
-            .filter(Boolean)
-    );
+    const visibleManifest = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        if (!q) return appBookings;
+        return appBookings.filter((b) =>
+            [b.passengerName, b.bookingId, b.seatNumber].join(" ").toLowerCase().includes(q)
+        );
+    }, [appBookings, query]);
 
-    function toggleBoarded(bookingId: string) {
-        setBoardedIds((prev) => {
-            const next = new Set(prev);
-            if (next.has(bookingId)) next.delete(bookingId);
-            else next.add(bookingId);
-            return next;
-        });
+    function toggleBoarded(b: BookingDetails) {
+        const next = !b.boardedAt;
+        setBoarded(b.bookingId, next);
+        toast(
+            next ? `${b.passengerName} boarded, seat ${b.seatNumber}` : `${b.passengerName} put back on the waiting list`,
+            next ? "success" : "info"
+        );
+    }
+
+    function boardEveryone() {
+        const waiting = appBookings.filter((b) => !b.boardedAt);
+        if (waiting.length === 0) {
+            toast("Everyone on the manifest is already on board", "info");
+            return;
+        }
+        waiting.forEach((b) => setBoarded(b.bookingId, true));
+        toast(`${waiting.length} passenger${waiting.length === 1 ? "" : "s"} boarded`, "success");
     }
 
     function seatStatus(seatId: string): "boarded" | "booked" | "walkup" | "free" {
         const booking = todaysBookings.find((b) => b.seatNumber === seatId);
         if (!booking) return "free";
         if (booking.bookedByDriver) return "walkup";
-        if (boardedIds.has(booking.bookingId)) return "boarded";
-        return "booked";
+        return booking.boardedAt ? "boarded" : "booked";
     }
 
     const routeFrom = todaysBookings[0]?.from ?? "Departure";
     const routeTo = todaysBookings[0]?.to ?? "Destination";
-    const taxiId = user?.vehiclePlate ?? "-";
+    const taxiId = user?.vehiclePlate ?? "Unassigned";
 
     return (
         <main className="h-screen w-full flex flex-col overflow-hidden bg-q-bg-page">
-            {/* ── Header ─────────────────────────────────────────────── */}
+            {/* ── Header ── */}
             <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-q-stone-200 shadow-q-xs flex-shrink-0 z-10">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                     <button
                         onClick={() => router.back()}
-                        className="w-9 h-9 flex items-center justify-center rounded-[10px] hover:bg-q-stone-100 transition-colors"
+                        aria-label="Go back"
+                        className="w-9 h-9 flex items-center justify-center rounded-[10px] hover:bg-q-stone-100 transition-colors flex-shrink-0"
                     >
                         <span className="material-symbols-outlined text-q-stone-700 text-xl">arrow_back</span>
                     </button>
-                    <div>
-                        <h1 className="font-display text-base font-semibold text-q-stone-900 leading-tight">Gaatjie Mode</h1>
-                        <p className="font-sans text-[10px] text-q-brown font-semibold uppercase tracking-wider">Conductor · {taxiId}</p>
+                    <div className="min-w-0">
+                        <h1 className="font-sans text-base font-black leading-tight truncate" style={{ color: "#111111", letterSpacing: "-0.02em" }}>
+                            Gaatjie Mode
+                        </h1>
+                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider truncate" style={{ color: "#1D3686" }}>
+                            Conductor · {taxiId}
+                        </p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    {/* Capacity pill */}
-                    <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border font-sans text-xs font-bold ${
-                        fillPercent >= 90
-                            ? "bg-red-50 border-red-200 text-red-700"
+                <div className="flex items-center gap-2 flex-shrink-0">
+                    <button
+                        onClick={() => { setSearchOpen(!searchOpen); if (searchOpen) setQuery(""); }}
+                        aria-label={searchOpen ? "Close search" : "Search manifest"}
+                        className="w-9 h-9 flex items-center justify-center rounded-[10px] transition-colors"
+                        style={searchOpen ? { backgroundColor: "#111111", color: "#FFFFFF" } : { color: "#8A8678" }}
+                    >
+                        <span className="material-symbols-outlined text-xl">{searchOpen ? "close" : "search"}</span>
+                    </button>
+                    <div
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-sans text-xs font-bold"
+                        style={fillPercent >= 90
+                            ? { backgroundColor: "rgba(220,38,38,0.08)", color: "#DC2626", border: "1px solid rgba(220,38,38,0.25)" }
                             : fillPercent >= 70
-                            ? "bg-amber-50 border-amber-200 text-amber-700"
-                            : "bg-q-brown-50 border-q-brown-200 text-q-brown"
-                    }`}>
+                            ? { backgroundColor: "rgba(217,119,6,0.08)", color: "#D97706", border: "1px solid rgba(217,119,6,0.25)" }
+                            : { backgroundColor: "#E1EDF5", color: "#1D3686", border: "1px solid rgba(29,54,134,0.20)" }}
+                    >
                         <span className="material-symbols-outlined text-sm">airline_seat_recline_normal</span>
                         {boardedCount}/{TOTAL_SEATS}
                     </div>
                 </div>
             </header>
 
-            {/* ── Route strip ────────────────────────────────────────── */}
-            <div className="flex items-center gap-4 px-4 py-3 bg-q-brown text-white flex-shrink-0">
-                <span className="material-symbols-outlined text-white/70 text-sm">directions_bus</span>
+            {searchOpen && (
+                <div className="px-4 py-2 bg-white border-b border-q-stone-200 flex-shrink-0">
+                    <input
+                        className="q-input w-full"
+                        placeholder="Search passenger, reference or seat"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        aria-label="Search manifest"
+                        autoFocus
+                    />
+                </div>
+            )}
+
+            {/* ── Route strip ── */}
+            <div className="flex items-center gap-4 px-4 py-3 flex-shrink-0" style={{ backgroundColor: "#111111", color: "#FFFFFF" }}>
+                <span className="material-symbols-outlined text-sm flex-shrink-0" style={{ color: "rgba(255,255,255,0.65)" }}>directions_bus</span>
                 <div className="flex items-center gap-2 flex-1 min-w-0">
                     <span className="font-sans text-sm font-semibold truncate">{routeFrom}</span>
-                    <span className="material-symbols-outlined text-white/60 text-base">arrow_forward</span>
+                    <span className="material-symbols-outlined text-base flex-shrink-0" style={{ color: "rgba(255,255,255,0.55)" }}>arrow_forward</span>
                     <span className="font-sans text-sm font-semibold truncate">{routeTo}</span>
                 </div>
                 <div className="text-right flex-shrink-0">
-                    <p className="font-sans text-[10px] font-bold text-white/60 uppercase">Boarded</p>
-                    <p className="font-display text-lg font-bold leading-tight">{boardedCount}/{TOTAL_SEATS}</p>
+                    <p className="font-mono text-[10px] font-bold uppercase" style={{ color: "rgba(255,255,255,0.55)" }}>Boarded</p>
+                    <p className="font-sans text-lg font-black leading-tight">{boardedCount}/{TOTAL_SEATS}</p>
                 </div>
             </div>
 
-            {/* ── Capacity bar ────────────────────────────────────────── */}
+            {/* ── Capacity bar ── */}
             <div className="px-4 pt-3 pb-1 bg-white border-b border-q-stone-200 flex-shrink-0">
-                <div className="h-2 w-full bg-q-stone-200 rounded-full overflow-hidden">
+                <div className="h-2 w-full rounded-full overflow-hidden" style={{ backgroundColor: "rgba(17,17,17,0.10)" }}>
                     <div
-                        className={`h-full rounded-full transition-all duration-500 ${
-                            fillPercent >= 90 ? "bg-red-500" : fillPercent >= 70 ? "bg-amber-500" : "bg-q-brown"
-                        }`}
-                        style={{ width: `${fillPercent}%` }}
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{
+                            width: `${fillPercent}%`,
+                            backgroundColor: fillPercent >= 90 ? "#DC2626" : fillPercent >= 70 ? "#D97706" : "#1D3686",
+                        }}
                     />
                 </div>
             </div>
 
-            {/* ── Tab bar ─────────────────────────────────────────────── */}
+            {/* ── Tabs ── */}
             <div className="flex border-b border-q-stone-200 bg-white flex-shrink-0">
                 {(["manifest", "seats"] as const).map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`flex-1 py-3 font-sans text-xs font-bold uppercase tracking-wider border-b-2 transition-colors ${
-                            activeTab === tab
-                                ? "border-q-brown text-q-brown"
-                                : "border-transparent text-q-stone-400 hover:text-q-stone-600"
-                        }`}
+                        className="flex-1 py-3 font-mono text-xs font-bold uppercase tracking-wider transition-colors"
+                        style={activeTab === tab
+                            ? { borderBottom: "2px solid #111111", color: "#111111" }
+                            : { borderBottom: "2px solid transparent", color: "#AEA89C" }}
                     >
                         {tab === "manifest" ? "Passenger Manifest" : "Seat Map"}
                     </button>
                 ))}
             </div>
 
-            {/* ── Content ─────────────────────────────────────────────── */}
+            {/* ── Content ── */}
             <div className="flex-1 overflow-y-auto pb-28">
 
-                {/* ── MANIFEST TAB ─────────────────────────────────────── */}
                 {activeTab === "manifest" && (
                     <div className="px-4 pt-4 space-y-5">
-
                         {/* App bookings */}
                         <div>
-                            <div className="flex items-center justify-between mb-3">
-                                <h2 className="font-sans text-xs font-bold uppercase tracking-widest text-q-stone-500">
+                            <div className="flex items-center justify-between mb-3 gap-2">
+                                <h2 className="font-mono text-[10px] font-bold uppercase tracking-widest" style={{ color: "#8A8678" }}>
                                     App Bookings
                                 </h2>
-                                <span className="font-sans text-xs font-bold text-q-brown">
-                                    {appBookings.filter((b) => boardedIds.has(b.bookingId)).length}/{appBookings.length} boarded
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <span className="font-sans text-xs font-bold" style={{ color: "#1D3686" }}>
+                                        {boardedApp.length}/{appBookings.length} boarded
+                                    </span>
+                                    {appBookings.length > boardedApp.length && (
+                                        <button
+                                            onClick={boardEveryone}
+                                            className="font-mono text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
+                                            style={{ backgroundColor: "#EEF1EA", color: "#111111" }}
+                                        >
+                                            Board all
+                                        </button>
+                                    )}
+                                </div>
                             </div>
 
-                            {appBookings.length === 0 ? (
+                            {visibleManifest.length === 0 ? (
                                 <div className="py-8 text-center">
-                                    <span className="material-symbols-outlined text-q-stone-300 text-4xl mb-2 block">smartphone</span>
-                                    <p className="font-sans text-sm text-q-stone-400">No app bookings for this run yet.</p>
+                                    <span className="material-symbols-outlined text-4xl mb-2 block" style={{ color: "#CDDFF6" }}>
+                                        {query ? "search_off" : "smartphone"}
+                                    </span>
+                                    <p className="font-sans text-sm" style={{ color: "#8A8678" }}>
+                                        {query ? "Nobody on the manifest matches that search." : "No app bookings for this run yet."}
+                                    </p>
                                 </div>
                             ) : (
                                 <div className="space-y-2">
-                                    {appBookings.map((b) => {
-                                        const isBoarded = boardedIds.has(b.bookingId);
+                                    {visibleManifest.map((b) => {
+                                        const isBoarded = Boolean(b.boardedAt);
                                         return (
                                             <div
                                                 key={b.bookingId}
-                                                className={`flex items-center gap-3 p-3 rounded-[14px] border transition-all ${
-                                                    isBoarded
-                                                        ? "bg-green-50 border-green-200"
-                                                        : "bg-white border-q-stone-200"
-                                                }`}
+                                                className="flex items-center gap-3 p-3 rounded-[14px] transition-all"
+                                                style={isBoarded
+                                                    ? { backgroundColor: "rgba(22,163,74,0.07)", border: "1px solid rgba(22,163,74,0.28)" }
+                                                    : { backgroundColor: "#FFFFFF", border: "1px solid rgba(17,17,17,0.08)" }}
                                             >
-                                                {/* Avatar */}
-                                                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                                                    isBoarded ? "bg-green-100 text-green-600" : "bg-q-brown-100 text-q-brown"
-                                                }`}>
+                                                <div
+                                                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                                                    style={isBoarded
+                                                        ? { backgroundColor: "rgba(22,163,74,0.15)", color: "#16A34A" }
+                                                        : { backgroundColor: "#EEF1EA", color: "#1D3686" }}
+                                                >
                                                     <span className="material-symbols-outlined text-base">
                                                         {isBoarded ? "check_circle" : "person"}
                                                     </span>
                                                 </div>
 
-                                                {/* Info */}
                                                 <div className="flex-1 min-w-0">
-                                                    <p className={`font-sans text-sm font-semibold truncate ${isBoarded ? "text-green-800" : "text-q-stone-900"}`}>
+                                                    <p
+                                                        className="font-sans text-sm font-semibold truncate"
+                                                        style={{ color: isBoarded ? "#15803D" : "#111111" }}
+                                                    >
                                                         {b.passengerName}
                                                     </p>
-                                                    <p className="font-sans text-[10px] font-mono text-q-stone-400">{b.bookingId}</p>
+                                                    <p className="font-mono text-[10px]" style={{ color: "#AEA89C" }}>
+                                                        {b.bookingId}
+                                                        {isBoarded && b.boardedAt &&
+                                                            ` · ${new Date(b.boardedAt).toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" })}`}
+                                                    </p>
                                                 </div>
 
-                                                {/* Seat */}
-                                                <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center border-2 font-display font-bold text-sm flex-shrink-0 ${
-                                                    isBoarded
-                                                        ? "bg-green-600 border-green-600 text-white"
-                                                        : "bg-q-brown-100 border-q-brown text-q-brown"
-                                                }`}>
+                                                <div
+                                                    className="w-10 h-10 rounded-[10px] flex items-center justify-center font-sans font-bold text-sm flex-shrink-0"
+                                                    style={isBoarded
+                                                        ? { backgroundColor: "#16A34A", color: "#FFFFFF" }
+                                                        : { backgroundColor: "#E1EDF5", color: "#1D3686", border: "2px solid #1D3686" }}
+                                                >
                                                     {b.seatNumber}
                                                 </div>
 
-                                                {/* Board / Unboard toggle */}
                                                 <button
-                                                    onClick={() => toggleBoarded(b.bookingId)}
-                                                    className={`flex-shrink-0 flex items-center gap-1 px-3 py-2 rounded-[10px] font-sans text-xs font-bold transition-all active:scale-95 ${
-                                                        isBoarded
-                                                            ? "bg-green-100 text-green-700 border border-green-200"
-                                                            : "bg-q-brown text-white shadow-q-sm"
-                                                    }`}
+                                                    onClick={() => toggleBoarded(b)}
+                                                    className="flex-shrink-0 flex items-center gap-1 px-3 py-2 rounded-[10px] font-sans text-xs font-bold transition-all active:scale-95"
+                                                    style={isBoarded
+                                                        ? { backgroundColor: "rgba(22,163,74,0.12)", color: "#16A34A", border: "1px solid rgba(22,163,74,0.25)" }
+                                                        : { backgroundColor: "#111111", color: "#FFFFFF" }}
                                                 >
                                                     <span className="material-symbols-outlined text-sm">
                                                         {isBoarded ? "undo" : "how_to_reg"}
@@ -231,35 +290,43 @@ function GaatjieContent() {
                             )}
                         </div>
 
-                        {/* Walk-up passengers */}
+                        {/* Walk-ups */}
                         {walkUpBookings.length > 0 && (
                             <div>
-                                <h2 className="font-sans text-xs font-bold uppercase tracking-widest text-q-stone-500 mb-3">
+                                <h2 className="font-mono text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: "#8A8678" }}>
                                     Walk-Up Passengers
                                 </h2>
                                 <div className="space-y-2">
                                     {walkUpBookings.map((b) => (
                                         <div
                                             key={b.bookingId}
-                                            className="flex items-center gap-3 p-3 rounded-[14px] bg-white border border-q-stone-200"
+                                            className="flex items-center gap-3 p-3 rounded-[14px]"
+                                            style={{ backgroundColor: "#FFFFFF", border: "1px solid rgba(17,17,17,0.08)" }}
                                         >
-                                            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                                <span className="material-symbols-outlined text-blue-600 text-base">person_add</span>
+                                            <div
+                                                className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                                                style={{ backgroundColor: "#E1EDF5", color: "#1D3686" }}
+                                            >
+                                                <span className="material-symbols-outlined text-base">person_add</span>
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="font-sans text-sm font-semibold text-q-stone-900 truncate">
+                                                <p className="font-sans text-sm font-semibold truncate" style={{ color: "#111111" }}>
                                                     {b.passengerName}
                                                 </p>
-                                                <p className="font-sans text-[10px] font-mono text-q-stone-400">{b.bookingId}</p>
+                                                <p className="font-mono text-[10px]" style={{ color: "#AEA89C" }}>{b.bookingId}</p>
                                             </div>
-                                            <div className="w-10 h-10 rounded-[10px] flex items-center justify-center bg-blue-50 border-2 border-blue-200 font-display font-bold text-sm text-blue-600 flex-shrink-0">
+                                            <div
+                                                className="w-10 h-10 rounded-[10px] flex items-center justify-center font-sans font-bold text-sm flex-shrink-0"
+                                                style={{ backgroundColor: "#CDDFF6", color: "#111111" }}
+                                            >
                                                 {b.seatNumber}
                                             </div>
-                                            <span className={`px-2 py-1 rounded-full font-sans text-[9px] font-bold uppercase flex-shrink-0 ${
-                                                b.paymentMethod === "cash"
-                                                    ? "bg-green-100 text-green-700"
-                                                    : "bg-blue-100 text-blue-700"
-                                            }`}>
+                                            <span
+                                                className="px-2.5 py-1 rounded-full font-mono text-[10px] font-bold uppercase flex-shrink-0"
+                                                style={b.paymentMethod === "cash"
+                                                    ? { backgroundColor: "rgba(22,163,74,0.12)", color: "#16A34A" }
+                                                    : { backgroundColor: "rgba(29,54,134,0.10)", color: "#1D3686" }}
+                                            >
                                                 {b.paymentMethod ?? "cash"}
                                             </span>
                                         </div>
@@ -270,72 +337,68 @@ function GaatjieContent() {
 
                         {todaysBookings.length === 0 && (
                             <div className="py-16 flex flex-col items-center text-center">
-                                <span className="material-symbols-outlined text-q-stone-300 text-5xl mb-3">groups</span>
-                                <p className="font-sans font-semibold text-q-stone-500 mb-1">No passengers yet</p>
-                                <p className="font-sans text-xs text-q-stone-400 max-w-xs">
-                                    App bookings will appear here automatically. Use Walk-Up to add passengers boarding with cash or card.
+                                <span className="material-symbols-outlined text-5xl mb-3" style={{ color: "#CDDFF6" }}>groups</span>
+                                <p className="font-sans font-bold mb-1" style={{ color: "#111111" }}>No passengers yet</p>
+                                <p className="font-sans text-xs max-w-xs" style={{ color: "#8A8678", lineHeight: 1.6 }}>
+                                    App bookings appear here automatically. Use Walk-Up to add passengers boarding with cash or card.
                                 </p>
                             </div>
                         )}
                     </div>
                 )}
 
-                {/* ── SEAT MAP TAB ──────────────────────────────────────── */}
                 {activeTab === "seats" && (
                     <div className="px-4 pt-5">
                         {/* Legend */}
                         <div className="flex flex-wrap items-center gap-3 mb-5 font-sans text-xs font-semibold">
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-6 h-6 rounded-md bg-green-500" />
-                                <span className="text-q-stone-600">Boarded</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-6 h-6 rounded-md bg-q-brown-100 border-2 border-q-brown" />
-                                <span className="text-q-stone-600">Awaiting</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-6 h-6 rounded-md bg-blue-100 border-2 border-blue-300" />
-                                <span className="text-q-stone-600">Walk-Up</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-6 h-6 rounded-md bg-q-stone-100 border-2 border-q-stone-200" />
-                                <span className="text-q-stone-400">Free</span>
-                            </div>
+                            {[
+                                { color: "#16A34A", border: "#16A34A", label: "Boarded", text: "#5C5A56" },
+                                { color: "#E1EDF5", border: "#1D3686", label: "Awaiting", text: "#5C5A56" },
+                                { color: "#CDDFF6", border: "#CDDFF6", label: "Walk-Up", text: "#5C5A56" },
+                                { color: "#EEF1EA", border: "rgba(17,17,17,0.12)", label: "Free", text: "#AEA89C" },
+                            ].map((l) => (
+                                <div key={l.label} className="flex items-center gap-1.5">
+                                    <div className="w-6 h-6 rounded-md" style={{ backgroundColor: l.color, border: `2px solid ${l.border}` }} />
+                                    <span style={{ color: l.text }}>{l.label}</span>
+                                </div>
+                            ))}
                         </div>
 
-                        <div className="mb-4 py-2.5 rounded-[10px] bg-q-stone-100 text-center font-sans text-xs font-bold uppercase tracking-widest text-q-stone-500">
+                        <div
+                            className="mb-4 py-2.5 rounded-[10px] text-center font-mono text-xs font-bold uppercase tracking-widest"
+                            style={{ backgroundColor: "#EEF1EA", color: "#8A8678" }}
+                        >
                             Front of Taxi · Driver
                         </div>
 
                         <div className="space-y-3">
                             {ROWS.map((row) => (
                                 <div key={row} className="flex items-center gap-3">
-                                    <span className="font-sans text-xs font-bold text-q-stone-400 w-4">{row}</span>
+                                    <span className="font-mono text-xs font-bold w-4 flex-shrink-0" style={{ color: "#AEA89C" }}>{row}</span>
                                     <div className="flex gap-3 flex-1">
                                         {COLS.map((col, idx) => {
                                             const seatId = `${row}${col}`;
                                             const status = seatStatus(seatId);
                                             const booking = todaysBookings.find((b) => b.seatNumber === seatId);
 
+                                            const seatStyle =
+                                                status === "boarded"
+                                                    ? { backgroundColor: "#16A34A", borderColor: "#16A34A", color: "#FFFFFF" }
+                                                    : status === "booked"
+                                                    ? { backgroundColor: "#E1EDF5", borderColor: "#1D3686", color: "#1D3686" }
+                                                    : status === "walkup"
+                                                    ? { backgroundColor: "#CDDFF6", borderColor: "#CDDFF6", color: "#111111" }
+                                                    : { backgroundColor: "#EEF1EA", borderColor: "rgba(17,17,17,0.10)", color: "#C7C4BB" };
+
                                             return (
                                                 <React.Fragment key={col}>
-                                                    {idx === 2 && <div className="w-5" />}
+                                                    {idx === 2 && <div className="w-5 flex-shrink-0" />}
                                                     <button
-                                                        disabled={status === "free"}
-                                                        onClick={() => {
-                                                            if (booking && !booking.bookedByDriver) {
-                                                                toggleBoarded(booking.bookingId);
-                                                            }
-                                                        }}
-                                                        className={`flex-1 h-14 rounded-[10px] font-sans text-xs font-bold border-2 transition-all flex flex-col items-center justify-center gap-0.5 active:scale-95 ${
-                                                            status === "boarded"
-                                                                ? "bg-green-500 border-green-500 text-white shadow-q-sm"
-                                                                : status === "booked"
-                                                                ? "bg-q-brown-100 border-q-brown text-q-brown"
-                                                                : status === "walkup"
-                                                                ? "bg-blue-50 border-blue-300 text-blue-600"
-                                                                : "bg-q-stone-100 border-q-stone-200 text-q-stone-300 cursor-default"
-                                                        }`}
+                                                        disabled={status === "free" || status === "walkup"}
+                                                        onClick={() => booking && !booking.bookedByDriver && toggleBoarded(booking)}
+                                                        title={booking ? `${booking.passengerName} · ${booking.bookingId}` : `Seat ${seatId} is free`}
+                                                        className="flex-1 h-14 rounded-[10px] font-sans text-xs font-bold transition-all flex flex-col items-center justify-center gap-0.5 active:scale-95"
+                                                        style={{ ...seatStyle, borderWidth: 2, borderStyle: "solid", cursor: status === "booked" || status === "boarded" ? "pointer" : "default" }}
                                                     >
                                                         <span className="text-sm font-bold">{seatId}</span>
                                                         {status !== "free" && (
@@ -352,37 +415,40 @@ function GaatjieContent() {
                             ))}
                         </div>
 
-                        {/* Counts summary */}
+                        {/* Counts */}
                         <div className="mt-6 grid grid-cols-3 gap-3">
-                            <div className="q-card p-3 text-center">
-                                <p className="font-display text-2xl font-bold text-green-600">{boardedIds.size}</p>
-                                <p className="font-sans text-[10px] font-bold text-q-stone-500 uppercase mt-0.5">Boarded</p>
-                            </div>
-                            <div className="q-card p-3 text-center">
-                                <p className="font-display text-2xl font-bold text-q-brown">{appBookings.length - boardedIds.size}</p>
-                                <p className="font-sans text-[10px] font-bold text-q-stone-500 uppercase mt-0.5">Awaiting</p>
-                            </div>
-                            <div className="q-card p-3 text-center">
-                                <p className="font-display text-2xl font-bold text-q-stone-500">{TOTAL_SEATS - boardedCount}</p>
-                                <p className="font-sans text-[10px] font-bold text-q-stone-500 uppercase mt-0.5">Free Seats</p>
-                            </div>
+                            {[
+                                { value: boardedApp.length + walkUpBookings.length, label: "Boarded", color: "#16A34A" },
+                                { value: appBookings.length - boardedApp.length,    label: "Awaiting", color: "#1D3686" },
+                                { value: Math.max(0, TOTAL_SEATS - boardedCount),   label: "Free Seats", color: "#8A8678" },
+                            ].map((s) => (
+                                <div key={s.label} className="q-card p-3 text-center">
+                                    <p className="font-sans text-2xl font-black" style={{ color: s.color }}>{s.value}</p>
+                                    <p className="font-mono text-[10px] font-bold uppercase mt-0.5" style={{ color: "#8A8678" }}>{s.label}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* ── Fixed bottom actions ─────────────────────────────────── */}
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-q-stone-200 px-4 py-3 pb-6 shadow-q-lg flex gap-3 z-20">
+            {/* ── Fixed bottom actions ── */}
+            <div
+                className="fixed bottom-0 left-0 right-0 px-4 py-3 pb-6 flex gap-3 z-20"
+                style={{ backgroundColor: "#FFFFFF", borderTop: "1px solid rgba(17,17,17,0.08)", boxShadow: "0 -8px 28px rgba(17,17,17,0.10)" }}
+            >
                 <Link
                     href="/driver/walk-up"
-                    className="flex items-center justify-center gap-2 flex-1 py-3 rounded-[12px] bg-q-stone-100 text-q-stone-700 font-sans font-semibold text-sm border border-q-stone-200 active:scale-95 transition-transform"
+                    className="flex items-center justify-center gap-2 flex-1 py-3 rounded-[12px] font-sans font-semibold text-sm active:scale-95 transition-transform"
+                    style={{ backgroundColor: "#EEF1EA", color: "#111111", border: "1px solid rgba(17,17,17,0.08)" }}
                 >
                     <span className="material-symbols-outlined text-lg">person_add</span>
                     Add Walk-Up
                 </Link>
                 <Link
                     href="/driver/scan"
-                    className="flex items-center justify-center gap-2 flex-1 py-3 rounded-[12px] bg-q-brown text-white font-sans font-bold text-sm shadow-q-cta active:scale-95 transition-transform"
+                    className="flex items-center justify-center gap-2 flex-1 py-3 rounded-[12px] font-sans font-bold text-sm active:scale-95 transition-transform"
+                    style={{ backgroundColor: "#111111", color: "#FFFFFF" }}
                 >
                     <span className="material-symbols-outlined text-lg">qr_code_scanner</span>
                     Scan Ticket

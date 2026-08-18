@@ -4,6 +4,8 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import QRCode from "react-qr-code";
 import { useBooking } from "@/app/context/BookingContext";
+import ShareButton from "@/components/ShareButton";
+import { absoluteUrl, bookingShareText } from "@/lib/share";
 
 export default function HikeBookingConfirmationPage() {
     const router = useRouter();
@@ -22,10 +24,15 @@ export default function HikeBookingConfirmationPage() {
     return (
         <main className="min-h-screen bg-q-bg-page flex flex-col pb-24">
             <header className="flex items-center bg-white px-4 py-3 border-b border-q-stone-200 shadow-q-xs">
-                <button onClick={() => router.back()} className="flex w-10 h-10 items-center justify-center rounded-[10px] hover:bg-q-stone-100 transition-colors">
+                <button onClick={() => router.back()} aria-label="Go back" className="flex w-10 h-10 items-center justify-center rounded-[10px] hover:bg-q-stone-100 transition-colors">
                     <span className="material-symbols-outlined text-q-stone-700">arrow_back</span>
                 </button>
-                <h1 className="font-display text-lg font-semibold text-q-stone-900 flex-1 text-center pr-10">Confirmation</h1>
+                <h1 className="font-display text-lg font-semibold text-q-stone-900 flex-1 text-center">Confirmation</h1>
+                <ShareButton
+                    title="My Quallor ticket"
+                    text={currentBooking ? bookingShareText(currentBooking) : `Quallor trip ${bookingId}`}
+                    url={absoluteUrl("/trips")}
+                />
             </header>
 
             <div className="flex-1 overflow-y-auto">
@@ -41,14 +48,25 @@ export default function HikeBookingConfirmationPage() {
                     </p>
                 </div>
 
-                {/* QR code */}
+                {/* QR code, with the boarding note read first */}
                 <div className="px-4 mb-6">
-                    <div className="q-card-raised p-6 flex flex-col items-center">
-                        <div className="p-4 bg-white rounded-[14px] border border-q-stone-200 shadow-q-xs mb-4">
-                            <QRCode value={qrData} size={176} style={{ height: "auto", maxWidth: "100%", width: "100%" }} fgColor="#1C1917" />
+                    <div className="q-card-raised overflow-hidden">
+                        <div
+                            className="flex gap-3 items-start px-5 py-4"
+                            style={{ backgroundColor: "#E1EDF5", borderBottom: "1px solid rgba(17,17,17,0.07)" }}
+                        >
+                            <span className="material-symbols-outlined text-xl flex-shrink-0" style={{ color: "#1D3686" }}>info</span>
+                            <p className="font-sans text-sm leading-snug" style={{ color: "rgba(17,17,17,0.80)" }}>
+                                Present this screen to the driver when boarding. Maximise your screen brightness for best scanning results.
+                            </p>
                         </div>
-                        <p className="font-sans text-xs font-bold text-q-stone-500 uppercase tracking-widest mb-1">Booking Reference</p>
-                        <p className="font-display text-xl font-bold text-q-brown">{bookingId}</p>
+                        <div className="p-6 flex flex-col items-center">
+                            <div className="p-4 bg-white rounded-[14px] border border-q-stone-200 shadow-q-xs mb-4">
+                                <QRCode value={qrData} size={176} style={{ height: "auto", maxWidth: "100%", width: "100%" }} fgColor="#111111" />
+                            </div>
+                            <p className="font-mono text-xs font-bold text-q-stone-500 uppercase tracking-widest mb-1">Booking Reference</p>
+                            <p className="font-sans text-xl font-black" style={{ color: "#111111" }}>{bookingId}</p>
+                        </div>
                     </div>
                 </div>
 
