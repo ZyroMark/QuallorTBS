@@ -19,6 +19,10 @@ export default function SeatSelectionPage() {
     const to = selectedRoute?.to || "Amalinda";
     const taxi = selectedTaxi || { id: "TX-402", name: "Khululeka Express", departureTime: "08:30 AM", fare: 20 };
 
+    // Set when this seat is the second taxi of a connecting journey.
+    const journeyId = selectedRoute?.journeyId;
+    const legIndex = selectedRoute?.legIndex ?? 0;
+
     function handleConfirm() {
         if (!selectedSeat) return;
         const booking = confirmBooking({
@@ -34,6 +38,8 @@ export default function SeatSelectionPage() {
             passengerId: user?.id || "GUEST",
             date: new Date().toISOString(),
             status: "confirmed",
+            paymentMethod: "app",
+            ...(journeyId ? { journeyId, legIndex, legCount: legIndex + 1 } : {}),
         });
         if (booking) router.push("/commute/confirmation");
     }
@@ -47,6 +53,15 @@ export default function SeatSelectionPage() {
                 </button>
                 <h1 className="font-display text-lg font-semibold text-q-stone-900 flex-1 text-center pr-10">Select Your Seat</h1>
             </header>
+
+            {journeyId && (
+                <div className="flex items-center gap-2 px-4 py-2.5" style={{ backgroundColor: "#CDDFF6" }}>
+                    <span className="material-symbols-outlined text-lg flex-shrink-0" style={{ color: "#111111" }}>alt_route</span>
+                    <p className="font-sans text-xs font-bold" style={{ color: "#111111" }}>
+                        Connecting taxi {legIndex + 1} of your journey · {from} to {to}
+                    </p>
+                </div>
+            )}
 
             <div className="flex-1 overflow-y-auto pb-32">
                 {/* Route Info */}

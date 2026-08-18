@@ -23,10 +23,9 @@ const DRIVER_LINKS = [
 ];
 
 const OPERATOR_LINKS = [
-    { icon: "grid_view",       label: "Dashboard",  href: "/operator/dashboard" },
-    { icon: "local_taxi",      label: "Fleet",      href: "/operator/dashboard" },
-    { icon: "monitoring",      label: "Analytics",  href: "/operator/dashboard" },
-    { icon: "manage_accounts", label: "Settings",   href: "/operator/dashboard" },
+    { icon: "grid_view",       label: "Console",           href: "/operator" },
+    { icon: "local_taxi",      label: "Fleet Management",  href: "/fleet" },
+    { icon: "person",          label: "Account",           href: "/profile" },
 ];
 
 export default function Sidebar() {

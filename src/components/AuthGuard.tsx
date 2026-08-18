@@ -15,7 +15,8 @@ export default function AuthGuard({ children, requiredRole }: {
         if (!user) { router.replace("/auth/login"); return; }
         if (requiredRole && user.role !== requiredRole) {
             if (user.role === "driver") router.replace("/driver/dashboard");
-            else if (user.role === "operator") router.replace("/operator/dashboard");
+            else if (user.role === "operator") router.replace("/operator");
+            else if (user.role === "fleet") router.replace("/fleet");
             else router.replace("/dashboard");
         }
     }, [user, isLoading, requiredRole, router]);

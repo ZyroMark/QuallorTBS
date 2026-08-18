@@ -5,9 +5,17 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 
-type Role = "passenger" | "driver" | "operator";
+type Role = "passenger" | "driver" | "operator" | "fleet";
 
-const ROLE_DETAILS = {
+/**
+ * Only passenger and driver sign-up is offered publicly. Operator accounts are
+ * issued by Quallor once an association's licences are verified, and the
+ * operator console lives behind /operator. The operator branch below is still
+ * reachable with ?role=operator for that internal onboarding.
+ */
+const PUBLIC_ROLES: Role[] = ["passenger", "driver"];
+
+const ROLE_DETAILS: Record<Role, { icon: string; label: string; tagline: string; description: string }> = {
     passenger: {
         icon: "person",
         label: "Passenger",
@@ -24,7 +32,13 @@ const ROLE_DETAILS = {
         icon: "business",
         label: "Operator",
         tagline: "Run your fleet, grow your business.",
-        description: "Monitor all vehicles, manage routes, and track revenue across your entire operation.",
+        description: "See your own vehicles and drivers, manage routes, and track revenue across your operation.",
+    },
+    fleet: {
+        icon: "local_taxi",
+        label: "Fleet",
+        tagline: "Keep every taxi roadworthy.",
+        description: "Register vehicles across every operator, run inspections, and take unsafe taxis off the road.",
     },
 };
 
@@ -33,7 +47,15 @@ function SignupForm() {
     const searchParams = useSearchParams();
     const { signup } = useAuth();
 
-    const [role, setRole] = useState<Role>((searchParams.get("role") as Role) || "passenger");
+    const requestedRole = (searchParams.get("role") as Role) || "passenger";
+    const [role, setRole] = useState<Role>(requestedRole);
+
+    // Back-office tabs only appear when asked for by URL.
+    const visibleRoles: Role[] =
+        requestedRole === "operator" ? [...PUBLIC_ROLES, "operator"]
+        : requestedRole === "fleet" ? [...PUBLIC_ROLES, "fleet"]
+        : PUBLIC_ROLES;
+
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
@@ -45,6 +67,7 @@ function SignupForm() {
     const [vehiclePlate, setVehiclePlate] = useState("");
     const [companyName, setCompanyName] = useState("");
     const [fleetSize, setFleetSize] = useState("");
+    const [staffNumber, setStaffNumber] = useState("");
     const [agreed, setAgreed] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -69,6 +92,7 @@ function SignupForm() {
             role,
             ...(role === "driver" ? { licenseNumber, vehicleModel, vehiclePlate } : {}),
             ...(role === "operator" ? { companyName, fleetSize: parseInt(fleetSize) || 0 } : {}),
+            ...(role === "fleet" ? { staffNumber } : {}),
         });
         setLoading(false);
         if (!result.success) {
@@ -76,7 +100,8 @@ function SignupForm() {
             return;
         }
         if (role === "driver") router.push("/driver/dashboard");
-        else if (role === "operator") router.push("/operator/dashboard");
+        else if (role === "operator") router.push("/operator");
+        else if (role === "fleet") router.push("/fleet");
         else router.push("/dashboard");
     };
 
@@ -111,7 +136,9 @@ function SignupForm() {
                     </p>
 
                     <div className="space-y-3">
-                        {(Object.entries(ROLE_DETAILS) as [Role, typeof ROLE_DETAILS.passenger][]).map(([key, detail]) => (
+                        {visibleRoles.map((key) => {
+                            const detail = ROLE_DETAILS[key];
+                            return (
                             <div
                                 key={key}
                                 className="p-4 flex items-start gap-4 rounded-[14px] transition-all duration-200"
@@ -134,7 +161,8 @@ function SignupForm() {
                                     <p className="font-sans text-sm" style={{ color: "rgba(17,17,17,0.55)" }}>{detail.description}</p>
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </div>
@@ -162,21 +190,24 @@ function SignupForm() {
                         className="flex gap-1 p-1 rounded-[14px] mb-6"
                         style={{ backgroundColor: "#EEF1EA" }}
                     >
-                        {(Object.entries(ROLE_DETAILS) as [Role, typeof ROLE_DETAILS.passenger][]).map(([key, detail]) => (
-                            <button
-                                key={key}
-                                type="button"
-                                onClick={() => setRole(key)}
-                                className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-[10px] font-sans text-xs font-bold transition-all duration-200"
-                                style={role === key
-                                    ? { backgroundColor: "#111111", color: "#FFFFFF" }
-                                    : { color: "#8A8678" }
-                                }
-                            >
-                                <span className="material-symbols-outlined text-base">{detail.icon}</span>
-                                {detail.label}
-                            </button>
-                        ))}
+                        {visibleRoles.map((key) => {
+                            const detail = ROLE_DETAILS[key];
+                            return (
+                                <button
+                                    key={key}
+                                    type="button"
+                                    onClick={() => setRole(key)}
+                                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-[10px] font-sans text-xs font-bold transition-all duration-200"
+                                    style={role === key
+                                        ? { backgroundColor: "#111111", color: "#FFFFFF" }
+                                        : { color: "#8A8678" }
+                                    }
+                                >
+                                    <span className="material-symbols-outlined text-base">{detail.icon}</span>
+                                    {detail.label}
+                                </button>
+                            );
+                        })}
                     </div>
 
                     {/* Error */}
@@ -219,6 +250,23 @@ function SignupForm() {
                                     <input type="text" className="q-input-lg" placeholder="e.g. CA 123-456" value={vehiclePlate} onChange={(e) => setVehiclePlate(e.target.value)} />
                                 </div>
                             </>
+                        )}
+
+                        {/* Fleet manager */}
+                        {role === "fleet" && (
+                            <div>
+                                <label className="q-label">Staff Number</label>
+                                <input
+                                    type="text"
+                                    className="q-input-lg"
+                                    placeholder="e.g. QF-0142"
+                                    value={staffNumber}
+                                    onChange={(e) => setStaffNumber(e.target.value)}
+                                />
+                                <p className="font-sans text-xs mt-1.5" style={{ color: "#8A8678" }}>
+                                    Shown on every assessment you sign off.
+                                </p>
+                            </div>
                         )}
 
                         {/* Operator-specific fields */}

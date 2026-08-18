@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useBooking } from "@/app/context/BookingContext";
 import AuthGuard from "@/components/AuthGuard";
 import QRCode from "react-qr-code";
+import ShareButton from "@/components/ShareButton";
+import { absoluteUrl, bookingShareText } from "@/lib/share";
 
 function WalkUpTicketContent() {
     const router = useRouter();
@@ -44,6 +46,11 @@ function WalkUpTicketContent() {
                     <h1 className="font-display text-lg font-semibold text-q-stone-900">Walk-Up Ticket</h1>
                     <p className="font-sans text-xs text-q-brown">Show this to confirm boarding</p>
                 </div>
+                <ShareButton
+                    title="Quallor walk-up ticket"
+                    text={bookingShareText(booking)}
+                    url={absoluteUrl("/trips")}
+                />
             </header>
 
             <div className="flex-1 overflow-y-auto px-4 py-6 pb-32">
@@ -75,10 +82,21 @@ function WalkUpTicketContent() {
                         </div>
                     </div>
 
+                    {/* Boarding note sits above the QR so the passenger reads it first */}
+                    <div
+                        className="flex gap-3 items-start px-5 py-4"
+                        style={{ backgroundColor: "#E1EDF5", borderBottom: "1px solid rgba(17,17,17,0.07)" }}
+                    >
+                        <span className="material-symbols-outlined text-xl flex-shrink-0" style={{ color: "#1D3686" }}>info</span>
+                        <p className="font-sans text-sm leading-snug" style={{ color: "rgba(17,17,17,0.80)" }}>
+                            Present this screen to the driver when boarding. Maximise your screen brightness for best scanning results.
+                        </p>
+                    </div>
+
                     {/* QR Code */}
                     <div className="flex flex-col items-center py-6 px-5 bg-white">
-                        <QRCode value={booking.qrData} size={180} level="M" bgColor="#ffffff" fgColor="#1C1917" />
-                        <p className="font-sans text-[10px] font-mono text-q-stone-400 mt-3 text-center">{booking.bookingId}</p>
+                        <QRCode value={booking.qrData} size={180} level="M" bgColor="#ffffff" fgColor="#111111" />
+                        <p className="font-mono text-[10px] text-q-stone-400 mt-3 text-center">{booking.bookingId}</p>
                     </div>
 
                     {/* Details */}

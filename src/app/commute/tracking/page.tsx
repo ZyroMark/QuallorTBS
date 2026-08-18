@@ -4,15 +4,21 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useBooking } from "@/app/context/BookingContext";
+import { useSettings } from "@/app/context/SettingsContext";
+import { useToast } from "@/components/Toast";
+import { share, absoluteUrl, bookingShareText } from "@/lib/share";
 
 const TrackingMap = dynamic(() => import("@/components/TrackingMap"), { ssr: false });
 
 export default function TrackingPage() {
     const router = useRouter();
     const { currentBooking } = useBooking();
+    const { triggerSos, contacts } = useSettings();
+    const { toast } = useToast();
     const [minutes, setMinutes] = useState(12);
     const [seconds, setSeconds] = useState(0);
     const [mapProgress, setMapProgress] = useState(0);
+    const [sosArmed, setSosArmed] = useState(false);
 
     const from = currentBooking?.from || "Beacon Bay";
     const to = currentBooking?.to || "Amalinda";
@@ -86,19 +92,73 @@ export default function TrackingPage() {
 
                     {/* Action buttons */}
                     <div className="grid grid-cols-3 gap-3 mb-4">
-                        <button className="flex flex-col items-center gap-1.5 p-3 rounded-[12px] bg-q-brown-50 border border-q-brown-200 text-q-brown">
-                            <span className="material-symbols-outlined">share</span>
+                        <button
+                            onClick={async () => {
+                                const outcome = await share({
+                                    title: "Track my Quallor trip",
+                                    text: currentBooking
+                                        ? `${bookingShareText(currentBooking)}\nI am on my way, follow my taxi live.`
+                                        : `I am travelling from ${from} to ${to} with Quallor.`,
+                                    url: absoluteUrl("/commute/tracking"),
+                                });
+                                if (outcome === "copied") toast("Trip link copied to clipboard", "success");
+                                else if (outcome === "shared") toast("Trip shared", "success");
+                                else if (outcome === "failed") toast("Could not share on this device", "error");
+                            }}
+                            className="flex flex-col items-center gap-1.5 p-3 rounded-[12px] bg-q-brown-50 border border-q-brown-200 text-q-brown"
+                        >
+                            <span className="material-symbols-outlined">ios_share</span>
                             <span className="font-sans text-[10px] font-bold uppercase">Share</span>
                         </button>
-                        <button className="flex flex-col items-center gap-1.5 p-3 rounded-[12px] bg-blue-50 border border-blue-200 text-blue-600">
+                        <a
+                            href="tel:+27430000000"
+                            className="flex flex-col items-center gap-1.5 p-3 rounded-[12px] bg-blue-50 border border-blue-200 text-blue-600"
+                        >
                             <span className="material-symbols-outlined">call</span>
                             <span className="font-sans text-[10px] font-bold uppercase">Contact</span>
-                        </button>
-                        <button className="flex flex-col items-center gap-1.5 p-3 rounded-[12px] bg-red-50 border border-red-200 text-red-600">
+                        </a>
+                        <button
+                            onClick={() => {
+                                if (!sosArmed) {
+                                    setSosArmed(true);
+                                    toast("Tap SOS again to confirm the alert", "info");
+                                    setTimeout(() => setSosArmed(false), 5000);
+                                    return;
+                                }
+                                const event = triggerSos(`${from} to ${to}`);
+                                setSosArmed(false);
+                                toast(
+                                    event.notified.length
+                                        ? `SOS sent to ${event.notified.join(", ")}`
+                                        : "SOS recorded. Add a trusted contact so someone is alerted.",
+                                    event.notified.length ? "success" : "error"
+                                );
+                            }}
+                            className="flex flex-col items-center gap-1.5 p-3 rounded-[12px] border transition-colors"
+                            style={sosArmed
+                                ? { backgroundColor: "#DC2626", borderColor: "#DC2626", color: "#FFFFFF" }
+                                : { backgroundColor: "rgba(220,38,38,0.06)", borderColor: "rgba(220,38,38,0.25)", color: "#DC2626" }}
+                        >
                             <span className="material-symbols-outlined">emergency</span>
-                            <span className="font-sans text-[10px] font-bold uppercase">SOS</span>
+                            <span className="font-sans text-[10px] font-bold uppercase">
+                                {sosArmed ? "Confirm" : "SOS"}
+                            </span>
                         </button>
                     </div>
+
+                    {contacts.filter((c) => c.canSeeLocation).length === 0 && (
+                        <button
+                            onClick={() => router.push("/safety/contacts")}
+                            className="w-full flex items-center gap-2 p-3 mb-4 rounded-[12px] text-left"
+                            style={{ backgroundColor: "#EEF1EA", border: "1px solid rgba(17,17,17,0.07)" }}
+                        >
+                            <span className="material-symbols-outlined text-lg flex-shrink-0" style={{ color: "#1D3686" }}>person_add</span>
+                            <span className="font-sans text-xs flex-1" style={{ color: "#5C5A56" }}>
+                                No trusted contact yet. Add one so an SOS reaches somebody.
+                            </span>
+                            <span className="material-symbols-outlined text-base flex-shrink-0" style={{ color: "#AEA89C" }}>chevron_right</span>
+                        </button>
+                    )}
 
                     {/* Route line */}
                     <div className="flex items-center gap-3 p-3 rounded-[12px] bg-q-bg-section border border-q-stone-200">
