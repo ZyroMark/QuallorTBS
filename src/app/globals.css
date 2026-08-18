@@ -1116,16 +1116,23 @@ body.q-noselect canvas {
   inset: 0;
   z-index: 2147483500;
   display: flex;
-  align-items: center;
+  /* flex-start rather than center: a panel taller than the viewport would be
+     centred with its top and bottom cut off and no way to reach either. The
+     panel's auto margins re-centre it whenever it does fit. */
+  align-items: flex-start;
   justify-content: center;
   padding: 1rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
   background: #FFFCF9;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .q-gate-panel {
   width: 100%;
   max-width: 44rem;
   max-height: min(94vh, 60rem);
+  margin: auto;
   display: flex;
   flex-direction: column;
   background: #FFFFFF;
@@ -1133,6 +1140,21 @@ body.q-noselect canvas {
   border-radius: 18px;
   box-shadow: 0 24px 70px rgba(17, 17, 17, 0.16);
   overflow: hidden;
+}
+/* On a phone, or any short window, the header, the notice and the form cannot
+   share one screen. Release the panel's height cap and let the overlay carry a
+   single page scroll instead, so the accept button is always reachable. */
+@media (max-width: 640px), (max-height: 720px) {
+  .q-gate-panel {
+    max-height: none;
+    overflow: visible;
+  }
+  .q-gate-scroll {
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: none;
+    overflow-y: visible;
+  }
 }
 .q-gate-header {
   padding: 1.75rem 1.75rem 1.25rem;
@@ -1260,6 +1282,7 @@ body.q-noselect canvas {
 }
 .q-gate-declined {
   max-width: 30rem;
+  margin: auto;
   text-align: center;
   padding: 2rem;
 }
