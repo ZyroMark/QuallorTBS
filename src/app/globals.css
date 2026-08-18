@@ -924,3 +924,348 @@
   .q-tx * { animation: none !important; }
   .q-tx .q-tx-fx { display: none; }
 }
+
+/* ─── CONFIDENTIALITY LAYER (ZYROMARK PTY LTD) ──────────────────────── */
+/* Ownership watermark, capture deterrents, print block and access gate.  */
+
+/* Watermark ---------------------------------------------------------- */
+.q-watermark {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  mix-blend-mode: multiply;
+}
+.q-watermark-plane {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 240vmax;
+  height: 240vmax;
+  transform: translate(-50%, -50%) rotate(-32deg);
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-content: space-around;
+  justify-items: center;
+  gap: 2rem 1rem;
+}
+.q-watermark-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+}
+.q-watermark-main {
+  font-family: "Azeret Mono", ui-monospace, monospace;
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(29, 54, 134, 0.13);
+}
+.q-watermark-sub {
+  font-family: "Azeret Mono", ui-monospace, monospace;
+  font-size: clamp(0.5rem, 0.9vw, 0.65rem);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(17, 17, 17, 0.11);
+}
+@media (max-width: 640px) {
+  .q-watermark-plane { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Corner ownership stamp */
+.q-watermark-badge {
+  position: fixed;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 2147483001;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(255, 252, 249, 0.72);
+  border: 1px solid rgba(29, 54, 134, 0.18);
+  backdrop-filter: blur(2px);
+  max-width: min(90vw, 26rem);
+  text-align: right;
+}
+.q-watermark-badge-title {
+  font-family: "Azeret Mono", ui-monospace, monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(29, 54, 134, 0.78);
+}
+.q-watermark-badge-meta {
+  font-family: "Azeret Mono", ui-monospace, monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(17, 17, 17, 0.55);
+  word-break: break-all;
+}
+/* Keep the stamp clear of the passenger bottom navigation on small screens. */
+@media (max-width: 1023px) {
+  .q-watermark-badge { bottom: 5.25rem; }
+}
+
+/* Selection and drag lock -------------------------------------------- */
+body.q-noselect,
+body.q-noselect * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+}
+/* Form fields stay usable. */
+body.q-noselect input,
+body.q-noselect textarea,
+body.q-noselect select,
+body.q-noselect [contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+}
+body.q-noselect img,
+body.q-noselect canvas {
+  -webkit-user-drag: none;
+}
+
+/* Capture shield ------------------------------------------------------ */
+.q-capture-shield {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  background: #1F1F1F;
+  color: #FFFCF9;
+}
+.q-capture-shield-icon { font-size: 44px; color: #CDDFF6; }
+.q-capture-shield-title {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+.q-capture-shield-body {
+  font-family: "Schibsted Grotesk", system-ui, sans-serif;
+  font-size: 0.9rem;
+  max-width: 34ch;
+  color: rgba(255, 252, 249, 0.72);
+  line-height: 1.55;
+}
+.q-capture-shield-owner {
+  margin-top: 1.25rem;
+  font-family: "Azeret Mono", ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: rgba(205, 223, 246, 0.8);
+}
+
+/* Print block --------------------------------------------------------- */
+.q-print-block { display: none; }
+@media print {
+  html, body { background: #FFFFFF !important; }
+  /* Visibility rather than display, so the notice can live anywhere in the tree. */
+  body * { visibility: hidden !important; }
+  .q-print-block, .q-print-block * { visibility: visible !important; }
+  .q-print-block {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    background: #FFFFFF;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+  .q-print-block-title {
+    font-family: "Azeret Mono", ui-monospace, monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    margin-bottom: 1.5rem;
+  }
+  .q-print-block-body {
+    font-family: "Schibsted Grotesk", system-ui, sans-serif;
+    font-size: 0.9rem;
+    max-width: 48ch;
+    margin: 0 auto 0.75rem;
+    line-height: 1.6;
+  }
+}
+
+/* Access gate --------------------------------------------------------- */
+.q-gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: #FFFCF9;
+  overflow-y: auto;
+}
+.q-gate-panel {
+  width: 100%;
+  max-width: 44rem;
+  max-height: min(94vh, 60rem);
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border: 1px solid rgba(17, 17, 17, 0.10);
+  border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(17, 17, 17, 0.16);
+  overflow: hidden;
+}
+.q-gate-header {
+  padding: 1.75rem 1.75rem 1.25rem;
+  background: #E1EDF5;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+}
+.q-gate-title {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #111111;
+  margin: 0.4rem 0 0.6rem;
+}
+.q-gate-lede {
+  font-family: "Schibsted Grotesk", system-ui, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(17, 17, 17, 0.72);
+  max-width: 56ch;
+}
+.q-gate-meta {
+  margin-top: 0.9rem;
+  font-family: "Azeret Mono", ui-monospace, monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(17, 17, 17, 0.55);
+}
+.q-gate-scroll {
+  flex: 1 1 auto;
+  min-height: 8rem;
+  overflow-y: auto;
+  padding: 1.5rem 1.75rem;
+  -webkit-overflow-scrolling: touch;
+}
+.q-gate-clause { margin-bottom: 1.5rem; }
+.q-gate-clause-heading {
+  font-family: "Azeret Mono", ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #1D3686;
+  margin-bottom: 0.6rem;
+}
+.q-gate-para {
+  font-family: "Schibsted Grotesk", system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: rgba(17, 17, 17, 0.80);
+  margin-bottom: 0.75rem;
+}
+.q-gate-list {
+  margin: 0 0 0.75rem 0;
+  padding-left: 1.1rem;
+  list-style: disc;
+}
+.q-gate-list li {
+  font-family: "Schibsted Grotesk", system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgba(17, 17, 17, 0.80);
+  margin-bottom: 0.35rem;
+}
+.q-gate-form {
+  flex: 0 0 auto;
+  padding: 1.25rem 1.75rem 1.5rem;
+  background: #EEF1EA;
+  border-top: 1px solid rgba(17, 17, 17, 0.08);
+}
+.q-gate-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.q-gate-field { display: flex; flex-direction: column; gap: 0.3rem; }
+.q-gate-field:last-child { grid-column: 1 / -1; }
+@media (max-width: 640px) {
+  .q-gate-fields { grid-template-columns: 1fr; }
+  .q-gate-header, .q-gate-scroll, .q-gate-form { padding-left: 1.15rem; padding-right: 1.15rem; }
+}
+.q-gate-check {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+.q-gate-check input {
+  margin-top: 0.2rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+  accent-color: #1D3686;
+  cursor: pointer;
+}
+.q-gate-check span {
+  font-family: "Schibsted Grotesk", system-ui, sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: rgba(17, 17, 17, 0.80);
+}
+.q-gate-error {
+  font-family: "Schibsted Grotesk", system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: #DC2626;
+  margin-bottom: 0.75rem;
+}
+.q-gate-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.9rem;
+}
+.q-gate-foot {
+  margin-top: 1rem;
+  font-family: "Azeret Mono", ui-monospace, monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(17, 17, 17, 0.45);
+}
+.q-gate-declined {
+  max-width: 30rem;
+  text-align: center;
+  padding: 2rem;
+}
+.q-gate-body {
+  font-family: "Schibsted Grotesk", system-ui, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(17, 17, 17, 0.72);
+}

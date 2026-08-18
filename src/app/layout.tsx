@@ -5,10 +5,20 @@ import { BottomNav } from "@/components/layout/bottom-nav";
 import OfflineBanner from "@/components/OfflineBanner";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
 import PageLoader from "@/components/Loader";
+import ConfidentialLayer from "@/components/confidential/ConfidentialLayer";
 
 export const metadata: Metadata = {
   title: "Quallor | Eastern Cape Taxi Booking",
   description: "Book a confirmed seat on any taxi route in the Eastern Cape. Digital tickets, live tracking, offline support.",
+  robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icons/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icons/favicon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({
@@ -20,11 +30,10 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#FFFCF9" />
+        <meta name="theme-color" content="#9FC8DE" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Quallor" />
-        <link rel="apple-touch-icon" href="/icons/icon.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Solaria-inspired type system: Fraunces (serif display) · Schibsted Grotesk (UI/body) · Azeret Mono (labels/buttons) */}
@@ -46,9 +55,11 @@ export default function RootLayout({
         <PageLoader />
         <ServiceWorkerRegistrar />
         <AuthProvider>
-          <OfflineBanner />
-          {children}
-          <BottomNav />
+          <ConfidentialLayer>
+            <OfflineBanner />
+            {children}
+            <BottomNav />
+          </ConfidentialLayer>
         </AuthProvider>
       </body>
     </html>
