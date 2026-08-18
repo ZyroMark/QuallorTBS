@@ -9,7 +9,7 @@ const STEPS = [
         num: "Step 1",
         title: "Choose your route",
         eyebrow: "Every route, one app",
-        body: "Browse daily commutes and long-distance hikes across the Eastern Cape. Fixed fares are shown upfront, so the price you see is the price you pay.",
+        body: "Browse daily commutes and long-distance hikes across the Eastern Cape, Western Cape and Gauteng. Fixed fares are shown upfront, so the price you see is the price you pay.",
         src: "/images/quantum3.jpg",
         label: "Minibus taxi on a city route",
     },

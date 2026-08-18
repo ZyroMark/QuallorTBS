@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import { useBooking } from "@/app/context/BookingContext";
+import { popularRoutesFor } from "@/lib/places";
+import { useProvince } from "@/lib/useProvince";
 import AuthGuard from "@/components/AuthGuard";
 
 const ROWS = ["A", "B", "C", "D"];
@@ -22,9 +24,13 @@ function WalkUpContent() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const from = "East London Rank";
-    const to = "Amalinda";
-    const fare = 20;
+    // The driver's own network, so a Johannesburg gaatjie is not writing
+    // tickets for an East London route.
+    const { province } = useProvince();
+    const headline = popularRoutesFor(province.id)[0];
+    const from = province.commuteOrigin;
+    const to = headline.to;
+    const fare = headline.fare;
     const taxiId = user?.vehiclePlate || "TX-001";
     const taxiName = user?.vehicleModel || "Quallor Taxi";
 
@@ -34,7 +40,7 @@ function WalkUpContent() {
         return `QLR-${a}-${b}`;
     }
 
-    function handleConfirm() {
+    async function handleConfirm() {
         if (!selectedSeat) { setError("Please select a seat."); return; }
         setError("");
         setLoading(true);
@@ -58,8 +64,12 @@ function WalkUpContent() {
             bookedByDriver: true,
             qrData: JSON.stringify({ bookingId, passengerName: name, from, to, seatNumber: selectedSeat, taxiId, fare, paymentMethod, bookedByDriver: true, date: new Date().toISOString(), status: "valid" }),
         };
-        addBooking(booking);
+        const result = await addBooking(booking);
         setLoading(false);
+        if (!result.success) {
+            setError(result.error || "Could not take this booking.");
+            return;
+        }
         router.push("/driver/walk-up/ticket");
     }
 

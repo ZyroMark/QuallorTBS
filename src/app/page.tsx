@@ -200,7 +200,7 @@ function HowItWorks() {
             num: "Step 1",
             title: "Choose your route",
             eyebrow: "Every route, one app",
-            body: "Browse daily commutes and long-distance hikes across the Eastern Cape. Fixed fares are shown upfront, so the price you see is the price you pay.",
+            body: "Browse daily commutes and long-distance hikes across the Eastern Cape, Western Cape and Gauteng. Fixed fares are shown upfront, so the price you see is the price you pay.",
             src: "/images/quantum3.jpg",
             label: "Minibus taxi on a city route",
         },
@@ -323,8 +323,9 @@ function Why() {
 /* ── NETWORK: marquee + statement ── */
 function Network() {
     const routes = [
-        "East London", "Mdantsane", "Beacon Bay", "Amalinda", "King William's Town",
-        "Gqeberha", "Mthatha", "Butterworth", "Komani", "Zwelitsha",
+        "East London", "Mdantsane", "Beacon Bay", "King William's Town", "Mthatha",
+        "Cape Town", "Khayelitsha", "Gugulethu", "Bellville", "Atlantis",
+        "Johannesburg", "Soweto", "Alexandra", "Tembisa", "Randburg",
     ];
 
     return (
@@ -360,7 +361,7 @@ function Network() {
                 <Reveal variant="media">
                     <Photo
                         src="/images/quantum4.jpg"
-                        label="Taxis across the Eastern Cape network"
+                        label="Taxis across the Quallor network"
                         className="w-full h-[40vh] min-h-[280px]"
                         fallback="#CDDFF6"
                     />

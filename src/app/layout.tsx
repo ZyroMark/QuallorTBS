@@ -8,8 +8,8 @@ import PageLoader from "@/components/Loader";
 import ConfidentialLayer from "@/components/confidential/ConfidentialLayer";
 
 export const metadata: Metadata = {
-  title: "Quallor | Eastern Cape Taxi Booking",
-  description: "Book a confirmed seat on any taxi route in the Eastern Cape. Digital tickets, live tracking, offline support.",
+  title: "Quallor | South African Taxi Booking",
+  description: "Book a confirmed seat on any taxi route across the Eastern Cape, Western Cape and Gauteng. Digital tickets, live tracking, offline support.",
   robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
   icons: {
     icon: [

@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import { useBooking } from "@/app/context/BookingContext";
+import { popularRoutesFor } from "@/lib/places";
+import { useProvince } from "@/lib/useProvince";
 
 const TAKEN_SEATS = ["A1", "A3", "B2", "B4", "C1", "D3"];
 const ROWS = ["A", "B", "C", "D"];
@@ -15,17 +17,18 @@ export default function SeatSelectionPage() {
     const { selectedRoute, selectedTaxi, confirmBooking } = useBooking();
     const [selectedSeat, setSelectedSeat] = useState<string | null>(null);
 
-    const from = selectedRoute?.from || "Beacon Bay";
-    const to = selectedRoute?.to || "Amalinda";
+    const { province } = useProvince();
+    const from = selectedRoute?.from || province.commuteOrigin;
+    const to = selectedRoute?.to || popularRoutesFor(province.id)[0].to;
     const taxi = selectedTaxi || { id: "TX-402", name: "Khululeka Express", departureTime: "08:30 AM", fare: 20 };
 
     // Set when this seat is the second taxi of a connecting journey.
     const journeyId = selectedRoute?.journeyId;
     const legIndex = selectedRoute?.legIndex ?? 0;
 
-    function handleConfirm() {
+    async function handleConfirm() {
         if (!selectedSeat) return;
-        const booking = confirmBooking({
+        const booking = await confirmBooking({
             tripType: "commute",
             from,
             to,

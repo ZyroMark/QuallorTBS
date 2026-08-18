@@ -102,7 +102,7 @@ function FleetContent() {
         fleets: operators.filter((o) => o.count > 0).length,
     }), [vehicles, operators, pendingVerification.length, blockingReason]);
 
-    function submitVehicle(e: React.FormEvent) {
+    async function submitVehicle(e: React.FormEvent) {
         e.preventDefault();
         setFormError("");
 
@@ -116,7 +116,7 @@ function FleetContent() {
         if (!form.licenceExpiry) { setFormError("Set the operating licence expiry date."); return; }
 
         const op = operators.find((o) => o.id === form.operatorId);
-        const vehicle = addVehicle({
+        const vehicle = await addVehicle({
             plate: form.plate.trim().toUpperCase(),
             model: form.model.trim() || "Toyota Quantum",
             year: Number(form.year) || new Date().getFullYear(),
@@ -134,6 +134,11 @@ function FleetContent() {
             verified: true,
             source: "fleet-manager",
         });
+
+        if (!vehicle) {
+            setFormError("Could not add the vehicle. Check the plate is not already registered.");
+            return;
+        }
 
         toast(`${vehicle.plate} added to ${op?.name}`, "success");
         setAdding(false);
@@ -271,7 +276,7 @@ function FleetContent() {
                                 { key: "capacity",      label: "Seats",             placeholder: "15", type: "number" },
                                 { key: "driverName",    label: "Assigned Driver",   placeholder: "Full name" },
                                 { key: "driverPhone",   label: "Driver Phone",      placeholder: "082 123 4567", type: "tel" },
-                                { key: "homeRank",      label: "Home Rank",         placeholder: "e.g. Beacon Bay Rank" },
+                                { key: "homeRank",      label: "Home Rank",         placeholder: "The rank this taxi works from" },
                                 { key: "route",         label: "Assigned Route",    placeholder: "e.g. Beacon Bay to Mdantsane" },
                                 { key: "permitNumber",  label: "Operating Licence", placeholder: "OL-EC-00000" },
                                 { key: "licenceExpiry", label: "Licence Expiry",    placeholder: "", type: "date" },

@@ -38,7 +38,7 @@ export default function ChangePasswordPage() {
 
     const strength = strengthOf(next);
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setError("");
 
@@ -48,7 +48,7 @@ export default function ChangePasswordPage() {
         }
 
         setSaving(true);
-        const result = changePassword(current, next);
+        const result = await changePassword(current, next);
         setSaving(false);
 
         if (!result.success) {

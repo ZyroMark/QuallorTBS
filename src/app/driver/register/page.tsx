@@ -49,7 +49,7 @@ export default function DriverRegisterPage() {
         }
         setError("");
         setLoading(true);
-        const result = signup({
+        const result = await signup({
             name: formData.fullName,
             email: formData.email,
             phone: formData.phone,
@@ -63,14 +63,18 @@ export default function DriverRegisterPage() {
         setLoading(false);
         if (!result.success) { setError(result.error || "Registration failed."); return; }
 
+        // With email confirmation on there is no session yet, so the vehicle
+        // insert would be refused by RLS and the driver would land on a page
+        // that bounces them to login. Stop here and say so instead.
+        if (result.notice) { setError(result.notice); return; }
+
         // Put the taxi on the fleet register straight away, unverified. It shows
         // up in the fleet office's Verify queue, and until they clear it the
         // driver cannot go online and passengers cannot book it.
-        const created = JSON.parse(localStorage.getItem("quallor_current_user") || "null");
         registerDriverVehicle({
             plate: formData.vehiclePlate,
             model: formData.vehicleModel,
-            driverId: created?.id ?? "",
+            driverId: result.user?.id ?? "",
             driverName: formData.fullName,
             driverPhone: formData.phone,
         });

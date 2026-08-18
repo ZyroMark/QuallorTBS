@@ -38,7 +38,7 @@ export default function WhyQuallorPage() {
                 eyebrow="Why Quallor"
                 skyLines={["Come,"]}
                 fieldLines={["take", "a", "seat."]}
-                body="Minibus taxis carry most of the Eastern Cape every single day, and almost all of it still runs on queues, cash, and guesswork. Quallor keeps what works and fixes what does not."
+                body="Minibus taxis carry most of South Africa every single day, and almost all of it still runs on queues, cash, and guesswork. Quallor keeps what works and fixes what does not."
             />
 
             {/* Dark problem band */}

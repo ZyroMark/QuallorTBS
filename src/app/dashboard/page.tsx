@@ -7,17 +7,23 @@ import { useBooking } from "@/app/context/BookingContext";
 import AuthGuard from "@/components/AuthGuard";
 import AppLayout from "@/components/layout/AppLayout";
 import RouteArt from "@/components/RouteArt";
+import { popularRoutesFor, featuredHikeFor } from "@/lib/places";
+import { useProvince } from "@/lib/useProvince";
 
 function DashboardContent() {
     const { user } = useAuth();
     const { setSelectedRoute } = useBooking();
     const router = useRouter();
 
-    const routes = [
-        { from: "Beacon Bay",  to: "Amalinda",  region: "East London Local",    price: "R 18" },
-        { from: "Vincent",     to: "Mdantsane", region: "Mdantsane Commuter",   price: "R 22" },
-        { from: "EL CBD",      to: "Nahoon",    region: "Coastal Route",         price: "R 15" },
-    ];
+    // The dashboard is the first thing a passenger sees, so it has to be their
+    // own network. A Johannesburg commuter has no use for a Beacon Bay fare.
+    const { provinceId } = useProvince();
+    const routes = popularRoutesFor(provinceId).map((r) => ({
+        ...r,
+        price: `R ${r.fare}`,
+    }));
+    const featuredCommute = routes[0];
+    const featuredHike = featuredHikeFor(provinceId);
 
     function handleRouteClick(from: string, to: string) {
         setSelectedRoute({ from, to, tripType: "commute" });
@@ -85,7 +91,7 @@ function DashboardContent() {
                             }}
                         >
                             <div className="w-full aspect-[16/7]">
-                                <RouteArt from="Beacon Bay" to="Amalinda" tone="blue" />
+                                <RouteArt from={featuredCommute.from} to={featuredCommute.to} tone="blue" />
                             </div>
                             <div className="p-5">
                                 <div className="flex justify-between items-start mb-4">
@@ -131,7 +137,7 @@ function DashboardContent() {
                             }}
                         >
                             <div className="w-full aspect-[16/7]">
-                                <RouteArt from="East London" to="Mthatha" tone="sage" />
+                                <RouteArt from={featuredHike.from} to={featuredHike.to} tone="sage" />
                             </div>
                             <div className="p-5">
                                 <div className="flex items-end justify-between">

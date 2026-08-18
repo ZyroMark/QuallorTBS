@@ -72,7 +72,7 @@ function AssessForm() {
         setStatuses(Object.fromEntries(checklist.map((l) => [l, status])));
     }
 
-    function submit(e: React.FormEvent) {
+    async function submit(e: React.FormEvent) {
         e.preventDefault();
         setError("");
 
@@ -89,7 +89,7 @@ function AssessForm() {
         const due = new Date(assessedAt);
         due.setDate(due.getDate() + REASSESS_DAYS[type]);
 
-        const saved = addAssessment({
+        const saved = await addAssessment({
             vehicleId: vehicle.id,
             plate: vehicle.plate,
             type,
@@ -101,6 +101,11 @@ function AssessForm() {
             notes: notes.trim(),
             nextDue: due.toISOString().slice(0, 10),
         });
+
+        if (!saved) {
+            toast("Could not save the assessment. Only the fleet office can record one.", "error");
+            return;
+        }
 
         toast(`${ASSESSMENT_LABELS[type]} saved as ${saved.id} · ${result}`, result === "fail" ? "error" : "success");
         router.push("/fleet");

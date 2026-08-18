@@ -9,7 +9,9 @@ import { useFleet, ASSESSMENT_LABELS, REQUEST_LABELS, type Vehicle, type Request
 import { useToast } from "@/components/Toast";
 import { Toggle, Field } from "@/components/SettingsUI";
 import OperatorGate from "@/components/OperatorGate";
-import { coordsFor, PLACES } from "@/lib/places";
+import { coordsFor, PLACES, DEFAULT_PROVINCE, type ProvinceId } from "@/lib/places";
+import { useProvince } from "@/lib/useProvince";
+import { ProvinceOptions } from "@/components/ProvincePicker";
 
 /**
  * Operator console.
@@ -747,6 +749,7 @@ function CompanyPanel({
     const [registrationNumber, setRegistrationNumber] = useState(operator.registrationNumber);
     const [vatNumber, setVatNumber] = useState(operator.vatNumber);
     const [operatingRegion, setOperatingRegion] = useState(operator.operatingRegion);
+    const [homeProvince, setHomeProvince] = useState<ProvinceId>(user?.homeProvince ?? DEFAULT_PROVINCE);
     const [error, setError] = useState("");
 
     return (
@@ -771,12 +774,25 @@ function CompanyPanel({
                 <Field label="VAT Number" value={vatNumber} onChange={setVatNumber} placeholder="4123456789 (leave blank if not registered)" />
                 <Field label="Operating Region" value={operatingRegion} onChange={setOperatingRegion} placeholder="e.g. Buffalo City Metro" />
             </Card>
+
+            {/* An operator never opens the passenger commute screens, so this is
+                the only place they can set which network they run on. It decides
+                which places Route Management will offer them. */}
+            <Card>
+                <p className="q-label">Network</p>
+                <p className="font-sans text-xs mb-3" style={{ color: "#8A8678" }}>
+                    The metro your association runs in. Approved routes can only use
+                    places on this network.
+                </p>
+                <ProvinceOptions selected={homeProvince} onSelect={setHomeProvince} />
+            </Card>
+
             <button
-                onClick={() => {
+                onClick={async () => {
                     setError("");
                     if (!name.trim()) { setError("A contact name is required."); return; }
                     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setError("That does not look like a valid email address."); return; }
-                    const res = updateUser({ name: name.trim(), companyName: companyName.trim(), email: email.trim(), phone: phone.trim() });
+                    const res = await updateUser({ name: name.trim(), companyName: companyName.trim(), email: email.trim(), phone: phone.trim(), homeProvince });
                     if (!res.success) { setError(res.error || "Could not save."); return; }
                     updateOperator({ tradingName, registrationNumber, vatNumber, operatingRegion, contactEmail: email.trim(), contactPhone: phone.trim() });
                     toast("Company profile saved", "success");
@@ -954,7 +970,15 @@ function RoutesPanel({
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
     const [fare, setFare] = useState("");
-    const names = PLACES.map((p) => p.name);
+
+    // An operator approves routes on their own network. Offering them every
+    // place in the country lets a Cape Town association approve a Mdantsane
+    // run, which no taxi of theirs can serve.
+    const { provinceId } = useProvince();
+    const names = useMemo(
+        () => PLACES.filter((p) => p.province === provinceId).map((p) => p.name),
+        [provinceId]
+    );
 
     return (
         <>

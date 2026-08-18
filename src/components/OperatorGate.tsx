@@ -134,11 +134,11 @@ export default function OperatorGate({
                     )}
 
                     <form
-                        onSubmit={(e) => {
+                        onSubmit={async (e) => {
                             e.preventDefault();
                             setError("");
                             setBusy(true);
-                            const result = login(email.trim(), password);
+                            const result = await login(email.trim(), password);
                             setBusy(false);
                             if (!result.success) setError(result.error || "Sign in failed.");
                             // A wrong-role account falls through to the panel above.

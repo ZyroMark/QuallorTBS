@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import { useBooking } from "@/app/context/BookingContext";
+import { featuredHikeFor } from "@/lib/places";
+import { useProvince } from "@/lib/useProvince";
 
 const TAKEN_SEATS = ["A1", "A3", "B2", "C4", "D1"];
 const ROWS = ["A", "B", "C", "D"];
@@ -15,17 +17,18 @@ export default function HikeSeatSelectionPage() {
     const { selectedRoute, selectedTaxi, confirmBooking } = useBooking();
     const [selectedSeat, setSelectedSeat] = useState<string | null>(null);
 
-    const from = selectedRoute?.from || "East London";
-    const to = selectedRoute?.to || "Port Elizabeth";
+    const { province } = useProvince();
+    const from = selectedRoute?.from || province.hikingOrigin;
+    const to = selectedRoute?.to || featuredHikeFor(province.id).to;
     const taxi = selectedTaxi || { id: "HC-101", name: "Sibusiso M.", departureTime: "08:30 AM", fare: 250 };
 
     // Set when this seat is a later taxi of a connecting journey.
     const journeyId = selectedRoute?.journeyId;
     const legIndex = selectedRoute?.legIndex ?? 0;
 
-    function handleConfirm() {
+    async function handleConfirm() {
         if (!selectedSeat) return;
-        confirmBooking({
+        const booking = await confirmBooking({
             tripType: "hiking",
             from,
             to,
@@ -41,6 +44,8 @@ export default function HikeSeatSelectionPage() {
             paymentMethod: "app",
             ...(journeyId ? { journeyId, legIndex, legCount: legIndex + 1 } : {}),
         });
+        // The seat may have gone to someone else between listing and confirming.
+        if (!booking) return;
         // A connecting leg returns to the shared confirmation screen so the whole
         // journey is shown, not just this taxi.
         router.push(journeyId ? "/commute/confirmation" : "/hiking/confirmation");
