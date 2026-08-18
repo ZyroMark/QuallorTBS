@@ -1,12 +1,17 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useAuth } from "@/app/context/AuthContext";
 
 /**
- * Safety, sharing and app preferences.
+ * Personal safety, wallet and operator settings.
  *
- * Everything is stored per user id so a passenger, a driver and an operator
- * signed in on the same device keep their own emergency contacts and settings.
+ * These are the most private rows in the system, so their policies are the
+ * strictest: trusted contacts, preferences and the wallet ledger are readable
+ * only by the account that owns them, with no fleet-office override. The one
+ * exception is sos_events, which the fleet office can read, because somebody
+ * has to answer the alarm.
  */
 
 export interface TrustedContact {
@@ -148,9 +153,17 @@ const DEFAULT_PREFERENCES: AppPreferences = {
     reduceMotion: false,
 };
 
+/**
+ * Opening credit for a new account. This used to be a hard-coded balance in
+ * localStorage; with a real ledger the balance has to come from somewhere, so
+ * it is written once as an actual transaction the user can see.
+ */
+const OPENING_CREDIT = 142.5;
+const OPENING_CREDIT_DESCRIPTION = "Opening balance";
+
 const DEFAULT_WALLET: Wallet = {
-    balance: 142.5,
-    methods: [{ id: "PM-CASH", kind: "cash", label: "Cash on board", last4: "", isDefault: true }],
+    balance: 0,
+    methods: [],
     transactions: [],
 };
 
@@ -161,10 +174,7 @@ const DEFAULT_OPERATOR: OperatorSettings = {
     contactEmail: "",
     contactPhone: "",
     operatingRegion: "Buffalo City Metro",
-    routes: [
-        { id: "RT-1", from: "Beacon Bay", to: "Mdantsane", fare: 22, active: true },
-        { id: "RT-2", from: "East London", to: "King William's Town", fare: 60, active: true },
-    ],
+    routes: [],
     payout: { bankName: "", accountLast4: "", accountHolder: "", schedule: "weekly" },
     policies: {
         maxSpeed: 100,
@@ -192,194 +202,531 @@ const DEFAULT_STATE: SettingsState = {
 };
 
 interface SettingsContextType extends SettingsState {
-    addContact: (c: Omit<TrustedContact, "id">) => void;
-    updateContact: (id: string, patch: Partial<TrustedContact>) => void;
-    removeContact: (id: string) => void;
-    updateSafety: (patch: Partial<SafetySettings>) => void;
-    updatePreferences: (patch: Partial<AppPreferences>) => void;
-    triggerSos: (location: string) => SosEvent;
-    resolveSos: (id: string) => void;
-    topUp: (amount: number, method: string) => void;
-    chargeWallet: (amount: number, description: string) => boolean;
-    addPaymentMethod: (m: Omit<PaymentMethod, "id">) => void;
-    removePaymentMethod: (id: string) => void;
-    setDefaultPaymentMethod: (id: string) => void;
-    updateOperator: (patch: Partial<OperatorSettings>) => void;
-    addRoute: (r: Omit<OperatorRoute, "id">) => void;
-    updateRoute: (id: string, patch: Partial<OperatorRoute>) => void;
-    removeRoute: (id: string) => void;
-    inviteDriver: (name: string, phone: string) => DriverInvite;
+    addContact: (c: Omit<TrustedContact, "id">) => Promise<void>;
+    updateContact: (id: string, patch: Partial<TrustedContact>) => Promise<void>;
+    removeContact: (id: string) => Promise<void>;
+    updateSafety: (patch: Partial<SafetySettings>) => Promise<void>;
+    updatePreferences: (patch: Partial<AppPreferences>) => Promise<void>;
+    triggerSos: (location: string) => Promise<SosEvent | null>;
+    resolveSos: (id: string) => Promise<void>;
+    topUp: (amount: number, method: string) => Promise<void>;
+    chargeWallet: (amount: number, description: string) => Promise<boolean>;
+    addPaymentMethod: (m: Omit<PaymentMethod, "id">) => Promise<void>;
+    removePaymentMethod: (id: string) => Promise<void>;
+    setDefaultPaymentMethod: (id: string) => Promise<void>;
+    updateOperator: (patch: Partial<OperatorSettings>) => Promise<void>;
+    addRoute: (r: Omit<OperatorRoute, "id">) => Promise<void>;
+    updateRoute: (id: string, patch: Partial<OperatorRoute>) => Promise<void>;
+    removeRoute: (id: string) => Promise<void>;
+    inviteDriver: (name: string, phone: string) => Promise<DriverInvite | null>;
     /** How many of the recommended safety steps are done, out of the total. */
     checkupScore: () => { done: number; total: number; items: { label: string; done: boolean; href?: string }[] };
+    refresh: () => Promise<void>;
+    isLoading: boolean;
 }
 
 const SettingsContext = createContext<SettingsContextType | null>(null);
 
-const STORAGE_KEY = "quallor_settings";
-
-function readAll(): Record<string, SettingsState> {
-    if (typeof window === "undefined") return {};
-    try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    } catch {
-        return {};
-    }
+/** Balance is derived from the ledger rather than stored twice. */
+function balanceOf(transactions: WalletTransaction[]): number {
+    return Number(transactions.reduce((sum, t) => sum + t.amount, 0).toFixed(2));
 }
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
-    // The settings provider sits above AuthContext in some trees, so it reads the
-    // current user id straight from storage rather than through the auth hook.
-    const [userKey, setUserKey] = useState<string>("guest");
+    const supabase = useMemo(() => createClient(), []);
+    const { user, isLoading: authLoading } = useAuth();
+
     const [state, setState] = useState<SettingsState>(DEFAULT_STATE);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const refresh = useCallback(async () => {
+        if (!user) {
+            setState(DEFAULT_STATE);
+            setIsLoading(false);
+            return;
+        }
+
+        const [contactsRes, safetyRes, prefsRes, sosRes, methodsRes, txRes, opRes, routesRes, invitesRes] =
+            await Promise.all([
+                supabase.from("trusted_contacts").select("*").order("created_at"),
+                supabase.from("safety_settings").select("*").eq("user_id", user.id).maybeSingle(),
+                supabase.from("app_preferences").select("*").eq("user_id", user.id).maybeSingle(),
+                supabase.from("sos_events").select("*").order("triggered_at", { ascending: false }).limit(20),
+                supabase.from("payment_methods").select("*").order("created_at"),
+                supabase.from("wallet_transactions").select("*").order("occurred_at", { ascending: false }).limit(50),
+                supabase.from("operator_settings").select("*").eq("operator_id", user.id).maybeSingle(),
+                supabase.from("operator_routes").select("*").order("created_at"),
+                supabase.from("driver_invites").select("*").order("sent_at", { ascending: false }),
+            ]);
+
+        const contacts: TrustedContact[] = (contactsRes.data ?? []).map((c: Record<string, unknown>) => ({
+            id: c.id as string,
+            name: c.name as string,
+            phone: c.phone as string,
+            relationship: c.relationship as string,
+            canSeeLocation: c.can_see_location as boolean,
+        }));
+
+        const s = safetyRes.data as Record<string, unknown> | null;
+        const safety: SafetySettings = s
+            ? {
+                  sosEnabled: s.sos_enabled as boolean,
+                  sosCountdown: s.sos_countdown as number,
+                  sosCallsEmergencyServices: s.sos_calls_emergency_services as boolean,
+                  shareTripAutomatically: s.share_trip_automatically as boolean,
+                  shareRouteDeviations: s.share_route_deviations as boolean,
+                  biometricEnabled: s.biometric_enabled as boolean,
+                  passwordChangedAt: (s.password_changed_at as string | null) ?? null,
+              }
+            : DEFAULT_SAFETY;
+
+        const p = prefsRes.data as Record<string, unknown> | null;
+        const preferences: AppPreferences = p
+            ? {
+                  pushNotifications: p.push_notifications as boolean,
+                  smsNotifications: p.sms_notifications as boolean,
+                  tripReminders: p.trip_reminders as boolean,
+                  language: p.language as AppPreferences["language"],
+                  reduceMotion: p.reduce_motion as boolean,
+              }
+            : DEFAULT_PREFERENCES;
+
+        const sosHistory: SosEvent[] = (sosRes.data ?? []).map((e: Record<string, unknown>) => ({
+            id: e.id as string,
+            triggeredAt: e.triggered_at as string,
+            location: e.location as string,
+            notified: Array.isArray(e.notified) ? (e.notified as string[]) : [],
+            resolved: e.resolved as boolean,
+        }));
+
+        const methods: PaymentMethod[] = (methodsRes.data ?? []).map((m: Record<string, unknown>) => ({
+            id: m.id as string,
+            kind: m.kind as PaymentMethod["kind"],
+            label: m.label as string,
+            last4: (m.last4 as string | null) ?? "",
+            isDefault: m.is_default as boolean,
+        }));
+
+        let transactions: WalletTransaction[] = (txRes.data ?? []).map((t: Record<string, unknown>) => ({
+            id: t.id as string,
+            at: t.occurred_at as string,
+            description: t.description as string,
+            amount: Number(t.amount),
+            method: t.method as string,
+        }));
+
+        // First run for this account: write the opening credit as a real ledger
+        // entry so the balance has a visible origin.
+        if (transactions.length === 0) {
+            const { data: opening } = await supabase
+                .from("wallet_transactions")
+                .insert({
+                    user_id: user.id,
+                    description: OPENING_CREDIT_DESCRIPTION,
+                    amount: OPENING_CREDIT,
+                    method: "Quallor credits",
+                })
+                .select()
+                .single();
+
+            if (opening) {
+                const o = opening as Record<string, unknown>;
+                transactions = [
+                    {
+                        id: o.id as string,
+                        at: o.occurred_at as string,
+                        description: o.description as string,
+                        amount: Number(o.amount),
+                        method: o.method as string,
+                    },
+                ];
+            }
+        }
+
+        const routes: OperatorRoute[] = (routesRes.data ?? []).map((r: Record<string, unknown>) => ({
+            id: r.id as string,
+            from: r.from_location as string,
+            to: r.to_location as string,
+            fare: Number(r.fare),
+            active: r.active as boolean,
+        }));
+
+        const driverInvites: DriverInvite[] = (invitesRes.data ?? []).map((i: Record<string, unknown>) => ({
+            id: i.id as string,
+            name: i.name as string,
+            phone: i.phone as string,
+            sentAt: i.sent_at as string,
+            status: i.status as DriverInvite["status"],
+        }));
+
+        const o = opRes.data as Record<string, unknown> | null;
+        const operator: OperatorSettings = {
+            ...DEFAULT_OPERATOR,
+            ...(o
+                ? {
+                      tradingName: (o.trading_name as string) ?? "",
+                      registrationNumber: (o.registration_number as string) ?? "",
+                      vatNumber: (o.vat_number as string) ?? "",
+                      contactEmail: (o.contact_email as string) ?? "",
+                      contactPhone: (o.contact_phone as string) ?? "",
+                      operatingRegion: (o.operating_region as string) || DEFAULT_OPERATOR.operatingRegion,
+                      payout: {
+                          bankName: (o.payout_bank_name as string) ?? "",
+                          accountLast4: (o.payout_account_last4 as string | null) ?? "",
+                          accountHolder: (o.payout_account_holder as string) ?? "",
+                          schedule: (o.payout_schedule as OperatorSettings["payout"]["schedule"]) ?? "weekly",
+                      },
+                      policies: { ...DEFAULT_OPERATOR.policies, ...((o.policies as object) ?? {}) },
+                      notifications: { ...DEFAULT_OPERATOR.notifications, ...((o.notifications as object) ?? {}) },
+                  }
+                : {}),
+            routes,
+            driverInvites,
+        };
+
+        setState({
+            contacts,
+            safety,
+            preferences,
+            sosHistory,
+            wallet: { balance: balanceOf(transactions), methods, transactions },
+            operator,
+        });
+        setIsLoading(false);
+    }, [supabase, user]);
 
     useEffect(() => {
-        function load() {
-            let key = "guest";
-            try {
-                const raw = localStorage.getItem("quallor_current_user");
-                if (raw) key = JSON.parse(raw).id || "guest";
-            } catch {
-                key = "guest";
-            }
-            setUserKey(key);
-            const all = readAll();
-            const stored = all[key] ?? {};
-            // Merge one level deep so a record written before a field existed
-            // still picks up the new defaults instead of rendering undefined.
-            setState({
-                ...DEFAULT_STATE,
-                ...stored,
-                safety: { ...DEFAULT_SAFETY, ...(stored.safety ?? {}) },
-                preferences: { ...DEFAULT_PREFERENCES, ...(stored.preferences ?? {}) },
-                wallet: { ...DEFAULT_WALLET, ...(stored.wallet ?? {}) },
-                operator: { ...DEFAULT_OPERATOR, ...(stored.operator ?? {}) },
-            });
-        }
-        load();
-        window.addEventListener("storage", load);
-        return () => window.removeEventListener("storage", load);
-    }, []);
+        if (authLoading) return;
+        // Deferred: refresh() resets state synchronously on its signed-out path,
+        // and doing that inside the effect body cascades an extra render.
+        queueMicrotask(() => void refresh());
+    }, [authLoading, refresh]);
 
-    function persist(next: SettingsState) {
-        setState(next);
-        const all = readAll();
-        all[userKey] = next;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+    // ----------------------------------------------------------------------
+    // Trusted contacts
+    // ----------------------------------------------------------------------
+
+    async function addContact(c: Omit<TrustedContact, "id">) {
+        if (!user) return;
+        const { data } = await supabase
+            .from("trusted_contacts")
+            .insert({
+                user_id: user.id,
+                name: c.name,
+                phone: c.phone,
+                relationship: c.relationship,
+                can_see_location: c.canSeeLocation,
+            })
+            .select()
+            .single();
+        if (!data) return;
+        const row = data as Record<string, unknown>;
+        setState((prev) => ({
+            ...prev,
+            contacts: [...prev.contacts, { ...c, id: row.id as string }],
+        }));
     }
 
-    function addContact(c: Omit<TrustedContact, "id">) {
-        persist({
-            ...state,
-            contacts: [...state.contacts, { ...c, id: `TC-${Date.now()}` }],
-        });
+    async function updateContact(id: string, patch: Partial<TrustedContact>) {
+        const row: Record<string, unknown> = {};
+        if (patch.name !== undefined) row.name = patch.name;
+        if (patch.phone !== undefined) row.phone = patch.phone;
+        if (patch.relationship !== undefined) row.relationship = patch.relationship;
+        if (patch.canSeeLocation !== undefined) row.can_see_location = patch.canSeeLocation;
+
+        const { error } = await supabase.from("trusted_contacts").update(row).eq("id", id);
+        if (error) return;
+        setState((prev) => ({
+            ...prev,
+            contacts: prev.contacts.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+        }));
     }
 
-    function updateContact(id: string, patch: Partial<TrustedContact>) {
-        persist({
-            ...state,
-            contacts: state.contacts.map((c) => (c.id === id ? { ...c, ...patch } : c)),
-        });
+    async function removeContact(id: string) {
+        const { error } = await supabase.from("trusted_contacts").delete().eq("id", id);
+        if (error) return;
+        setState((prev) => ({ ...prev, contacts: prev.contacts.filter((c) => c.id !== id) }));
     }
 
-    function removeContact(id: string) {
-        persist({ ...state, contacts: state.contacts.filter((c) => c.id !== id) });
+    // ----------------------------------------------------------------------
+    // Safety and preferences: one row per user, created on first write.
+    // ----------------------------------------------------------------------
+
+    async function updateSafety(patch: Partial<SafetySettings>) {
+        if (!user) return;
+        const next = { ...state.safety, ...patch };
+        const { error } = await supabase.from("safety_settings").upsert(
+            {
+                user_id: user.id,
+                sos_enabled: next.sosEnabled,
+                sos_countdown: next.sosCountdown,
+                sos_calls_emergency_services: next.sosCallsEmergencyServices,
+                share_trip_automatically: next.shareTripAutomatically,
+                share_route_deviations: next.shareRouteDeviations,
+                biometric_enabled: next.biometricEnabled,
+                password_changed_at: next.passwordChangedAt,
+            },
+            { onConflict: "user_id" }
+        );
+        if (error) return;
+        setState((prev) => ({ ...prev, safety: next }));
     }
 
-    function updateSafety(patch: Partial<SafetySettings>) {
-        persist({ ...state, safety: { ...state.safety, ...patch } });
+    async function updatePreferences(patch: Partial<AppPreferences>) {
+        if (!user) return;
+        const next = { ...state.preferences, ...patch };
+        const { error } = await supabase.from("app_preferences").upsert(
+            {
+                user_id: user.id,
+                push_notifications: next.pushNotifications,
+                sms_notifications: next.smsNotifications,
+                trip_reminders: next.tripReminders,
+                language: next.language,
+                reduce_motion: next.reduceMotion,
+            },
+            { onConflict: "user_id" }
+        );
+        if (error) return;
+        setState((prev) => ({ ...prev, preferences: next }));
     }
 
-    function updatePreferences(patch: Partial<AppPreferences>) {
-        persist({ ...state, preferences: { ...state.preferences, ...patch } });
-    }
+    // ----------------------------------------------------------------------
+    // SOS
+    // ----------------------------------------------------------------------
 
-    function triggerSos(location: string): SosEvent {
+    async function triggerSos(location: string): Promise<SosEvent | null> {
+        if (!user) return null;
+        const notified = state.contacts.filter((c) => c.canSeeLocation).map((c) => c.name);
+
+        const { data } = await supabase
+            .from("sos_events")
+            .insert({ user_id: user.id, location, notified, resolved: false })
+            .select()
+            .single();
+        if (!data) return null;
+
+        const row = data as Record<string, unknown>;
         const event: SosEvent = {
-            id: `SOS-${Date.now()}`,
-            triggeredAt: new Date().toISOString(),
+            id: row.id as string,
+            triggeredAt: row.triggered_at as string,
             location,
-            notified: state.contacts.filter((c) => c.canSeeLocation).map((c) => c.name),
+            notified,
             resolved: false,
         };
-        persist({ ...state, sosHistory: [event, ...state.sosHistory].slice(0, 20) });
+        setState((prev) => ({ ...prev, sosHistory: [event, ...prev.sosHistory].slice(0, 20) }));
         return event;
     }
 
-    function resolveSos(id: string) {
-        persist({
-            ...state,
-            sosHistory: state.sosHistory.map((e) => (e.id === id ? { ...e, resolved: true } : e)),
+    async function resolveSos(id: string) {
+        const { error } = await supabase
+            .from("sos_events")
+            .update({ resolved: true, resolved_at: new Date().toISOString() })
+            .eq("id", id);
+        if (error) return;
+        setState((prev) => ({
+            ...prev,
+            sosHistory: prev.sosHistory.map((e) => (e.id === id ? { ...e, resolved: true } : e)),
+        }));
+    }
+
+    // ----------------------------------------------------------------------
+    // Wallet. The ledger is append-only, so a charge is a negative row rather
+    // than an edit of a running balance.
+    // ----------------------------------------------------------------------
+
+    async function pushTransaction(description: string, amount: number, method: string) {
+        if (!user) return;
+        const { data } = await supabase
+            .from("wallet_transactions")
+            .insert({ user_id: user.id, description, amount, method })
+            .select()
+            .single();
+        if (!data) return;
+
+        const row = data as Record<string, unknown>;
+        const tx: WalletTransaction = {
+            id: row.id as string,
+            at: row.occurred_at as string,
+            description,
+            amount: Number(row.amount),
+            method,
+        };
+        setState((prev) => {
+            const transactions = [tx, ...prev.wallet.transactions].slice(0, 50);
+            return { ...prev, wallet: { ...prev.wallet, transactions, balance: balanceOf(transactions) } };
         });
     }
 
-    function pushTransaction(w: Wallet, tx: Omit<WalletTransaction, "id" | "at">): Wallet {
-        return {
-            ...w,
-            transactions: [
-                { ...tx, id: `TX-${Date.now().toString(36).toUpperCase()}`, at: new Date().toISOString() },
-                ...w.transactions,
-            ].slice(0, 50),
-        };
-    }
-
-    function topUp(amount: number, method: string) {
-        const w = pushTransaction(state.wallet, { description: "Top up", amount, method });
-        persist({ ...state, wallet: { ...w, balance: Number((state.wallet.balance + amount).toFixed(2)) } });
+    async function topUp(amount: number, method: string) {
+        await pushTransaction("Top up", amount, method);
     }
 
     /** Returns false when there is not enough credit, leaving the balance untouched. */
-    function chargeWallet(amount: number, description: string): boolean {
+    async function chargeWallet(amount: number, description: string): Promise<boolean> {
         if (state.wallet.balance < amount) return false;
-        const w = pushTransaction(state.wallet, { description, amount: -amount, method: "Quallor credits" });
-        persist({ ...state, wallet: { ...w, balance: Number((state.wallet.balance - amount).toFixed(2)) } });
+        await pushTransaction(description, -amount, "Quallor credits");
         return true;
     }
 
-    function addPaymentMethod(m: Omit<PaymentMethod, "id">) {
-        const method: PaymentMethod = { ...m, id: `PM-${Date.now().toString(36).toUpperCase()}` };
-        const methods = m.isDefault
-            ? [...state.wallet.methods.map((x) => ({ ...x, isDefault: false })), method]
-            : [...state.wallet.methods, method];
-        persist({ ...state, wallet: { ...state.wallet, methods } });
+    async function addPaymentMethod(m: Omit<PaymentMethod, "id">) {
+        if (!user) return;
+        // Only one default is allowed by a partial unique index, so clear the
+        // old one before claiming the flag.
+        if (m.isDefault) {
+            await supabase.from("payment_methods").update({ is_default: false }).eq("user_id", user.id);
+        }
+
+        const { data } = await supabase
+            .from("payment_methods")
+            .insert({
+                user_id: user.id,
+                kind: m.kind,
+                label: m.label,
+                last4: m.last4 || null,
+                is_default: m.isDefault,
+            })
+            .select()
+            .single();
+        if (!data) return;
+
+        const row = data as Record<string, unknown>;
+        setState((prev) => ({
+            ...prev,
+            wallet: {
+                ...prev.wallet,
+                methods: [
+                    ...(m.isDefault ? prev.wallet.methods.map((x) => ({ ...x, isDefault: false })) : prev.wallet.methods),
+                    { ...m, id: row.id as string },
+                ],
+            },
+        }));
     }
 
-    function removePaymentMethod(id: string) {
-        persist({ ...state, wallet: { ...state.wallet, methods: state.wallet.methods.filter((m) => m.id !== id) } });
+    async function removePaymentMethod(id: string) {
+        const { error } = await supabase.from("payment_methods").delete().eq("id", id);
+        if (error) return;
+        setState((prev) => ({
+            ...prev,
+            wallet: { ...prev.wallet, methods: prev.wallet.methods.filter((m) => m.id !== id) },
+        }));
     }
 
-    function setDefaultPaymentMethod(id: string) {
-        persist({
-            ...state,
-            wallet: { ...state.wallet, methods: state.wallet.methods.map((m) => ({ ...m, isDefault: m.id === id })) },
-        });
+    async function setDefaultPaymentMethod(id: string) {
+        if (!user) return;
+        await supabase.from("payment_methods").update({ is_default: false }).eq("user_id", user.id);
+        const { error } = await supabase.from("payment_methods").update({ is_default: true }).eq("id", id);
+        if (error) return;
+        setState((prev) => ({
+            ...prev,
+            wallet: {
+                ...prev.wallet,
+                methods: prev.wallet.methods.map((m) => ({ ...m, isDefault: m.id === id })),
+            },
+        }));
     }
 
-    function updateOperator(patch: Partial<OperatorSettings>) {
-        persist({ ...state, operator: { ...state.operator, ...patch } });
+    // ----------------------------------------------------------------------
+    // Operator settings
+    // ----------------------------------------------------------------------
+
+    async function updateOperator(patch: Partial<OperatorSettings>) {
+        if (!user) return;
+        const next = { ...state.operator, ...patch };
+
+        // routes and driverInvites are their own tables; they are kept in the
+        // same object for the UI but written through addRoute / inviteDriver.
+        const { error } = await supabase.from("operator_settings").upsert(
+            {
+                operator_id: user.id,
+                trading_name: next.tradingName,
+                registration_number: next.registrationNumber,
+                vat_number: next.vatNumber,
+                contact_email: next.contactEmail,
+                contact_phone: next.contactPhone,
+                operating_region: next.operatingRegion,
+                payout_bank_name: next.payout.bankName,
+                payout_account_last4: next.payout.accountLast4 || null,
+                payout_account_holder: next.payout.accountHolder,
+                payout_schedule: next.payout.schedule,
+                policies: next.policies,
+                notifications: next.notifications,
+            },
+            { onConflict: "operator_id" }
+        );
+        if (error) return;
+        setState((prev) => ({ ...prev, operator: next }));
     }
 
-    function addRoute(r: Omit<OperatorRoute, "id">) {
-        const route: OperatorRoute = { ...r, id: `RT-${Date.now().toString(36).toUpperCase()}` };
-        updateOperator({ routes: [...state.operator.routes, route] });
+    async function addRoute(r: Omit<OperatorRoute, "id">) {
+        if (!user) return;
+        const { data } = await supabase
+            .from("operator_routes")
+            .insert({
+                operator_id: user.id,
+                from_location: r.from,
+                to_location: r.to,
+                fare: r.fare,
+                active: r.active,
+            })
+            .select()
+            .single();
+        if (!data) return;
+
+        const row = data as Record<string, unknown>;
+        setState((prev) => ({
+            ...prev,
+            operator: { ...prev.operator, routes: [...prev.operator.routes, { ...r, id: row.id as string }] },
+        }));
     }
 
-    function updateRoute(id: string, patch: Partial<OperatorRoute>) {
-        updateOperator({ routes: state.operator.routes.map((r) => (r.id === id ? { ...r, ...patch } : r)) });
+    async function updateRoute(id: string, patch: Partial<OperatorRoute>) {
+        const row: Record<string, unknown> = {};
+        if (patch.from !== undefined) row.from_location = patch.from;
+        if (patch.to !== undefined) row.to_location = patch.to;
+        if (patch.fare !== undefined) row.fare = patch.fare;
+        if (patch.active !== undefined) row.active = patch.active;
+
+        const { error } = await supabase.from("operator_routes").update(row).eq("id", id);
+        if (error) return;
+        setState((prev) => ({
+            ...prev,
+            operator: {
+                ...prev.operator,
+                routes: prev.operator.routes.map((r) => (r.id === id ? { ...r, ...patch } : r)),
+            },
+        }));
     }
 
-    function removeRoute(id: string) {
-        updateOperator({ routes: state.operator.routes.filter((r) => r.id !== id) });
+    async function removeRoute(id: string) {
+        const { error } = await supabase.from("operator_routes").delete().eq("id", id);
+        if (error) return;
+        setState((prev) => ({
+            ...prev,
+            operator: { ...prev.operator, routes: prev.operator.routes.filter((r) => r.id !== id) },
+        }));
     }
 
-    function inviteDriver(name: string, phone: string): DriverInvite {
+    async function inviteDriver(name: string, phone: string): Promise<DriverInvite | null> {
+        if (!user) return null;
+        const { data } = await supabase
+            .from("driver_invites")
+            .insert({ operator_id: user.id, name, phone, status: "invited" })
+            .select()
+            .single();
+        if (!data) return null;
+
+        const row = data as Record<string, unknown>;
         const invite: DriverInvite = {
-            id: `INV-${Date.now().toString(36).toUpperCase()}`,
+            id: row.id as string,
             name,
             phone,
-            sentAt: new Date().toISOString(),
+            sentAt: row.sent_at as string,
             status: "invited",
         };
-        updateOperator({ driverInvites: [invite, ...state.operator.driverInvites] });
+        setState((prev) => ({
+            ...prev,
+            operator: { ...prev.operator, driverInvites: [invite, ...prev.operator.driverInvites] },
+        }));
         return invite;
     }
 
@@ -416,6 +763,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
                 removeRoute,
                 inviteDriver,
                 checkupScore,
+                refresh,
+                isLoading,
             }}
         >
             {children}

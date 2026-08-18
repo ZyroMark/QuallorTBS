@@ -7,7 +7,7 @@ import { useToast } from "@/components/Toast";
 import RouteArt from "@/components/RouteArt";
 import ShareButton from "@/components/ShareButton";
 import { absoluteUrl, bookingShareText } from "@/lib/share";
-import { onwardFrom, searchPlaces } from "@/lib/places";
+import { onwardFrom, searchPlaces, provinceOf } from "@/lib/places";
 
 export default function BookingConfirmationPage() {
     const router = useRouter();
@@ -34,11 +34,15 @@ export default function BookingConfirmationPage() {
     const onwardOptions = useMemo(() => {
         const pool = onwardFrom(finalStop);
         const visited = new Set(legs.flatMap((l) => [l.from, l.to]));
-        const matches = legQuery ? searchPlaces(legQuery) : pool;
+        // Search the province you are actually standing in, which is where this
+        // taxi has dropped you, not the one your account is registered in.
+        const matches = legQuery
+            ? searchPlaces(legQuery, undefined, provinceOf(finalStop))
+            : pool;
         return matches.filter((p) => pool.some((o) => o.name === p.name) && !visited.has(p.name)).slice(0, 8);
     }, [finalStop, legs, legQuery]);
 
-    function startConnectingLeg(destination: string, destinationKind: "commute" | "hiking") {
+    async function startConnectingLeg(destination: string, destinationKind: "commute" | "hiking") {
         if (!currentBooking) return;
 
         // Stamp the first leg with a journey id if it does not have one yet,
@@ -46,7 +50,11 @@ export default function BookingConfirmationPage() {
         let journeyId = currentBooking.journeyId;
         if (!journeyId) {
             journeyId = generateJourneyId();
-            addBooking({ ...currentBooking, journeyId, legIndex: 0, legCount: 2 });
+            const stamped = await addBooking({ ...currentBooking, journeyId, legIndex: 0, legCount: 2 });
+            if (!stamped.success) {
+                toast(stamped.error || "Could not start the connecting leg.", "error");
+                return;
+            }
         }
 
         setSelectedRoute({

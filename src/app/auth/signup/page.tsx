@@ -4,6 +4,8 @@ import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import { ProvinceOptions } from "@/components/ProvincePicker";
+import { DEFAULT_PROVINCE, type ProvinceId } from "@/lib/places";
 
 type Role = "passenger" | "driver" | "operator" | "fleet";
 
@@ -20,7 +22,7 @@ const ROLE_DETAILS: Record<Role, { icon: string; label: string; tagline: string;
         icon: "person",
         label: "Passenger",
         tagline: "Book rides, track taxis, travel smart.",
-        description: "Access all Eastern Cape routes, get QR tickets, and track your taxi in real time.",
+        description: "Access every route on your metro network, get QR tickets, and track your taxi in real time.",
     },
     driver: {
         icon: "directions_car",
@@ -49,6 +51,7 @@ function SignupForm() {
 
     const requestedRole = (searchParams.get("role") as Role) || "passenger";
     const [role, setRole] = useState<Role>(requestedRole);
+    const [homeProvince, setHomeProvince] = useState<ProvinceId>(DEFAULT_PROVINCE);
 
     // Back-office tabs only appear when asked for by URL.
     const visibleRoles: Role[] =
@@ -70,6 +73,8 @@ function SignupForm() {
     const [staffNumber, setStaffNumber] = useState("");
     const [agreed, setAgreed] = useState(false);
     const [error, setError] = useState("");
+    /** Account created, but it needs an emailed confirmation before first sign in. */
+    const [notice, setNotice] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -84,12 +89,13 @@ function SignupForm() {
             return;
         }
         setLoading(true);
-        const result = signup({
+        const result = await signup({
             name,
             email,
             phone,
             password,
             role,
+            homeProvince,
             ...(role === "driver" ? { licenseNumber, vehicleModel, vehiclePlate } : {}),
             ...(role === "operator" ? { companyName, fleetSize: parseInt(fleetSize) || 0 } : {}),
             ...(role === "fleet" ? { staffNumber } : {}),
@@ -97,6 +103,12 @@ function SignupForm() {
         setLoading(false);
         if (!result.success) {
             setError(result.error || "Registration failed.");
+            return;
+        }
+        // Email confirmation is on for this project, so the account exists but
+        // has no session yet. Routing into the app would only bounce to login.
+        if (result.notice) {
+            setNotice(result.notice);
             return;
         }
         if (role === "driver") router.push("/driver/dashboard");
@@ -129,7 +141,7 @@ function SignupForm() {
                         className="font-sans font-black text-3xl mb-4 leading-none"
                         style={{ color: "#111111", letterSpacing: "-0.03em" }}
                     >
-                        Join the Eastern Cape&apos;s<br />digital taxi network.
+                        Join South Africa&apos;s<br />digital taxi network.
                     </h2>
                     <p className="font-sans text-base mb-10" style={{ color: "rgba(17,17,17,0.60)", lineHeight: 1.65 }}>
                         Whether you&apos;re a passenger, a driver, or an operator, Quallor connects you to every route in the region.
@@ -220,6 +232,18 @@ function SignupForm() {
                         </div>
                     )}
 
+                    {notice && (
+                        <div
+                            className="mb-5 px-4 py-3 rounded-[12px] font-sans text-sm font-semibold"
+                            style={{ backgroundColor: "rgba(29,54,134,0.07)", border: "1.5px solid rgba(29,54,134,0.20)", color: "#1D3686" }}
+                        >
+                            {notice}{" "}
+                            <Link href="/auth/login" className="underline">
+                                Go to sign in
+                            </Link>
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label className="q-label">Full Name</label>
@@ -232,6 +256,13 @@ function SignupForm() {
                         <div>
                             <label className="q-label">Phone Number</label>
                             <input type="tel" className="q-input-lg" placeholder="+27 xx xxx xxxx" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                        </div>
+
+                        {/* The three metros run separate networks, so this decides
+                            which routes and ranks the account sees from here on. */}
+                        <div>
+                            <label className="q-label">Where do you travel?</label>
+                            <ProvinceOptions selected={homeProvince} onSelect={setHomeProvince} />
                         </div>
 
                         {/* Driver-specific fields */}

@@ -58,13 +58,13 @@ function PersonalInfoContent() {
         return Object.keys(next).length === 0;
     }
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setBanner("");
         if (!validate()) return;
 
         setSaving(true);
-        const result = updateUser({
+        const result = await updateUser({
             name: name.trim(),
             email: email.trim(),
             phone: phone.trim(),

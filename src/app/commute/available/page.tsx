@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useBooking } from "@/app/context/BookingContext";
 import { useFleet } from "@/app/context/FleetContext";
 import { VehicleTile } from "@/components/RouteArt";
-import { PLACE_BY_NAME } from "@/lib/places";
+import { PLACE_BY_NAME, popularRoutesFor } from "@/lib/places";
+import { useProvince } from "@/lib/useProvince";
 
 interface Taxi {
     id: string;
@@ -40,8 +41,9 @@ export default function AvailableTaxisPage() {
     const [sort, setSort] = useState<SortKey>("soonest");
     const [hideFull, setHideFull] = useState(false);
 
-    const from = selectedRoute?.from || "Beacon Bay";
-    const to = selectedRoute?.to || "Amalinda";
+    const { province } = useProvince();
+    const from = selectedRoute?.from || province.commuteOrigin;
+    const to = selectedRoute?.to || popularRoutesFor(province.id)[0].to;
     const isConnecting = Boolean(selectedRoute?.journeyId);
 
     // Only vehicles the fleet office has cleared can be booked. A suspended or

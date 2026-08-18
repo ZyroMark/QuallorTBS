@@ -4,7 +4,8 @@ import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useBooking } from "@/app/context/BookingContext";
 import { VehicleTile } from "@/components/RouteArt";
-import { PLACE_BY_NAME } from "@/lib/places";
+import { PLACE_BY_NAME, featuredHikeFor } from "@/lib/places";
+import { useProvince } from "@/lib/useProvince";
 
 interface HikeTaxi {
     id: string;
@@ -35,8 +36,9 @@ export default function AvailableHikingTaxisPage() {
     const [query, setQuery] = useState("");
     const [sort, setSort] = useState<SortKey>("soonest");
 
-    const from = selectedRoute?.from || "East London";
-    const to = selectedRoute?.to || "Port Elizabeth";
+    const { province } = useProvince();
+    const from = selectedRoute?.from || province.hikingOrigin;
+    const to = selectedRoute?.to || featuredHikeFor(province.id).to;
     const isConnecting = Boolean(selectedRoute?.journeyId);
 
     // Base fare comes from the destination, so the price matches the route picked.

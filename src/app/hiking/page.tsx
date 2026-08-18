@@ -6,8 +6,8 @@ import { useBooking } from "@/app/context/BookingContext";
 import AppLayout from "@/components/layout/AppLayout";
 import RouteArt from "@/components/RouteArt";
 import { placesFor, searchPlaces } from "@/lib/places";
-
-const ORIGIN = "East London";
+import { useProvince } from "@/lib/useProvince";
+import ProvincePicker from "@/components/ProvincePicker";
 
 export default function HikingPage() {
     const router = useRouter();
@@ -15,14 +15,22 @@ export default function HikingPage() {
     const [query, setQuery] = useState("");
     const [showAll, setShowAll] = useState(false);
 
-    const all = useMemo(() => placesFor("hiking").filter((p) => p.name !== ORIGIN), []);
+    // Long distance departs from the passenger's own metro, and unlike commute
+    // it also reaches the other provinces' hubs.
+    const { province, provinceId } = useProvince();
+    const ORIGIN = province.hikingOrigin;
+
+    const all = useMemo(
+        () => placesFor("hiking", provinceId).filter((p) => p.name !== ORIGIN),
+        [provinceId, ORIGIN]
+    );
 
     const results = useMemo(() => {
         const matches = query.trim()
-            ? searchPlaces(query, "hiking").filter((p) => p.name !== ORIGIN)
+            ? searchPlaces(query, "hiking", provinceId).filter((p) => p.name !== ORIGIN)
             : all;
         return query.trim() || showAll ? matches : matches.slice(0, 5);
-    }, [query, all, showAll]);
+    }, [query, all, showAll, provinceId, ORIGIN]);
 
     function go(destination: string) {
         setSelectedRoute({ from: ORIGIN, to: destination, tripType: "hiking" });
@@ -36,7 +44,10 @@ export default function HikingPage() {
                     <h1 className="font-sans font-black text-3xl mb-1" style={{ color: "#111111", letterSpacing: "-0.03em" }}>
                         Hiking
                     </h1>
-                    <p className="q-body">Long-distance inter-city travel across the Eastern Cape.</p>
+                    <p className="q-body mb-3">
+                        Long-distance inter-city travel from {province.metro}.
+                    </p>
+                    <ProvincePicker />
                 </div>
 
                 {/* Search */}

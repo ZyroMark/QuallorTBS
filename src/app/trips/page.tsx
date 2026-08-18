@@ -69,11 +69,13 @@ function TripsContent() {
         };
     }, [myBookings]);
 
-    function handleCancel(b: BookingDetails) {
+    async function handleCancel(b: BookingDetails) {
         const departsAt = new Date(b.date).getTime();
         const refundable = departsAt - Date.now() > CANCEL_WINDOW_MS;
 
-        cancelBooking(b.bookingId);
+        // Await it: refunding before the cancellation lands would credit the
+        // fare back for a trip that is still booked.
+        await cancelBooking(b.bookingId);
         if (refundable) {
             topUp(b.fare, "Refund");
             toast(`Trip cancelled. R ${b.fare.toFixed(2)} returned to your credits.`, "success");

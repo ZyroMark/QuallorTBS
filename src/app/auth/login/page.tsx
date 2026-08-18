@@ -18,18 +18,21 @@ export default function LoginPage() {
         e.preventDefault();
         setError("");
         setLoading(true);
-        const result = login(email, password);
+        const result = await login(email, password);
         setLoading(false);
         if (!result.success) {
             setError(result.error || "Login failed.");
             return;
         }
-        const stored = localStorage.getItem("quallor_current_user");
-        const user = stored ? JSON.parse(stored) : null;
-        if (user?.role === "driver") {
+        // The role comes back with the result: the context's `user` may not have
+        // re-rendered yet, and there is no localStorage copy to read any more.
+        const role = result.user?.role;
+        if (role === "driver") {
             router.push("/driver/dashboard");
-        } else if (user?.role === "operator") {
+        } else if (role === "operator") {
             router.push("/operator/dashboard");
+        } else if (role === "fleet") {
+            router.push("/fleet");
         } else {
             router.push("/dashboard");
         }
@@ -71,7 +74,7 @@ export default function LoginPage() {
                         className="font-sans font-bold text-xs uppercase tracking-widest mb-6"
                         style={{ color: "rgba(17,17,17,0.55)" }}
                     >
-                        Eastern Cape Network
+                        Eastern Cape · Western Cape · Gauteng
                     </p>
 
                     <h2
@@ -82,7 +85,7 @@ export default function LoginPage() {
                             letterSpacing: "-0.03em",
                         }}
                     >
-                        The smarter<br />way to travel<br />the Eastern<br />Cape.
+                        The smarter<br />way to travel<br />your city.
                     </h2>
 
                     <p

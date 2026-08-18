@@ -15,7 +15,7 @@ const FAQS = [
     },
     {
         q: "My route says it leaves when full. When does it actually go?",
-        a: "Many Eastern Cape routes fill before they depart. The time shown on a leaves-when-full route is an estimate based on how quickly that taxi has filled recently. You will get a notification when boarding starts.",
+        a: "Many routes fill before they depart. The time shown on a leaves-when-full route is an estimate based on how quickly that taxi has filled recently. You will get a notification when boarding starts.",
     },
     {
         q: "Can I book two taxis for one journey?",

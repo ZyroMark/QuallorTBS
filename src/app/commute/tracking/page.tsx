@@ -118,15 +118,19 @@ export default function TrackingPage() {
                             <span className="font-sans text-[10px] font-bold uppercase">Contact</span>
                         </a>
                         <button
-                            onClick={() => {
+                            onClick={async () => {
                                 if (!sosArmed) {
                                     setSosArmed(true);
                                     toast("Tap SOS again to confirm the alert", "info");
                                     setTimeout(() => setSosArmed(false), 5000);
                                     return;
                                 }
-                                const event = triggerSos(`${from} to ${to}`);
+                                const event = await triggerSos(`${from} to ${to}`);
                                 setSosArmed(false);
+                                if (!event) {
+                                    toast("The SOS could not be recorded. Try again.", "error");
+                                    return;
+                                }
                                 toast(
                                     event.notified.length
                                         ? `SOS sent to ${event.notified.join(", ")}`

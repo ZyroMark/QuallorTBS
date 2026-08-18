@@ -6,23 +6,28 @@ import { useBooking } from "@/app/context/BookingContext";
 import AppLayout from "@/components/layout/AppLayout";
 import RouteArt from "@/components/RouteArt";
 import { placesFor, searchPlaces, type Place } from "@/lib/places";
-
-const ORIGIN = "Beacon Bay";
+import { useProvince } from "@/lib/useProvince";
+import ProvincePicker from "@/components/ProvincePicker";
 
 export default function CommutePage() {
     const router = useRouter();
     const { setSelectedRoute, myBookings } = useBooking();
     const [query, setQuery] = useState("");
 
+    // Where this passenger travels decides both the origin rank and the whole
+    // destination list: the three metros share no routes.
+    const { province, provinceId } = useProvince();
+    const ORIGIN = province.commuteOrigin;
+
     const allDestinations = useMemo(
-        () => placesFor("commute").filter((p) => p.name !== ORIGIN),
-        []
+        () => placesFor("commute", provinceId).filter((p) => p.name !== ORIGIN),
+        [provinceId, ORIGIN]
     );
 
     const results = useMemo(() => {
         if (!query.trim()) return allDestinations;
-        return searchPlaces(query, "commute").filter((p) => p.name !== ORIGIN);
-    }, [query, allDestinations]);
+        return searchPlaces(query, "commute", provinceId).filter((p) => p.name !== ORIGIN);
+    }, [query, allDestinations, provinceId, ORIGIN]);
 
     // Places this passenger has actually travelled to, newest first.
     const recent = useMemo(() => {
@@ -50,7 +55,10 @@ export default function CommutePage() {
                 {/* ── Hero band ── */}
                 <div className="relative overflow-hidden" style={{ backgroundColor: "#EEF1EA", paddingTop: "3rem", paddingBottom: "3rem" }}>
                     <div className="q-container max-w-2xl">
-                        <p className="q-eyebrow mb-3">Eastern Cape Network</p>
+                        <div className="flex flex-wrap items-center gap-3 mb-3">
+                            <p className="q-eyebrow">{province.name} Network</p>
+                            <ProvincePicker />
+                        </div>
                         <h1
                             className="font-sans font-black mb-2"
                             style={{ fontSize: "clamp(2rem, 5vw, 3rem)", color: "#111111", letterSpacing: "-0.03em", lineHeight: 1.05 }}
@@ -58,7 +66,7 @@ export default function CommutePage() {
                             Daily Commute
                         </h1>
                         <p className="font-sans text-base" style={{ color: "#5C5A56" }}>
-                            Choose your destination on the Eastern Cape network.
+                            Choose your destination on the {province.metro} network.
                         </p>
                     </div>
                 </div>
@@ -72,7 +80,7 @@ export default function CommutePage() {
                         </span>
                         <input
                             className="q-input-lg pl-12 pr-12 w-full"
-                            placeholder="Search destination in Eastern Cape"
+                            placeholder={`Search destination in ${province.metro}`}
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             aria-label="Search destinations"

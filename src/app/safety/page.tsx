@@ -24,14 +24,20 @@ export default function SafetyPage() {
         if (countdown === null) return;
         if (countdown <= 0) {
             const where = currentBooking ? `${currentBooking.from} to ${currentBooking.to}` : "Location unavailable";
-            const event = triggerSos(where);
             setCountdown(null);
-            toast(
-                event.notified.length
-                    ? `SOS sent to ${event.notified.length} trusted contact${event.notified.length === 1 ? "" : "s"}`
-                    : "SOS recorded. Add a trusted contact so someone is alerted next time.",
-                event.notified.length ? "success" : "error"
-            );
+            void (async () => {
+                const event = await triggerSos(where);
+                if (!event) {
+                    toast("The SOS could not be recorded. Try again.", "error");
+                    return;
+                }
+                toast(
+                    event.notified.length
+                        ? `SOS sent to ${event.notified.length} trusted contact${event.notified.length === 1 ? "" : "s"}`
+                        : "SOS recorded. Add a trusted contact so someone is alerted next time.",
+                    event.notified.length ? "success" : "error"
+                );
+            })();
             return;
         }
         const t = setTimeout(() => setCountdown((c) => (c === null ? null : c - 1)), 1000);

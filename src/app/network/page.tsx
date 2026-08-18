@@ -5,17 +5,20 @@ import { Reveal, WordReveal } from "@/components/motion";
 import { SiteNav, SiteFooter, CtaBand, Photo, SceneBanner } from "@/components/marketing";
 
 const ROUTES = [
-    "East London", "Mdantsane", "Beacon Bay", "Amalinda", "King William's Town",
-    "Gqeberha", "Mthatha", "Butterworth", "Komani", "Zwelitsha",
+    "East London", "Mdantsane", "Beacon Bay", "King William's Town", "Mthatha",
+    "Cape Town", "Khayelitsha", "Gugulethu", "Bellville", "Atlantis",
+    "Johannesburg", "Soweto", "Alexandra", "Tembisa", "Randburg",
 ];
 
 const CORRIDORS = [
     { from: "East London", to: "Mdantsane", kind: "Daily commute" },
     { from: "Beacon Bay", to: "Amalinda", kind: "Daily commute" },
-    { from: "East London", to: "King William's Town", kind: "Daily commute" },
+    { from: "Cape Town CBD", to: "Khayelitsha", kind: "Daily commute" },
+    { from: "Bellville", to: "Kraaifontein", kind: "Daily commute" },
+    { from: "Johannesburg CBD", to: "Soweto", kind: "Daily commute" },
+    { from: "MTN Noord Rank", to: "Alexandra", kind: "Daily commute" },
     { from: "East London", to: "Mthatha", kind: "Long distance" },
-    { from: "East London", to: "Gqeberha", kind: "Long distance" },
-    { from: "Komani", to: "Butterworth", kind: "Long distance" },
+    { from: "Cape Town", to: "Johannesburg", kind: "Long distance" },
 ];
 
 export default function NetworkPage() {
@@ -49,7 +52,7 @@ export default function NetworkPage() {
                     <Reveal variant="media">
                         <Photo
                             src="/images/quantum4.jpg"
-                            label="Taxis across the Eastern Cape network"
+                            label="Taxis across the Quallor network"
                             className="w-full h-[50vh] min-h-[320px]"
                             fallback="#CDDFF6"
                         />
