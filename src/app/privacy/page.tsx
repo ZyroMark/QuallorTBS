@@ -100,6 +100,22 @@ const SECTIONS: LegalSection[] = [
         ],
     },
     {
+        heading: "Confidential access records",
+        blocks: [
+            "This product is confidential and is shown by invitation only. Before any screen is displayed, every visitor must read and accept the confidentiality and access notice. That acceptance is recorded, and the record is held by Zyromark (Pty) Ltd as the responsible party.",
+            "The following is recorded for each visitor:",
+            [
+                "The name, organisation and email address entered on the access notice.",
+                "The date and time of acceptance, and the version of the notice accepted.",
+                "A session reference, together with device type, operating system, browser, screen size, language and time zone.",
+                "The pages opened during the visit, and the time each was opened.",
+                "Any attempt to copy, print, screenshot, record or otherwise capture the material.",
+            ],
+            "These records exist so that access to unreleased material can be controlled, so that the undertaking given by each visitor can be proved, and so that an unauthorised disclosure can be traced to its source. We rely on consent for the details entered on the notice, and on our legitimate interest in protecting confidential material for the session and capture records. They are kept for as long as the material remains confidential and for three years after that, and they are never sold or used for marketing.",
+            "Every screen also carries a visible ownership watermark bearing the session reference, so that any image of this material, including a photograph taken with a separate camera, remains identifiable.",
+        ],
+    },
+    {
         heading: "Your rights",
         blocks: [
             "You have the right to:",
