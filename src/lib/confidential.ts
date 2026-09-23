@@ -1,9 +1,16 @@
 /**
  * Confidentiality, access control and POPIA record keeping for Zyromark (Pty) Ltd.
  *
- * Everything in this module is client side. It records who acknowledged the
- * confidentiality undertaking, when, and what they viewed afterwards, so that a
- * disclosure can be traced back to the person who was granted access.
+ * It records who acknowledged the confidentiality undertaking, when, and what
+ * they viewed afterwards, so that a disclosure can be traced back to the person
+ * who was granted access.
+ *
+ * Every record is written twice: to `localStorage`, which is what the gate
+ * itself reads on the next visit, and to Supabase, which is the register that
+ * actually survives the viewer clearing their browser. The local write is
+ * synchronous and always happens first, so a Supabase outage can never lock a
+ * legitimate viewer out of the site; the remote write is awaited where a caller
+ * cares and fired and forgotten where it does not.
  */
 
 export const OWNER = "ZYROMARK PTY LTD";
@@ -11,7 +18,7 @@ export const OWNER_LEGAL = "Zyromark (Pty) Ltd";
 export const WATERMARK_TEXT = `PROPERTY OF ${OWNER}`;
 
 /** Bump this when the wording of the undertaking changes, to force re-acceptance. */
-export const AGREEMENT_VERSION = "1.0";
+export const AGREEMENT_VERSION = "1.1";
 
 const KEY_ACK = "zyromark_confidentiality_ack";
 const KEY_ACK_LOG = "zyromark_confidentiality_ack_log";
@@ -47,6 +54,39 @@ export function getSessionRef(): string {
     return ref;
 }
 
+/**
+ * Writes to the Supabase register. Never throws: the confidentiality gate is a
+ * shutter over the whole application, so a failure here must degrade to a local
+ * only record rather than deny access to someone who has just accepted the
+ * undertaking. Failures are reported to the console so they are visible in
+ * development instead of vanishing.
+ */
+async function persist(
+    table: "confidentiality_acknowledgements" | "access_log",
+    row: Record<string, unknown>
+): Promise<void> {
+    if (typeof window === "undefined") return;
+
+    try {
+        const { createClient, isSupabaseConfigured } = await import("@/lib/supabase/client");
+        if (!isSupabaseConfigured()) return;
+
+        const supabase = createClient();
+
+        // The gate runs ahead of the sign-in screen, so most rows are filed
+        // anonymously. When the viewer does already hold a session, stamp their
+        // profile onto the row so the register ties back to an account.
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+
+        const { error } = await supabase.from(table).insert({ ...row, user_id: user?.id ?? null });
+        if (error) console.error(`[confidential] could not record to ${table}:`, error.message);
+    } catch (err) {
+        console.error(`[confidential] could not record to ${table}:`, err);
+    }
+}
+
 export function readAcknowledgement(): Acknowledgement | null {
     if (typeof window === "undefined") return null;
     try {
@@ -60,11 +100,11 @@ export function readAcknowledgement(): Acknowledgement | null {
     }
 }
 
-export function saveAcknowledgement(input: {
+export async function saveAcknowledgement(input: {
     fullName: string;
     organisation: string;
     email: string;
-}): Acknowledgement {
+}): Promise<Acknowledgement> {
     const record: Acknowledgement = {
         version: AGREEMENT_VERSION,
         fullName: input.fullName.trim(),
@@ -93,6 +133,22 @@ export function saveAcknowledgement(input: {
         localStorage.setItem(KEY_ACK_LOG, JSON.stringify([record]));
     }
 
+    await persist("confidentiality_acknowledgements", {
+        version: record.version,
+        full_name: record.fullName,
+        organisation: record.organisation,
+        email: record.email,
+        accepted_confidentiality: record.acceptedConfidentiality,
+        accepted_popia: record.acceptedPopia,
+        accepted_at: record.acceptedAt,
+        session_ref: record.sessionRef,
+        user_agent: record.userAgent,
+        platform: record.platform,
+        language: record.language,
+        time_zone: record.timeZone,
+        screen: record.screen,
+    });
+
     return record;
 }
 
@@ -103,16 +159,28 @@ export interface AccessEvent {
     detail: string;
 }
 
-/** Records page views and attempted captures against the current session. */
+/**
+ * Records page views and attempted captures against the current session.
+ *
+ * Deliberately not awaited by its callers: these fire on every navigation and
+ * on every capture attempt, and the viewer must never wait on the network to
+ * turn a page.
+ */
 export function logAccess(event: string, detail = ""): void {
     if (typeof window === "undefined") return;
+
+    const at = new Date().toISOString();
+    const sessionRef = getSessionRef();
+
     try {
         const log: AccessEvent[] = JSON.parse(localStorage.getItem(KEY_ACCESS_LOG) ?? "[]");
-        log.push({ at: new Date().toISOString(), sessionRef: getSessionRef(), event, detail });
+        log.push({ at, sessionRef, event, detail });
         localStorage.setItem(KEY_ACCESS_LOG, JSON.stringify(log.slice(-500)));
     } catch {
         /* storage full or unavailable; access control must not break the app */
     }
+
+    void persist("access_log", { session_ref: sessionRef, event, detail, occurred_at: at });
 }
 
 export function readAccessLog(): AccessEvent[] {

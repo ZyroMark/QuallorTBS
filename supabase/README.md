@@ -25,8 +25,15 @@ Run these once, in order, in **SQL Editor → New query**:
    new `auth.users` row.
 2. `migrations/0002_rls_policies.sql` — enables RLS on all fourteen tables and
    defines every policy.
+3. `migrations/0003_seed_fleet.sql` — seed data for the fleet role.
+4. `migrations/0004_home_province.sql` — adds the home province column.
+5. `migrations/0005_confidentiality_anon_insert.sql` — lets a signed-out
+   visitor file their confidentiality acknowledgement and access trail. Without
+   it the gate accepts the undertaking but writes nothing, because 0002 granted
+   insert on those two tables to `authenticated` only and the gate runs ahead
+   of sign-in.
 
-Both files are re-runnable: types are guarded with `duplicate_object` handlers,
+All of these are re-runnable: types are guarded with `duplicate_object` handlers,
 tables use `create table if not exists`, and each policy is dropped before it is
 created. Applying them twice is a no-op.
 

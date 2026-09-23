@@ -90,6 +90,7 @@ export default function ConfidentialGate({ onAccepted }: { onAccepted: () => voi
     const [agreePopia, setAgreePopia] = useState(false);
     const [error, setError] = useState("");
     const [sessionRef, setSessionRef] = useState("");
+    const [saving, setSaving] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -115,7 +116,7 @@ export default function ConfidentialGate({ onAccepted }: { onAccepted: () => voi
         };
     }, [visible]);
 
-    function handleAccept() {
+    async function handleAccept() {
         if (!fullName.trim()) {
             setError("Enter your full name so the acknowledgement can be attributed to you.");
             return;
@@ -134,8 +135,16 @@ export default function ConfidentialGate({ onAccepted }: { onAccepted: () => voi
         }
 
         setError("");
-        saveAcknowledgement({ fullName, organisation, email });
+        setSaving(true);
+
+        // Awaited so the acknowledgement is in the register before the viewer
+        // is shown anything. saveAcknowledgement writes locally first and
+        // swallows any Supabase failure, so this cannot strand a viewer at the
+        // gate; it only ever delays them by the length of one insert.
+        await saveAcknowledgement({ fullName, organisation, email });
         logAccess("gate_accepted", `${email.trim()} (${organisation.trim() || "no organisation"})`);
+
+        setSaving(false);
         setVisible(false);
         onAccepted();
     }
@@ -286,10 +295,10 @@ export default function ConfidentialGate({ onAccepted }: { onAccepted: () => voi
                     {error ? <p className="q-gate-error">{error}</p> : null}
 
                     <div className="q-gate-actions">
-                        <button className="q-btn-primary" onClick={handleAccept}>
-                            Accept and continue
+                        <button className="q-btn-primary" onClick={handleAccept} disabled={saving}>
+                            {saving ? "Recording…" : "Accept and continue"}
                         </button>
-                        <button className="q-btn-outline" onClick={handleDecline}>
+                        <button className="q-btn-outline" onClick={handleDecline} disabled={saving}>
                             Decline
                         </button>
                     </div>
