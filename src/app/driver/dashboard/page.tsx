@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -10,6 +9,10 @@ import { useFleet } from "@/app/context/FleetContext";
 import { useToast } from "@/components/Toast";
 import AuthGuard from "@/components/AuthGuard";
 import { coordsFor } from "@/lib/places";
+import { useDriverShift, shiftEndsAt, formatDuration, formatClock } from "@/lib/shifts";
+
+/** Warn the driver this long before the operator's shift limit ends the shift. */
+const LIMIT_WARNING_MS = 30 * 60_000;
 
 // Leaflet needs window, so the map panel is client-only.
 const MiniMap = dynamic(() => import("@/components/MiniMap"), { ssr: false });
@@ -20,29 +23,47 @@ function DriverDashboardContent() {
     const { vehicleForDriver, blockingReason } = useFleet();
     const { toast } = useToast();
     const router = useRouter();
-    const [isOnline, setIsOnline] = useState(() => {
-        if (typeof window !== "undefined") {
-            return localStorage.getItem("driver_online_status") !== "false";
-        }
-        return true;
-    });
+    const { shift, onShift, online, workedToday, now, isLoading: shiftLoading, busy, clockIn, clockOut, setOnline } = useDriverShift();
 
     // The driver's vehicle as the fleet office sees it. If the fleet manager
     // suspends it or an inspection fails, that lands here and the driver cannot
-    // go online until it is cleared.
+    // clock in or go online until it is cleared. The database enforces the same
+    // rule, and ends a running shift when the vehicle is taken off the road.
     const vehicle = vehicleForDriver(user?.id, user?.vehiclePlate);
     const blocked = vehicle ? blockingReason(vehicle) : null;
     const noVehicle = !vehicle;
     const canGoOnline = Boolean(vehicle) && !blocked;
+    const isOnline = online && canGoOnline;
 
-    useEffect(() => {
-        localStorage.setItem("driver_online_status", String(isOnline));
-    }, [isOnline]);
+    const endsAt = shift ? shiftEndsAt(shift) : 0;
+    const nearLimit = Boolean(shift) && endsAt - now <= LIMIT_WARNING_MS;
 
-    // Being taken off the road forces the driver offline straight away.
-    useEffect(() => {
-        if (!canGoOnline && isOnline) setIsOnline(false);
-    }, [canGoOnline, isOnline]);
+    async function handleClockIn() {
+        if (!canGoOnline) {
+            toast(blocked ?? "No vehicle is assigned to you yet", "error");
+            return;
+        }
+        const result = await clockIn();
+        toast(result.success ? "Clocked in. You are online." : result.error ?? "Could not clock in", result.success ? "success" : "error");
+    }
+
+    async function handleClockOut() {
+        const result = await clockOut();
+        toast(result.success ? "Clocked out. Shift saved." : result.error ?? "Could not clock out", result.success ? "success" : "error");
+    }
+
+    async function handleToggleOnline() {
+        if (!canGoOnline) {
+            toast(blocked ?? "No vehicle is assigned to you yet", "error");
+            return;
+        }
+        if (!onShift) {
+            toast("Clock in first to go online", "info");
+            return;
+        }
+        const result = await setOnline(!online);
+        if (!result.success) toast(result.error ?? "Could not change your status", "error");
+    }
 
     function handleLogout() {
         logout();
@@ -80,24 +101,20 @@ function DriverDashboardContent() {
                             {user?.name || "Quallor Driver"}
                         </p>
                         <button
-                            onClick={() => {
-                                if (!canGoOnline) {
-                                    toast(blocked ?? "No vehicle is assigned to you yet", "error");
-                                    return;
-                                }
-                                setIsOnline(!isOnline);
-                            }}
-                            className="flex items-center gap-1.5"
+                            onClick={handleToggleOnline}
+                            disabled={busy}
+                            className="flex items-center gap-1.5 disabled:opacity-60"
+                            aria-label={isOnline ? "Go offline" : "Go online"}
                         >
                             <span
                                 className={`w-2 h-2 rounded-full ${isOnline ? "animate-pulse" : ""}`}
-                                style={{ backgroundColor: isOnline ? "#16A34A" : canGoOnline ? "#AEA89C" : "#DC2626" }}
+                                style={{ backgroundColor: isOnline ? "#16A34A" : !canGoOnline ? "#DC2626" : onShift ? "#D97706" : "#AEA89C" }}
                             />
                             <span
                                 className="font-sans text-[10px] font-bold uppercase tracking-wider"
-                                style={{ color: isOnline ? "#16A34A" : canGoOnline ? "#AEA89C" : "#DC2626" }}
+                                style={{ color: isOnline ? "#16A34A" : !canGoOnline ? "#DC2626" : onShift ? "#D97706" : "#AEA89C" }}
                             >
-                                {isOnline ? "Online" : canGoOnline ? "Offline" : "Off the road"}
+                                {!canGoOnline ? "Off the road" : isOnline ? "Online" : onShift ? "Offline · on break" : "Clocked out"}
                             </span>
                         </button>
                     </div>
@@ -152,6 +169,56 @@ function DriverDashboardContent() {
                                 : `${blocked?.replace(/\.?$/, ".")} Contact the Quallor fleet office once it is corrected.`}
                         </p>
                     </div>
+                </div>
+            )}
+
+            {/* ── Shift: clock in and out, saved to the database ── */}
+            {!noVehicle && !blocked && !shiftLoading && (
+                <div
+                    className="flex items-center gap-3 px-4 py-3 flex-shrink-0"
+                    style={{
+                        backgroundColor: onShift ? (nearLimit ? "rgba(217,119,6,0.10)" : "rgba(22,163,74,0.08)") : "#FFFFFF",
+                        borderBottom: "1px solid rgba(17,17,17,0.08)",
+                    }}
+                >
+                    <span
+                        className="material-symbols-outlined flex-shrink-0"
+                        style={{ color: onShift ? (nearLimit ? "#D97706" : "#16A34A") : "#AEA89C" }}
+                    >
+                        {onShift ? "schedule" : "work_history"}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                        {shift ? (
+                            <>
+                                <p className="font-sans font-bold text-sm" style={{ color: "#111111" }}>
+                                    On shift since {formatClock(shift.clockedInAt)} · {formatDuration(now - new Date(shift.clockedInAt).getTime())}
+                                </p>
+                                <p className="font-sans text-xs mt-0.5" style={{ color: nearLimit ? "#B45309" : "rgba(17,17,17,0.60)" }}>
+                                    {nearLimit
+                                        ? `Your ${shift.maxShiftHours}-hour limit ends this shift at ${formatClock(new Date(endsAt).toISOString())}.`
+                                        : `${shift.plate} · shift limit ${shift.maxShiftHours} hours, ends ${formatClock(new Date(endsAt).toISOString())}`}
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <p className="font-sans font-bold text-sm" style={{ color: "#111111" }}>You are clocked out</p>
+                                <p className="font-sans text-xs mt-0.5" style={{ color: "rgba(17,17,17,0.60)" }}>
+                                    {workedToday > 0 ? `Worked ${formatDuration(workedToday)} today.` : "Clock in to start your shift and go online."}
+                                </p>
+                            </>
+                        )}
+                    </div>
+                    <button
+                        onClick={onShift ? handleClockOut : handleClockIn}
+                        disabled={busy}
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-[9999px] font-sans font-bold text-sm active:scale-95 transition-all disabled:opacity-60 flex-shrink-0"
+                        style={onShift
+                            ? { backgroundColor: "#FFFFFF", color: "#DC2626", border: "1px solid rgba(220,38,38,0.35)" }
+                            : { backgroundColor: "#111111", color: "#FFFFFF" }}
+                    >
+                        <span className="material-symbols-outlined text-lg">{onShift ? "timer_off" : "login"}</span>
+                        {busy ? "Saving…" : onShift ? "Clock out" : "Clock in"}
+                    </button>
                 </div>
             )}
 
