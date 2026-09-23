@@ -19,7 +19,14 @@ const OSM_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright
 const OSRM_ENDPOINT = "https://router.project-osrm.org/route/v1/driving";
 
 const ZOOM_3D_THRESHOLD = 16;
-const STEP_MS = 120;
+/** How often the taxi's position is refreshed. Its speed comes from the trip clock, not this. */
+const TICK_MS = 250;
+/** Shortest trip we will ever show, so tiny hops don't finish instantly. */
+const MIN_JOURNEY_SEC = 120;
+/** Fallback average taxi speed (about 40 km/h) when routing gives no drive time. */
+const FALLBACK_SPEED_MPS = 40_000 / 3600;
+/** Roads are longer than the straight line between two stops. */
+const ROAD_DETOUR_FACTOR = 1.3;
 
 type Coord = [number, number]; // [lat, lng]
 
@@ -91,47 +98,67 @@ function stopDotHtml(color: string): string {
     return `<span style="display:block;width:18px;height:18px;border-radius:50%;background:${color};border:3px solid #fff;box-shadow:0 2px 6px rgba(17,17,17,0.35)"></span>`;
 }
 
-/** Ask OSRM for the real road geometry. Returns null if it is unavailable. */
-async function fetchRoadPath(from: Coord, to: Coord): Promise<Coord[] | null> {
+// ── Great-circle distance in metres ───────────────────────────────────────
+function distanceM(a: Coord, b: Coord): number {
+    const R = 6371000;
+    const dLat = ((b[0] - a[0]) * Math.PI) / 180;
+    const dLng = ((b[1] - a[1]) * Math.PI) / 180;
+    const h =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos((a[0] * Math.PI) / 180) * Math.cos((b[0] * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/**
+ * Fallback trip time when routing is unreachable: straight-line distance, a
+ * detour allowance for real roads and an average taxi speed.
+ */
+function estimateDurationSec(from: Coord, to: Coord): number {
+    const roadM = distanceM(from, to) * ROAD_DETOUR_FACTOR;
+    return Math.max(MIN_JOURNEY_SEC, roadM / FALLBACK_SPEED_MPS);
+}
+
+/** Ask OSRM for the real road geometry and drive time. Returns null if it is unavailable. */
+async function fetchRoad(from: Coord, to: Coord): Promise<{ path: Coord[]; durationSec: number } | null> {
     try {
         const url = `${OSRM_ENDPOINT}/${from[1]},${from[0]};${to[1]},${to[0]}?overview=full&geometries=geojson`;
         const res = await fetch(url);
         if (!res.ok) return null;
         const data = await res.json();
-        const line = data?.routes?.[0]?.geometry?.coordinates;
+        const route = data?.routes?.[0];
+        const line = route?.geometry?.coordinates;
         if (!Array.isArray(line) || line.length < 2) return null;
         // GeoJSON is [lng, lat]; Leaflet wants [lat, lng].
-        return line.map((c: [number, number]) => [c[1], c[0]] as Coord);
+        const path = line.map((c: [number, number]) => [c[1], c[0]] as Coord);
+        const durationSec = typeof route.duration === "number" && route.duration > 0
+            ? Math.max(MIN_JOURNEY_SEC, route.duration)
+            : estimateDurationSec(from, to);
+        return { path, durationSec };
     } catch {
         return null;
     }
 }
 
-/** Insert extra points so short routes still animate smoothly. */
-function densify(path: Coord[], minPoints = 120): Coord[] {
-    if (path.length >= minPoints) return path;
-    const factor = Math.ceil(minPoints / (path.length - 1));
-    const out: Coord[] = [];
-    for (let i = 0; i < path.length - 1; i++) {
-        const [aLat, aLng] = path[i];
-        const [bLat, bLng] = path[i + 1];
-        for (let s = 0; s < factor; s++) {
-            const t = s / factor;
-            out.push([aLat + (bLat - aLat) * t, aLng + (bLng - aLng) * t]);
-        }
-    }
-    out.push(path[path.length - 1]);
-    return out;
+/**
+ * The single clock a trip runs on. The map moves the taxi against it and the
+ * tracking screen counts the ETA down against it, so the two always agree.
+ */
+export interface Journey {
+    /** Epoch ms when the taxi left the pickup. */
+    startedAt: number;
+    /** Total trip time in ms. */
+    durationMs: number;
 }
 
 interface TrackingMapProps {
     from: string;
     to: string;
     taxiId: string;
-    onProgress?: (pct: number) => void;
+    /** Called once the route is known, with the clock the trip runs on. */
+    onJourney?: (journey: Journey) => void;
 }
 
-export default function TrackingMap({ from, to, taxiId, onProgress }: TrackingMapProps) {
+export default function TrackingMap({ from, to, taxiId, onJourney }: TrackingMapProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<LeafletMap | null>(null);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -144,6 +171,12 @@ export default function TrackingMap({ from, to, taxiId, onProgress }: TrackingMa
 
         const fromCoord: Coord = [coordsFor(from).lat, coordsFor(from).lng];
         const toCoord: Coord = [coordsFor(to).lat, coordsFor(to).lng];
+
+        const reportJourney = (durationSec: number): Journey => {
+            const journey = { startedAt: Date.now(), durationMs: Math.round(durationSec * 1000) };
+            onJourney?.(journey);
+            return journey;
+        };
 
         (async () => {
             const L = (await import("leaflet")).default;
@@ -163,10 +196,11 @@ export default function TrackingMap({ from, to, taxiId, onProgress }: TrackingMa
 
             L.control.zoom({ position: "bottomright" }).addTo(map);
 
-            const road = await fetchRoadPath(fromCoord, toCoord);
+            const road = await fetchRoad(fromCoord, toCoord);
             if (cancelled) return;
 
-            const path = densify(road ?? [fromCoord, toCoord]);
+            const path = road?.path ?? [fromCoord, toCoord];
+            const durationSec = road?.durationSec ?? estimateDurationSec(fromCoord, toCoord);
             setStatus("ready");
 
             const remaining: Polyline = L.polyline(path as LatLngExpression[], {
@@ -229,37 +263,63 @@ export default function TrackingMap({ from, to, taxiId, onProgress }: TrackingMa
                 taxi.setIcon(busIcon(map.getZoom(), heading));
             });
 
-            const total = path.length - 1;
-            let step = 0;
-            timerRef.current = setInterval(() => {
-                step++;
-                if (step >= total) {
-                    taxi.setLatLng(path[total] as LatLngExpression);
+            // Cumulative distance along the route, so the taxi moves at an even
+            // speed however densely or sparsely the road geometry is sampled.
+            const cumulative: number[] = [0];
+            for (let i = 1; i < path.length; i++) {
+                cumulative.push(cumulative[i - 1] + distanceM(path[i - 1], path[i]));
+            }
+            const totalM = cumulative[cumulative.length - 1];
+            const last = path.length - 1;
+
+            const { startedAt, durationMs } = reportJourney(durationSec);
+            let seg = 0;
+            let lastZoom = map.getZoom();
+            let lastHeading = heading;
+
+            const tick = () => {
+                const fraction = Math.min(1, (Date.now() - startedAt) / durationMs);
+
+                if (fraction >= 1 || totalM === 0) {
+                    taxi.setLatLng(path[last] as LatLngExpression);
                     completed.setLatLngs(path as LatLngExpression[]);
-                    remaining.setLatLngs([path[total]] as LatLngExpression[]);
-                    onProgress?.(100);
+                    remaining.setLatLngs([path[last]] as LatLngExpression[]);
                     if (timerRef.current) clearInterval(timerRef.current);
                     return;
                 }
 
-                const pos = path[step];
-                const prev = path[Math.max(0, step - 1)];
-                const lookahead = path[Math.min(total, step + 2)];
-                heading = computeBearing(prev, lookahead);
+                // Find the segment the taxi is on and interpolate within it.
+                const travelled = fraction * totalM;
+                while (seg < last - 1 && cumulative[seg + 1] < travelled) seg++;
+                const segLen = cumulative[seg + 1] - cumulative[seg];
+                const t = segLen > 0 ? (travelled - cumulative[seg]) / segLen : 0;
+                const a = path[seg];
+                const b = path[seg + 1];
+                const pos: Coord = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+
+                heading = computeBearing(a, path[Math.min(last, seg + 2)]);
 
                 const zoom = map.getZoom();
                 taxi.setLatLng(pos as LatLngExpression);
-                taxi.setIcon(busIcon(zoom, heading));
-                completed.setLatLngs(path.slice(0, step + 1) as LatLngExpression[]);
-                remaining.setLatLngs(path.slice(step) as LatLngExpression[]);
+                if (zoom !== lastZoom || Math.abs(heading - lastHeading) > 2) {
+                    taxi.setIcon(busIcon(zoom, heading));
+                    lastZoom = zoom;
+                    lastHeading = heading;
+                }
+                completed.setLatLngs([...path.slice(0, seg + 1), pos] as LatLngExpression[]);
+                remaining.setLatLngs([pos, ...path.slice(seg + 1)] as LatLngExpression[]);
 
-                if (zoom >= ZOOM_3D_THRESHOLD) map.panTo(pos as LatLngExpression, { animate: true, duration: 0.12 });
-                else if (step % 10 === 0) map.panTo(pos as LatLngExpression, { animate: true });
+                if (zoom >= ZOOM_3D_THRESHOLD) map.panTo(pos as LatLngExpression, { animate: true, duration: TICK_MS / 1000 });
+                else if (!map.getBounds().pad(-0.2).contains(pos as LatLngExpression)) map.panTo(pos as LatLngExpression, { animate: true });
+            };
 
-                onProgress?.(Math.round((step / total) * 100));
-            }, STEP_MS);
+            tick();
+            timerRef.current = setInterval(tick, TICK_MS);
         })().catch(() => {
-            if (!cancelled) setStatus("error");
+            if (cancelled) return;
+            setStatus("error");
+            // Keep the ETA honest even when the map itself cannot load.
+            reportJourney(estimateDurationSec(fromCoord, toCoord));
         });
 
         return () => {
