@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import type { Map as LeafletMap, Marker, Polyline, LatLngExpression } from "leaflet";
 import { coordsFor } from "@/lib/places";
+import { resumeOrStartJourney, type Journey } from "@/lib/journeyClock";
 
 /**
  * Live tracking map built on OpenStreetMap.
@@ -139,26 +140,17 @@ async function fetchRoad(from: Coord, to: Coord): Promise<{ path: Coord[]; durat
     }
 }
 
-/**
- * The single clock a trip runs on. The map moves the taxi against it and the
- * tracking screen counts the ETA down against it, so the two always agree.
- */
-export interface Journey {
-    /** Epoch ms when the taxi left the pickup. */
-    startedAt: number;
-    /** Total trip time in ms. */
-    durationMs: number;
-}
-
 interface TrackingMapProps {
     from: string;
     to: string;
     taxiId: string;
+    /** Identifies this trip, so its progress is saved and resumed rather than restarted. */
+    journeyKey: string;
     /** Called once the route is known, with the clock the trip runs on. */
     onJourney?: (journey: Journey) => void;
 }
 
-export default function TrackingMap({ from, to, taxiId, onJourney }: TrackingMapProps) {
+export default function TrackingMap({ from, to, taxiId, journeyKey, onJourney }: TrackingMapProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<LeafletMap | null>(null);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -173,7 +165,7 @@ export default function TrackingMap({ from, to, taxiId, onJourney }: TrackingMap
         const toCoord: Coord = [coordsFor(to).lat, coordsFor(to).lng];
 
         const reportJourney = (durationSec: number): Journey => {
-            const journey = { startedAt: Date.now(), durationMs: Math.round(durationSec * 1000) };
+            const journey = resumeOrStartJourney(journeyKey, Math.round(durationSec * 1000));
             onJourney?.(journey);
             return journey;
         };
@@ -328,7 +320,7 @@ export default function TrackingMap({ from, to, taxiId, onJourney }: TrackingMap
             mapRef.current?.remove();
             mapRef.current = null;
         };
-    }, [from, to, taxiId]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [from, to, taxiId, journeyKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div style={{ position: "relative", width: "100%", height: "100%", backgroundColor: "#E1EDF5" }}>
