@@ -7,13 +7,13 @@ import { useBooking } from "@/app/context/BookingContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { useToast } from "@/components/Toast";
 import { share, absoluteUrl, bookingShareText } from "@/lib/share";
-import type { Journey } from "@/components/TrackingMap";
+import type { Journey } from "@/lib/journeyClock";
 
 const TrackingMap = dynamic(() => import("@/components/TrackingMap"), { ssr: false });
 
 export default function TrackingPage() {
     const router = useRouter();
-    const { currentBooking } = useBooking();
+    const { currentBooking, isLoading: bookingLoading } = useBooking();
     const { triggerSos, contacts } = useSettings();
     const { toast } = useToast();
     const [journey, setJourney] = useState<Journey | null>(null);
@@ -24,6 +24,8 @@ export default function TrackingPage() {
     const to = currentBooking?.to || "Amalinda";
     const taxiId = currentBooking?.taxiId || "TX-402";
     const taxiName = currentBooking?.taxiName || "Khululeka Express";
+    // One saved clock per booking, so leaving this screen never restarts the trip.
+    const journeyKey = currentBooking?.bookingId ?? `${from}|${to}|${taxiId}`;
 
     // The map owns the trip clock; this just re-renders so the ETA reads it.
     useEffect(() => {
@@ -58,7 +60,12 @@ export default function TrackingPage() {
         <main className="h-screen w-full flex flex-col overflow-hidden">
             {/* Map - top 55% */}
             <div className="relative" style={{ height: "55%" }}>
-                <TrackingMap from={from} to={to} taxiId={taxiId} onJourney={setJourney} />
+                {bookingLoading ? (
+                    // Wait for the booking so the map starts on the right trip, not the placeholder route.
+                    <div className="w-full h-full" style={{ backgroundColor: "#E1EDF5" }} />
+                ) : (
+                    <TrackingMap from={from} to={to} taxiId={taxiId} journeyKey={journeyKey} onJourney={setJourney} />
+                )}
                 <button
                     onClick={() => router.back()}
                     className="absolute top-4 right-4 z-[1001] flex w-10 h-10 items-center justify-center rounded-[10px] bg-white border border-q-stone-200 shadow-q-sm text-q-stone-700"
