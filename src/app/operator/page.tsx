@@ -11,6 +11,7 @@ import { Toggle, Field } from "@/components/SettingsUI";
 import OperatorGate from "@/components/OperatorGate";
 import { coordsFor, PLACES, DEFAULT_PROVINCE, type ProvinceId } from "@/lib/places";
 import { useProvince } from "@/lib/useProvince";
+import { useVehicleShifts, formatClock, formatDuration } from "@/lib/shifts";
 import { ProvinceOptions } from "@/components/ProvincePicker";
 
 /**
@@ -1062,6 +1063,8 @@ function DriversPanel({
 }) {
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
+    // Clock-in state for each vehicle, read from driver_shifts.
+    const { forVehicle } = useVehicleShifts();
 
     return (
         <>
@@ -1093,7 +1096,19 @@ function DriversPanel({
             <div className="rounded-[16px] overflow-hidden mb-5" style={{ backgroundColor: "#FFFFFF", border: "1px solid rgba(17,17,17,0.07)" }}>
                 {fleet.length === 0 ? (
                     <p className="font-sans text-sm p-4" style={{ color: "#8A8678" }}>No vehicles assigned to you yet.</p>
-                ) : fleet.map((v, i) => (
+                ) : fleet.map((v, i) => {
+                    const { open, last, workedToday } = forVehicle(v.id);
+                    const status = open
+                        ? open.online
+                            ? { label: "Online", color: "#16A34A", bg: "rgba(22,163,74,0.12)" }
+                            : { label: "On break", color: "#B45309", bg: "rgba(217,119,6,0.12)" }
+                        : { label: "Clocked out", color: "#8A8678", bg: "#EEF1EA" };
+                    const detail = open
+                        ? `Clocked in ${formatClock(open.clockedInAt)} · ${formatDuration(workedToday)} today`
+                        : last
+                            ? `Clocked out ${formatClock(last.clockedOutAt!)}${last.endReason === "shift-limit" ? " (shift limit)" : last.endReason === "vehicle-off-road" ? " (taken off the road)" : ""} · ${formatDuration(workedToday)} today`
+                            : "Not clocked in today";
+                    return (
                     <div
                         key={v.id}
                         className="flex items-center gap-3 p-4"
@@ -1108,7 +1123,14 @@ function DriversPanel({
                         <div className="flex-1 min-w-0">
                             <p className="font-sans font-semibold truncate" style={{ color: "#111111" }}>{v.driverName}</p>
                             <p className="font-sans text-xs" style={{ color: "#8A8678" }}>{v.plate} · {v.driverPhone || "no number"}</p>
+                            <p className="font-sans text-xs mt-0.5" style={{ color: "#5C5A56" }}>{detail}</p>
                         </div>
+                        <span
+                            className="font-mono text-[10px] font-bold uppercase px-2.5 py-1 rounded-full flex-shrink-0"
+                            style={{ backgroundColor: status.bg, color: status.color }}
+                        >
+                            {status.label}
+                        </span>
                         <a
                             href={`tel:${v.driverPhone.replace(/\s/g, "")}`}
                             className="font-mono text-[10px] font-bold uppercase px-3 py-1.5 rounded-full flex-shrink-0"
@@ -1117,7 +1139,8 @@ function DriversPanel({
                             Call
                         </a>
                     </div>
-                ))}
+                    );
+                })}
             </div>
 
             {invites.length > 0 && (

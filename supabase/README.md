@@ -32,6 +32,11 @@ Run these once, in order, in **SQL Editor → New query**:
    it the gate accepts the undertaking but writes nothing, because 0002 granted
    insert on those two tables to `authenticated` only and the gate runs ahead
    of sign-in.
+6. `migrations/0006_driver_shifts.sql` — driver clock-in, clock-out and
+   online status. Adds `driver_shifts` and the append-only
+   `driver_shift_events`, both read-only to clients, and the `clock_in`,
+   `clock_out` and `set_driver_online` functions that are the only way to
+   change them. A vehicle taken off the road ends any shift running on it.
 
 All of these are re-runnable: types are guarded with `duplicate_object` handlers,
 tables use `create table if not exists`, and each policy is dropped before it is
