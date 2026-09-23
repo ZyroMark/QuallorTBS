@@ -7,6 +7,7 @@ import { useBooking } from "@/app/context/BookingContext";
 import { useSettings } from "@/app/context/SettingsContext";
 import { useToast } from "@/components/Toast";
 import { share, absoluteUrl, bookingShareText } from "@/lib/share";
+import type { Journey } from "@/components/TrackingMap";
 
 const TrackingMap = dynamic(() => import("@/components/TrackingMap"), { ssr: false });
 
@@ -15,9 +16,8 @@ export default function TrackingPage() {
     const { currentBooking } = useBooking();
     const { triggerSos, contacts } = useSettings();
     const { toast } = useToast();
-    const [minutes, setMinutes] = useState(12);
-    const [seconds, setSeconds] = useState(0);
-    const [mapProgress, setMapProgress] = useState(0);
+    const [journey, setJourney] = useState<Journey | null>(null);
+    const [now, setNow] = useState(() => Date.now());
     const [sosArmed, setSosArmed] = useState(false);
 
     const from = currentBooking?.from || "Beacon Bay";
@@ -25,27 +25,40 @@ export default function TrackingPage() {
     const taxiId = currentBooking?.taxiId || "TX-402";
     const taxiName = currentBooking?.taxiName || "Khululeka Express";
 
+    // The map owns the trip clock; this just re-renders so the ETA reads it.
     useEffect(() => {
+        if (!journey) return;
         const timer = setInterval(() => {
-            setSeconds((s) => {
-                if (s > 0) return s - 1;
-                setMinutes((m) => {
-                    if (m <= 0) { clearInterval(timer); return 0; }
-                    return m - 1;
-                });
-                return 59;
-            });
-        }, 1000);
+            const t = Date.now();
+            setNow(t);
+            if (t >= journey.startedAt + journey.durationMs) clearInterval(timer);
+        }, 250);
         return () => clearInterval(timer);
-    }, []);
+    }, [journey]);
+
+    const remainingMs = journey
+        ? Math.min(journey.durationMs, Math.max(0, journey.startedAt + journey.durationMs - now))
+        : null;
+    const progress = journey && journey.durationMs > 0
+        ? Math.min(100, Math.round(((journey.durationMs - (remainingMs ?? 0)) / journey.durationMs) * 100))
+        : 0;
+    const arrived = remainingMs === 0;
 
     const pad = (n: number) => n.toString().padStart(2, "0");
+    const formatEta = (ms: number | null) => {
+        if (ms === null) return "--:--";
+        const total = Math.ceil(ms / 1000);
+        const h = Math.floor(total / 3600);
+        const m = Math.floor((total % 3600) / 60);
+        const s = total % 60;
+        return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+    };
 
     return (
         <main className="h-screen w-full flex flex-col overflow-hidden">
             {/* Map - top 55% */}
             <div className="relative" style={{ height: "55%" }}>
-                <TrackingMap from={from} to={to} taxiId={taxiId} onProgress={setMapProgress} />
+                <TrackingMap from={from} to={to} taxiId={taxiId} onJourney={setJourney} />
                 <button
                     onClick={() => router.back()}
                     className="absolute top-4 right-4 z-[1001] flex w-10 h-10 items-center justify-center rounded-[10px] bg-white border border-q-stone-200 shadow-q-sm text-q-stone-700"
@@ -71,7 +84,7 @@ export default function TrackingPage() {
                         </div>
                         <div className="text-right bg-q-brown-50 border border-q-brown-200 rounded-[14px] px-4 py-3">
                             <p className="font-sans text-[10px] font-bold text-q-stone-500 uppercase">ETA</p>
-                            <p className="font-display text-2xl font-bold text-q-brown tabular-nums">{pad(minutes)}:{pad(seconds)}</p>
+                            <p className="font-display text-2xl font-bold text-q-brown tabular-nums">{formatEta(remainingMs)}</p>
                         </div>
                     </div>
 
@@ -84,10 +97,10 @@ export default function TrackingPage() {
                         <div className="h-2 w-full bg-q-stone-200 rounded-full overflow-hidden">
                             <div
                                 className="h-full bg-q-brown rounded-full transition-all duration-500"
-                                style={{ width: `${mapProgress}%` }}
+                                style={{ width: `${progress}%` }}
                             />
                         </div>
-                        <p className="font-sans text-[10px] text-q-stone-400 text-center mt-1">{mapProgress}% of journey completed</p>
+                        <p className="font-sans text-[10px] text-q-stone-400 text-center mt-1">{progress}% of journey completed</p>
                     </div>
 
                     {/* Action buttons */}
@@ -177,7 +190,7 @@ export default function TrackingPage() {
                         </div>
                         <div className="text-right">
                             <p className="font-sans text-[10px] font-bold text-q-stone-500 uppercase">Status</p>
-                            <span className="font-sans text-[10px] font-bold text-green-600 uppercase">In Transit</span>
+                            <span className="font-sans text-[10px] font-bold text-green-600 uppercase">{arrived ? "Arrived" : "In Transit"}</span>
                         </div>
                     </div>
                 </div>
